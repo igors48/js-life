@@ -20,3 +20,25 @@ test("Area equality test", function() {
     ok(first.equals(second), "first == second");
     ok(!first.equals(third), "first != third");
 });
+
+test("Area shrink test", function() {
+    "use strict";
+    
+    var area = new Area(new Coordinates(1, 1), new Coordinates(2, 2));
+    var shrinked = area.shrink();
+    
+    var expected = new Area(new Coordinates(0, 0), new Coordinates(3, 3));
+    
+    ok(shrinked.equals(expected), "shrinked == expected");
+});
+
+test("Area shrink near border test", function() {
+    "use strict";
+    
+    var area = new Area(new Coordinates(0, 0), new Coordinates(2, 2));
+    var shrinked = area.shrink();
+    
+    var expected = new Area(new Coordinates(0, 0), new Coordinates(3, 3));
+    
+    ok(shrinked.equals(expected), "shrinked == expected");
+});

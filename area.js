@@ -24,6 +24,24 @@ Area.prototype = {
         return this._bottomRight;
     },
     
+    shrink: function () {
+        "use strict";
+        var newTop = this._topLeft.x() - 1;
+        var newLeft = this._topLeft.y() - 1;
+        var newBottom = this._bottomRight.x() + 1;
+        var newRight = this._bottomRight.y() + 1;
+        
+        newTop = newTop < 0 ? 0 : newTop;
+        newLeft = newLeft < 0 ? 0 : newLeft;
+        
+        var newTopLeft = new Coordinates(newTop, newLeft);
+        var newBottomRight = new Coordinates(newBottom, newRight);
+        
+        var shrinked = new Area(newTopLeft, newBottomRight);
+        
+        return shrinked;
+    },
+    
     equals: function (that) {
         "use strict";
         if (!(that instanceof Area)) {

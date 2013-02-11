@@ -1,6 +1,5 @@
 //TODO getDyingCells, getBornigArea, getBorningCells
 //TODO try iterateCells;
-//TODO create Area -- two Coordinates
 var Field = function () {
     "use strict";
     this._cells = [];
@@ -39,8 +38,8 @@ Field.prototype = {
         var length = this._cells.length;
         var i;
         
-        var xMin = 1000000;    
-        var yMin = 1000000;    
+        var xMin = Number.MAX_VALUE;    
+        var yMin = Number.MAX_VALUE;    
         var xMax = 0;    
         var yMax = 0;
         
@@ -85,6 +84,7 @@ Field.prototype = {
                 }
             }
         }
+        
         return null;
     }
     
