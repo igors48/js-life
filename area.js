@@ -22,6 +22,15 @@ Area.prototype = {
     bottomRight: function () {
         "use strict";
         return this._bottomRight;
+    },
+    
+    equals: function (that) {
+        "use strict";
+        if (!(that instanceof Area)) {
+            return false;
+        }
+        
+        return ((this._topLeft.equals(that.topLeft())) && (this._bottomRight.equals(that.bottomRight())));
     }
     
 }

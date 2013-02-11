@@ -24,7 +24,7 @@ Field.prototype = {
         return this._cells.length;
     },
 
-    getCellState: function (x, y) {
+    cellState: function (x, y) {
         "use strict";
         Assert.cellCoordinateValid(x);
         Assert.cellCoordinateValid(y);
@@ -34,18 +34,38 @@ Field.prototype = {
         return cell === null ? null : cell.state();
     },
     
-    getHabitat: function () {
+    habitat: function () {
         "use strict";
         var length = this._cells.length;
         var i;
-
+        
+        var xMin = 1000000;    
+        var yMin = 1000000;    
+        var xMax = 0;    
+        var yMax = 0;
+        
         for (i = 0; i < length; ++i) {
   
             if (i in this._cells) {
                 var candidate = this._cells[i];
                 var coordinates = candidate.coordinates();
+                
+                var x = coordinates.x();
+                var y = coordinates.y();
+                
+                xMin = Math.min(x, xMin);
+                xMax = Math.max(x, xMax);
+                
+                yMin = Math.min(y, yMin);
+                yMax = Math.max(y, yMax);
             }
         }        
+        
+        var topLeft = new Coordinates(xMin, yMin);
+        var bottomRight = new Coordinates(xMax, yMax);
+        var habitat = new Area(topLeft, bottomRight);
+        
+        return habitat;
     },
     
     _findCell: function (x, y) {
