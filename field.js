@@ -1,4 +1,6 @@
 //TODO getDyingCells, getBornigArea, getBorningCells
+//TODO try iterateCells;
+//TODO create Area -- two Coordinates
 var Field = function () {
     "use strict";
     this._cells = [];
@@ -32,7 +34,7 @@ Field.prototype = {
         return cell === null ? null : cell.state();
     },
     
-    _findCell: function (x, y) {
+    getHabitat: function () {
         "use strict";
         var length = this._cells.length;
         var i;
@@ -42,8 +44,23 @@ Field.prototype = {
             if (i in this._cells) {
                 var candidate = this._cells[i];
                 var coordinates = candidate.coordinates();
+            }
+        }        
+    },
+    
+    _findCell: function (x, y) {
+        "use strict";
+        var target = new Coordinates(x, y);
+        var length = this._cells.length;
+        var i;
+
+        for (i = 0; i < length; ++i) {
+  
+            if (i in this._cells) {
+                var candidate = this._cells[i];
+                var coordinates = candidate.coordinates();
                 
-                if (coordinates.x() === x && coordinates.y() === y) {
+                if (target.equals(coordinates)) {
                     return candidate;
                 }
             }
