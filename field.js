@@ -93,7 +93,7 @@ Field.prototype = {
                 
                     if (neighbors < 2 || neighbors > 3) {
                         var dyingCell = new Coordinates(x ,y);
-                        dyingCells.push(borningCell);    
+                        dyingCells.push(dyingCell);    
                     }
                     
                     if (neighbors === 2 || neighbors === 3) {
