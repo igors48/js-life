@@ -1,3 +1,4 @@
+// TODO looks line state does not need => Cell == Coordinates
 var Cell = function (x, y, state) {
     "use strict";
     this.init(x, y, state);

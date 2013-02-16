@@ -1,4 +1,3 @@
-//TODO getDyingCells, getBornigArea, getBorningCells
 //TODO try iterateCells;
 var Field = function () {
     "use strict";
@@ -67,13 +66,100 @@ Field.prototype = {
         return habitat;
     },
     
+    generationNext: function() {
+        "use strict";
+        var borningCells = [];
+        var dyingCells = [];
+        var livingCells = [];        
+        var previousGenerationHabitat = this.habitat();
+        var potentiallyArea = previousGenerationHabitat.shrink();
+        
+        var topLeft = potentiallyArea.topLeft();        
+        var bottomRight = potentiallyArea.bottomRight();
+        
+        var xMin = topLeft.x();
+        var xMax = bottomRight.x();
+
+        var yMin = topLeft.y();
+        var yMax = bottomRight.y();
+        
+        for (var x = xMin; x <= xMax; ++x) {
+            
+            for (var y = yMin; y <= yMax; ++y) {
+                var cell = this._findCell(x, y);
+                var neighbors = this._countNeighbors(x, y);
+                
+                if (cell) {
+                
+                    if (neighbors < 2 || neighbors > 3) {
+                        var dyingCell = new Coordinates(x ,y);
+                        dyingCells.push(borningCell);    
+                    }
+                    
+                    if (neighbors === 2 || neighbors === 3) {
+                        var livingCell = new Coordinates(x, y);
+                        livingCells.push(livingCell);
+                    }
+                }
+                
+                if (!cell && neighbors === 3) {
+                    var borningCell = new Coordinates(x ,y);
+                    borningCells.push(borningCell);    
+                }
+            }
+        }
+        
+        this._updateCells(livingCells, borningCells);
+        
+        var generationReport = new GenerationReport(borningCells, dyingCells, livingCells, previousGenerationHabitat);
+        
+        return generationReport;
+    },
+    
+    _updateCells: function(livingCells, borningCells) {
+        "use strict";
+        this._cells.length = 0;
+        
+        var length = livingCells.length;
+
+        for (var i = 0; i < length; ++i) {
+            var cell = livingCells[i];
+            this.putLiveCell(cell.x(), cell.y());
+        }
+
+        length = borningCells.length;
+
+        for (var i = 0; i < length; ++i) {
+            var cell = borningCells[i];
+            this.putLiveCell(cell.x(), cell.y());
+        }
+    },
+    
+    _countNeighbors: function (x, y) {
+        "use strict";
+        var coordinates = new Coordinates(x, y);
+        var neighbors = Neighbors.getNeighbors(coordinates);        
+        var length = neighbors.length;
+        var count = 0;
+        
+        for (var i = 0; i < length; ++i) {
+            var current = neighbors[i];
+            var neighbor = this._findCell(current.x(), current.y());
+            
+            if (neighbor) {
+                ++count;
+            }
+        }
+        
+        return count;
+    },
+    
     _findCell: function (x, y) {
         "use strict";
         var target = new Coordinates(x, y);
         var length = this._cells.length;
-        var i;
 
-        for (i = 0; i < length; ++i) {
+        for (var i = 0; i < length; ++i) {
   
             if (i in this._cells) {
                 var candidate = this._cells[i];
