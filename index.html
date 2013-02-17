@@ -11,38 +11,9 @@
   <body>
     <div id="container"></div>
     <script src="kinetic-v4.3.3.js"></script>
+    <script src="kinetic-editor.js"></script>
     <script>
-      var stage = new Kinetic.Stage({
-        container: 'container',
-        width: 578,
-        height: 200
-      });
-
-      var layer = new Kinetic.Layer();
-
-      var background = new Kinetic.Circle({
-        x: 239,
-        y: 75,
-        width: 15,
-        height: 15,
-        fill: 'silver'
-      });
-
-      background.on('click', (function(){
-        var color = 'silver';
-        var that = background;
-        
-        var func = function() {
-            color = color === 'silver' ? 'green' : 'silver';
-            that.setFill(color);
-            layer.draw();
-        }
-        
-        return func;
-      })());
-      
-      layer.add(background);
-      stage.add(layer);
+        new KineticEditor('container', 475, 475, 30, 30);
     </script>
   </body>
 </html>
