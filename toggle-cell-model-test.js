@@ -26,15 +26,19 @@ test("If cell added then cell returns", function() {
 test("If cell toggled then cell removed", function() {
     "use strict";
 
-    var x = 48;
-    var y = 49;
+    var xFirst = 48;
+    var yFirst = 49;
+    
+    var xSecond = 50;
+    var ySecond = 51;
     
     var model = new ToggleCellModel();
-    model.toggle(x, y);
-    model.toggle(x, y);
+    model.toggle(xFirst, yFirst);
+    model.toggle(xSecond, ySecond);
+    model.toggle(xFirst, yFirst);
     
     var cells = model.cells();
-    equal(cells.length, 0, 'There is no cells');    
+    equal(cells.length, 1, 'There is one cells');    
 });
 
 
