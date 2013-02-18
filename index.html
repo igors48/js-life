@@ -10,6 +10,14 @@
   </head>
   <body>
     <div id="container"></div>
+    <script>
+        function buttonClick() {
+            var button = document.getElementById('button');
+            var innerHtml = button.innerHTML;
+            button.innerHTML = innerHtml === 'Start' ? 'Stop' : 'Start'; 
+        }
+    </script>
+    <button id="button" onclick="buttonClick()">Start</button>
     <script src="kinetic-v4.3.3.js"></script>
     <script src="kinetic-editor.js"></script>
     <script>

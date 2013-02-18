@@ -43,11 +43,14 @@ KineticEditor.prototype = {
                 cell.on('click', (function(){
                     var color = 'silver';
                     var that = cell;
+                    var cellRow = row;
+                    var cellCol = col;
         
                     var func = function() {
                         color = color === 'silver' ? 'green' : 'silver';
                         that.setFill(color);
                         layer.draw();
+                        alert(cellRow + ' ' + cellCol);
                     }
         
                     return func;
