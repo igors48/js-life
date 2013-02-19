@@ -46,9 +46,8 @@ ToggleCellModel.prototype = {
   
             if (i in this._cells) {
                 var candidate = this._cells[i];
-                //var coordinates = candidate.coordinates();
                 
-                if (target.equals(/*coordinates*/candidate)) {
+                if (target.equals(candidate)) {
                     return i;
                 }
             }

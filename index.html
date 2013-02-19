@@ -10,18 +10,68 @@
   </head>
   <body>
     <div id="container"></div>
+    
+    <script src="kinetic-v4.3.3.js"></script>
+    <script src="assert-base.js"></script>
+    <script src="assert.js"></script>
+    <script src="coordinates.js"></script>
+    <script src="toggle-cell-model.js"></script>
+    <script src="kinetic-editor.js"></script>
+    <script src="field.js"></script>
+    <script src="cell.js"></script>
+    <script src="area.js"></script>
+    <script src="neighbors.js"></script>
+    <script src="offset.js"></script>
+    <script src="generation-report.js"></script>
+
     <script>
+        var editor = new KineticEditor('container', 475, 475, 30, 30);
+
         function buttonClick() {
             var button = document.getElementById('button');
-            var innerHtml = button.innerHTML;
-            button.innerHTML = innerHtml === 'Start' ? 'Stop' : 'Start'; 
+            button.innerHTML = 'Stop';
+            //button.disabled = true;
+            
+            var model = editor.model();
+            var cells = model.cells();
+            editor.switchToViewMode();
+            
+            var field = new Field();
+            
+            var length = cells.length;
+            
+            for (var i = 0; i < length; ++i) {
+                var current = cells[i];
+                
+                field.putLiveCell(current.x(), current.y());
+            }
+
+            var generationReport = field.generationNext();
+            var dying = generationReport.dyingCells();
+            var borning = generationReport.borningCells();
+            var living = generationReport.livingCells();
+            
+            editor.resetCells();
+            
+            length = living.length;
+            
+            for (var i = 0; i < length; ++i) {
+                var current = living[i];
+                
+                editor.paintCell(current.x(), current.y(), 'green');
+            }
+            
+            length = borning.length;
+            
+            for (var i = 0; i < length; ++i) {
+                var current = borning[i];
+                
+                editor.paintCell(current.x(), current.y(), 'green');
+            }
+            
+            editor.repaint();
         }
     </script>
     <button id="button" onclick="buttonClick()">Start</button>
-    <script src="kinetic-v4.3.3.js"></script>
-    <script src="kinetic-editor.js"></script>
-    <script>
-        new KineticEditor('container', 475, 475, 30, 30);
-    </script>
   </body>
 </html>
