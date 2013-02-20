@@ -62,7 +62,8 @@ KineticEditor.prototype = {
                         color = color === that.EMPTY_CELL_COLOR ? that.LIVE_CELL_COLOR : that.EMPTY_CELL_COLOR;
 
                         that._cells[cellCol][cellRow].setFill(color);
-                        that._layer.draw();
+                        that.repaint(); 
+                        
                         that._model.toggle(cellCol, cellRow);
                     }
         

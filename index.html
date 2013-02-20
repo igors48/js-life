@@ -26,26 +26,32 @@
 
     <script>
         var editor = new KineticEditor('container', 475, 475, 30, 30);
-
+        var mode = 'edit';
+        var field;
+        
         function buttonClick() {
-            var button = document.getElementById('button');
-            button.innerHTML = 'Stop';
-            //button.disabled = true;
             
-            var model = editor.model();
-            var cells = model.cells();
-            editor.switchToViewMode();
+            if (mode === 'edit') {
+                var button = document.getElementById('button');
+                button.innerHTML = 'Step';
             
-            var field = new Field();
+                var model = editor.model();
+                var cells = model.cells();
+                editor.switchToViewMode();
             
-            var length = cells.length;
+                field = new Field();
             
-            for (var i = 0; i < length; ++i) {
-                var current = cells[i];
+                var length = cells.length;
+            
+                for (var i = 0; i < length; ++i) {
+                    var current = cells[i];
                 
-                field.putLiveCell(current.x(), current.y());
-            }
-
+                    field.putLiveCell(current.x(), current.y());
+                }
+            }    
+            
+            mode = 'play';
+            
             var generationReport = field.generationNext();
             var dying = generationReport.dyingCells();
             var borning = generationReport.borningCells();
