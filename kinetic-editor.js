@@ -18,6 +18,7 @@ KineticEditor.prototype = {
         this._rows = rows;
         this._cols = cols;
         this._model = new ToggleCellModel();
+        this._viewport = new ViewPort(width, height, cols, rows, this.CELL_SIZE, this.CELL_SIZE, this.CELL_SIZE, 0);
         this._cells = new Array(rows);
     
         for (var i = 0; i < this._cols; i++) {
@@ -114,7 +115,24 @@ KineticEditor.prototype = {
     repaint: function () {
         "use strict";
         this._layer.draw();
-    }
+    },
+    
+    scrollX: function (delta) {
+        "use strict";
+        
+        this._viewport.scrollX(delta);
+    },
+        
+    scrollY: function (delta) {
+        "use strict";
+        
+        this._viewport.scrollY(delta);
+    },
+    
+    _fullRepaint: function () {
+        "use strict";
+        
+    }    
         
 };
 

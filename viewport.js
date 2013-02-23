@@ -48,10 +48,6 @@ ViewPort.prototype = {
         this.top = valid ? newValue : this.top;
     },
     
-    _update: function () {
-        "use strict";
-    },
-    
     _reset: function () {
         "use strict";
         
@@ -64,5 +60,4 @@ ViewPort.prototype = {
         this.left = Math.floor((this.maxCols - this.cols) / 2);
     }
     
-
 };    
