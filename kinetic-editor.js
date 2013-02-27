@@ -1,7 +1,7 @@
-var KineticEditor = function (container, width, height, rows, cols) {
+var KineticEditor = function (container, width, height, maxCols, maxRows) {
     "use strict";
     
-    this.init(container, width, height, rows, cols);
+    this.init(container, width, height, maxCols, maxRows);
 }
 
 KineticEditor.prototype = {
@@ -13,16 +13,17 @@ KineticEditor.prototype = {
     BORN_CELL_COLOR: 'yellow',
     DEAD_CELL_COLOR: 'black',
     
-    init: function (container, width, height, rows, cols) {
+    init: function (container, width, height, maxCols, maxRows) {
         "use strict";
-        this._rows = rows;
-        this._cols = cols;
+        this._maxRows = maxRows;
+        this._maxCols = maxCols;
         this._model = new ToggleCellModel();
-        this._viewport = new ViewPort(width, height, cols, rows, this.CELL_SIZE, this.CELL_SIZE, this.CELL_SIZE, 0);
-        this._cells = new Array(rows);
+        this._viewport = new ViewPort(width, height, maxCols, maxRows, this.CELL_SIZE, this.CELL_SIZE, this.CELL_SIZE, 0);
+        
+        this._viewCells = new Array(this._maxCols);
     
-        for (var i = 0; i < this._cols; i++) {
-            this._cells[i] = new Array(this._rows);
+        for (var i = 0; i < this._maxCols; i++) {
+            this._viewCells[i] = new Array(this._maxRows);
         }
         
         var stage = new Kinetic.Stage({
@@ -32,6 +33,7 @@ KineticEditor.prototype = {
         });
 
         this._layer = new Kinetic.Layer();
+        stage.add(this._layer);
         
         var background = new Kinetic.Rect({
             x: 0,
@@ -42,9 +44,9 @@ KineticEditor.prototype = {
         });
         this._layer.add(background);
         
-        for (var row = 0; row < this._rows; ++row) {
+        for (var row = 0; row < this._maxRows; ++row) {
         
-            for (var col = 0; col < this._cols; ++col) {
+            for (var col = 0; col < this._maxCols; ++col) {
                 
                 var cell = new Kinetic.Circle({
                     x: (col + 1) * this.CELL_SIZE,
@@ -62,7 +64,7 @@ KineticEditor.prototype = {
                     var func = function() {
                         color = color === that.EMPTY_CELL_COLOR ? that.LIVE_CELL_COLOR : that.EMPTY_CELL_COLOR;
 
-                        that._cells[cellCol][cellRow].setFill(color);
+                        that._viewCells[cellCol][cellRow].setFill(color);
                         that.repaint(); 
                         
                         that._model.toggle(cellCol, cellRow);
@@ -71,12 +73,11 @@ KineticEditor.prototype = {
                     return func;
                 })(this));
                 
-                this._cells[col][row] = cell;
+                this._viewCells[col][row] = cell;
                 this._layer.add(cell);
             }
         }
-      
-        stage.add(this._layer);
+        this.repaint();
     },
     
     model: function () {
@@ -87,11 +88,11 @@ KineticEditor.prototype = {
     switchToViewMode: function () {
         "use strict";
     
-        for (var row = 0; row < this._rows; ++row) {
+        for (var row = 0; row < this._maxRows; ++row) {
         
-            for (var col = 0; col < this._cols; ++col) {
-                this._cells[col][row].off(this.CLICK_EVENT);
-                this._cells[col][row].setFill(this.EMPTY_CELL_COLOR);
+            for (var col = 0; col < this._maxCols; ++col) {
+                this._viewCells[col][row].off(this.CLICK_EVENT);
+                this._viewCells[col][row].setFill(this.EMPTY_CELL_COLOR);
             }
         }
     },
@@ -99,17 +100,17 @@ KineticEditor.prototype = {
     resetCells: function() {
         "use strict";
 
-        for (var row = 0; row < this._rows; ++row) {
+        for (var row = 0; row < this._maxRows; ++row) {
         
-            for (var col = 0; col < this._cols; ++col) {
-                this._cells[col][row].setFill(this.EMPTY_CELL_COLOR);
+            for (var col = 0; col < this._maxCols; ++col) {
+                this._viewCells[col][row].setFill(this.EMPTY_CELL_COLOR);
             }
         }
     },
     
     paintCell: function (col, row, color) {
         "use strict";
-        this._cells[col][row].setFill(color);
+        this._viewCells[col][row].setFill(color);
     },
     
     repaint: function () {
@@ -131,8 +132,20 @@ KineticEditor.prototype = {
     
     _fullRepaint: function () {
         "use strict";
-        
-    }    
+            //create cells
+            //paint from model
+            //bind event handlers
+    },
+
+    _createViewCells: function () {
+        "use strict";
+    //bind events
+    },
+    
+    _clearViewCells: function () {
+        "use strict";
+    //unbind events
+    }
         
 };
 
