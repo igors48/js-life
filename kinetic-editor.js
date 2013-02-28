@@ -10,22 +10,18 @@ KineticEditor.prototype = {
     CLICK_EVENT: 'click',
     EMPTY_CELL_COLOR: 'silver',
     LIVE_CELL_COLOR: 'green',
-    BORN_CELL_COLOR: 'yellow',
-    DEAD_CELL_COLOR: 'black',
     
     init: function (container, width, height, maxCols, maxRows) {
         "use strict";
+
         this._maxRows = maxRows;
         this._maxCols = maxCols;
-        this._model = new ToggleCellModel();
+
         this._viewport = new ViewPort(width, height, maxCols, maxRows, this.CELL_SIZE, this.CELL_SIZE, this.CELL_SIZE, 0);
-        
-        this._viewCells = new Array(this._maxCols);
-    
-        for (var i = 0; i < this._maxCols; i++) {
-            this._viewCells[i] = new Array(this._maxRows);
-        }
-        
+        this._viewContext = this._viewport.getContext();
+
+        this._model = new ToggleCellModel();
+
         var stage = new Kinetic.Stage({
             container: container,
             width: width,
@@ -43,41 +39,9 @@ KineticEditor.prototype = {
             fill: 'gray'
         });
         this._layer.add(background);
-        
-        for (var row = 0; row < this._maxRows; ++row) {
-        
-            for (var col = 0; col < this._maxCols; ++col) {
-                
-                var cell = new Kinetic.Circle({
-                    x: (col + 1) * this.CELL_SIZE,
-                    y: (row + 1) * this.CELL_SIZE,
-                    width: this.CELL_SIZE,
-                    height: this.CELL_SIZE,
-                    fill: 'silver'
-                });
 
-                cell.on(this.CLICK_EVENT, (function(that){
-                    var color = that.EMPTY_CELL_COLOR;
-                    var cellRow = row;
-                    var cellCol = col;
-        
-                    var func = function() {
-                        color = color === that.EMPTY_CELL_COLOR ? that.LIVE_CELL_COLOR : that.EMPTY_CELL_COLOR;
-
-                        that._viewCells[cellCol][cellRow].setFill(color);
-                        that.repaint(); 
-                        
-                        that._model.toggle(cellCol, cellRow);
-                    }
-        
-                    return func;
-                })(this));
-                
-                this._viewCells[col][row] = cell;
-                this._layer.add(cell);
-            }
-        }
-        this.repaint();
+        this._createViewCellsArray();    
+        this._createViewCells();
     },
     
     model: function () {
@@ -85,66 +49,99 @@ KineticEditor.prototype = {
         return this._model;
     },
     
-    switchToViewMode: function () {
-        "use strict";
-    
-        for (var row = 0; row < this._maxRows; ++row) {
-        
-            for (var col = 0; col < this._maxCols; ++col) {
-                this._viewCells[col][row].off(this.CLICK_EVENT);
-                this._viewCells[col][row].setFill(this.EMPTY_CELL_COLOR);
-            }
-        }
-    },
-    
-    resetCells: function() {
-        "use strict";
-
-        for (var row = 0; row < this._maxRows; ++row) {
-        
-            for (var col = 0; col < this._maxCols; ++col) {
-                this._viewCells[col][row].setFill(this.EMPTY_CELL_COLOR);
-            }
-        }
-    },
-    
-    paintCell: function (col, row, color) {
-        "use strict";
-        this._viewCells[col][row].setFill(color);
-    },
-    
-    repaint: function () {
-        "use strict";
-        this._layer.draw();
-    },
-    
     scrollX: function (delta) {
         "use strict";
         
         this._viewport.scrollX(delta);
+        this._viewContext = this._viewport.getContext();
     },
         
     scrollY: function (delta) {
         "use strict";
         
         this._viewport.scrollY(delta);
+        this._viewContext = this._viewport.getContext();
     },
     
-    _fullRepaint: function () {
-        "use strict";
-            //create cells
-            //paint from model
-            //bind event handlers
+    _repaint: function () {
+        this._layer.draw();
     },
-
+    
     _createViewCells: function () {
         "use strict";
-    //bind events
+        
+        this._createViewCellsArray();
+        
+        var that = this;
+        this._iterateViewCellsArray(function (col, row) {
+            var viewCell = that._createViewCell(col, row);
+            that._viewCells[col][row] = viewCell;
+            that._layer.add(viewCell);
+        });
+        
+        this._repaint();
     },
     
     _clearViewCells: function () {
         "use strict";
+
+        var context = this._viewport.getContext();
     //unbind events
+    },
+    
+    _createViewCellsArray: function () {
+        "use strict";
+
+        this._viewCells = new Array(this._viewContext.cols);
+    
+        for (var i = 0; i < this._viewContext.cols; i++) {
+            this._viewCells[i] = new Array(this._viewContext.rows);
+        }
+    },
+    
+    _iterateViewCellsArray: function (action) {
+        "use strict";
+
+        var colCount = this._viewCells.length;
+            
+        for (var col = 0; col < colCount; ++col) {
+            var rowCount = this._viewCells[col].length;
+        
+            for (var row = 0; row < rowCount; ++row) {
+                action(col, row);
+            }
+        }    
+    },
+    
+    _createViewCell: function (col, row) {
+        "use strict";
+
+        var viewCell = new Kinetic.Circle({
+            x: (col + 1) * this._viewContext.cellSize,
+            y: (row + 1) * this._viewContext.cellSize,
+            width: this._viewContext.cellSize,
+            height: this._viewContext.cellSize,
+            fill: this.EMPTY_CELL_COLOR
+        });
+
+        var that = this;
+        viewCell.on(this.CLICK_EVENT, function(){
+            var cellRow = row;
+            var cellCol = col;
+        
+            that._onViewCellClick(cellCol, cellRow);
+        });
+
+        return viewCell;
+    },
+
+    _onViewCellClick: function (col, row) {
+        "use strict";
+        //TODO get cell state from model, not from viewCell
+        var color = this._viewCells[col][row].getFill();
+        color = (color === this.LIVE_CELL_COLOR) ? this.EMPTY_CELL_COLOR : this.LIVE_CELL_COLOR;
+        this._viewCells[col][row].setFill(color);
+        this._repaint();
     }
         
 };
