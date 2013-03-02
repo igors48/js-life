@@ -36,18 +36,36 @@ ViewPort.prototype = {
         this._reset();
     },
     
-    getContext: function () {
+    getCols: function () {
         "use strict";
-        
-        return { 
-            top: this._top, 
-            left: this._left, 
-            cellSize: this._cellSize,
-            cols: this._cols,
-            rows: this._rows
-        };
+
+        return this._cols;
     },
     
+    getRows: function () {
+        "use strict";
+
+        return this._rows;
+    },
+    
+    getTop: function () {
+        "use strict";
+
+        return this._top;
+    },
+
+    getLeft: function () {
+        "use strict";
+
+        return this._left;
+    },
+    
+    getCellSize: function () {
+        "use strict";
+
+        return this._cellSize;
+    },
+
     toGlobal: function (viewPortCoordinates) {
         "use strict";
         

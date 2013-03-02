@@ -23,7 +23,6 @@ KineticEditor.prototype = {
         this._maxCols = maxCols;
         
         this._viewport = new ViewPort(width, height, maxCols, maxRows, this.CELL_SIZE, this.CELL_SIZE, this.CELL_SIZE, 0);
-        this._updateViewContext();
 
         this._model = new ToggleCellModel();
 
@@ -62,7 +61,6 @@ KineticEditor.prototype = {
         
         this._paintModelCells(this.EMPTY_CELL_COLOR);
         this._viewport.scrollX(delta);
-        this._updateViewContext();
         this._paintModelCells(this.LIVE_CELL_COLOR);
     },
         
@@ -71,16 +69,11 @@ KineticEditor.prototype = {
         
         Assert.isInteger(delta);
         
+        this._paintModelCells(this.EMPTY_CELL_COLOR);
         this._viewport.scrollY(delta);
-        this._updateViewContext();
+        this._paintModelCells(this.LIVE_CELL_COLOR);
     },
-    
-    _updateViewContext: function() {
-        "use strict";
-        
-        this._viewContext = this._viewport.getContext();
-    },
-    
+
     _repaint: function () {
         "use strict";
         
@@ -105,28 +98,28 @@ KineticEditor.prototype = {
     _clearViewCells: function () {
         "use strict";
 
-        var context = this._viewport.getContext();
     //unbind events
     },
     
     _createViewCellsArray: function () {
         "use strict";
 
-        this._viewCells = new Array(this._viewContext.cols);
+        this._viewCells = new Array(this._viewport.getCols());
     
-        for (var i = 0; i < this._viewContext.cols; i++) {
-            this._viewCells[i] = new Array(this._viewContext.rows);
+        for (var i = 0; i < this._viewport.getCols(); i++) {
+            this._viewCells[i] = new Array(this._viewport.getRows());
         }
     },
     
     _createViewCell: function (col, row) {
         "use strict";
 
+        var cellSize = this._viewport.getCellSize();
         var viewCell = new Kinetic.Circle({
-            x: (col + 1) * this._viewContext.cellSize,
-            y: (row + 1) * this._viewContext.cellSize,
-            width: this._viewContext.cellSize,
-            height: this._viewContext.cellSize,
+            x: (col + 1) * cellSize,
+            y: (row + 1) * cellSize,
+            width: cellSize,
+            height: cellSize,
             fill: this.EMPTY_CELL_COLOR
         });
 
@@ -160,10 +153,10 @@ KineticEditor.prototype = {
         
         this._iterateModelCells(
             function (cell) {
+                var viewPortCoordinates = that._viewport.toViewPort(cell);
                 
-                if (that._isInViewPort(cell.x(), cell.y())) {
-                    var coordinates = that._toViewPort(cell.x(), cell.y());
-                    that._viewCells[coordinates.col][coordinates.row].setFill(color);
+                if (viewPortCoordinates) {
+                    that._viewCells[viewPortCoordinates.x()][viewPortCoordinates.y()].setFill(color);
                 }
             }
         );
@@ -175,12 +168,12 @@ KineticEditor.prototype = {
         "use strict";
 
         var modelCells = this._model.cells();
-        var length = modelCells.length;
-        
-        for (var index = 0; index < length; ++index) {
-            var current = modelCells[index];
-            action(current);
-        }
+
+        _.each(modelCells,
+            function (cell) {
+                action(cell);
+            }
+        );
     },
     
     _iterateViewCellsArray: function (action) {

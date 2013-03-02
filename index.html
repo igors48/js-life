@@ -28,7 +28,7 @@
     <script src="viewport.js"></script>
 
     <script>
-        var editor = new KineticEditor('container', 475, 475, 39, 31);
+        var editor = new KineticEditor('container', 475, 475, 60, 60);
         var mode = 'edit';
         var field;
         
@@ -80,7 +80,27 @@
             
             editor.repaint();
         }
+        
+        function scrollEditorRight() {
+            editor.scrollX(-1);
+        }
+
+        function scrollEditorLeft() {
+            editor.scrollX(1);
+        }
+
+        function scrollEditorUp() {
+            editor.scrollY(1);
+        }
+
+        function scrollEditorDown() {
+            editor.scrollY(-1);
+        }
     </script>
     <!--<button id="button" onclick="buttonClick()">Start</button>-->
+    <button id="scrollLeftButton" onclick="scrollEditorLeft();">L</button>
+    <button id="scrollRightButton" onclick="scrollEditorRight();">R</button>
+    <button id="scrollTopButton" onclick="scrollEditorUp();">U</button>
+    <button id="scrollDowntButton" onclick="scrollEditorDown();">D</button>
   </body>
 </html>
