@@ -16,10 +16,10 @@ KineticEditor.prototype = {
     init: function (container, width, height, maxCols, maxRows) {
         "use strict";
 
-         Assert.isPositiveInteger(width);    
-         Assert.isPositiveInteger(height);    
-         Assert.isPositiveInteger(maxCols);    
-         Assert.isPositiveInteger(maxRows);    
+        Assert.isPositiveInteger(width);    
+        Assert.isPositiveInteger(height);    
+        Assert.isPositiveInteger(maxCols);    
+        Assert.isPositiveInteger(maxRows);    
 
         this._maxRows = maxRows;
         this._maxCols = maxCols;
@@ -36,16 +36,7 @@ KineticEditor.prototype = {
 
         this._layer = new Kinetic.Layer();
         stage.add(this._layer);
-        /*
-        var background = new Kinetic.Rect({
-            x: 0,
-            y: 0,
-            width: width,
-            height: height,
-            fill: 'gray'
-        });
-        this._layer.add(background);
-        */
+
         this._createViewCellsArray();    
         this._createViewCells();
     },
@@ -81,7 +72,6 @@ KineticEditor.prototype = {
         
         Assert.isInteger(delta);
         
-        //this._paintModelCells(this.EMPTY_CELL_COLOR);
         this._viewport.zoom(delta);
         this._clearViewCellsArray();
         this._createViewCellsArray();
@@ -130,8 +120,6 @@ KineticEditor.prototype = {
         );
         
         this._viewCells.length = 0;
-        
-        this._repaint();
     },
     
     _createViewCellsArray: function () {
@@ -172,7 +160,6 @@ KineticEditor.prototype = {
 
         var globalCoordinates = this._viewport.toGlobal(new Coordinates(col, row));
         
-        alert(col + " " + row + " " + globalCoordinates.x() + " " + globalCoordinates.y());
         var isSet = this._model.toggle(globalCoordinates.x(), globalCoordinates.y());
 
         var color = isSet ? this.LIVE_CELL_COLOR : this.EMPTY_CELL_COLOR;
