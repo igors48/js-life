@@ -167,3 +167,43 @@ test("Global to ViewPort coordinate conversion test", function() {
     
     ok(outOfViewPortCoordinates == null, "if Global coordinates is out of ViewPort then null returns")
 });
+
+test("ViewPort corner points test", function() {
+    "use strict";
+
+    var width = 50;
+    var height = 50;
+    var maxCols = 7;
+    var maxRows = 7;
+    var minCellSize = 0;
+    var maxCellSize = 0;
+    var initialCellSize = 10;
+    var cellSizeStep = 0;
+    
+    var viewport = new ViewPort(width, height, maxCols, maxRows, minCellSize, maxCellSize, initialCellSize, cellSizeStep);
+
+    var leftTopGlobal = new Coordinates(1, 1);
+    var leftTopViewPort = viewport.toViewPort(leftTopGlobal);
+    
+    equal(leftTopViewPort.x(), 0, "ViewPort left top x is correct"); 
+    equal(leftTopViewPort.y(), 0, "ViewPort left top y is correct");   
+
+    var rightTopGlobal = new Coordinates(5, 1);
+    var rightTopViewPort = viewport.toViewPort(rightTopGlobal);
+    
+    equal(rightTopViewPort.x(), 4, "ViewPort right top x is correct"); 
+    equal(rightTopViewPort.y(), 0, "ViewPort right top y is correct"); 
+    
+    var leftBottomGlobal = new Coordinates(1, 5);
+    var leftBottomViewPort = viewport.toViewPort(leftBottomGlobal);
+    
+    equal(leftBottomViewPort.x(), 0, "ViewPort left bottom x is correct"); 
+    equal(leftBottomViewPort.y(), 4, "ViewPort left bottom y is correct");   
+
+    var rightBottomGlobal = new Coordinates(5, 5);
+    var rightBottomViewPort = viewport.toViewPort(rightBottomGlobal);
+    
+    equal(rightBottomViewPort.x(), 4, "ViewPort right bottom x is correct"); 
+    equal(rightBottomViewPort.y(), 4, "ViewPort right bottom y is correct");   
+});
+

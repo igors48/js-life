@@ -83,10 +83,10 @@ ViewPort.prototype = {
         Assert.isCoordinates(globalCoordinates);
         
         var viewPortCol = globalCoordinates.x() - this._left;
-        var viewPortColValid = (viewPortCol > 0) && (viewPortCol < this._cols);
+        var viewPortColValid = (viewPortCol >= 0) && (viewPortCol < this._cols);
         
         var viewPortRow = globalCoordinates.y() - this._top;
-        var viewPortRowValid = (viewPortRow > 0) && (viewPortRow < this._rows);
+        var viewPortRowValid = (viewPortRow >= 0) && (viewPortRow < this._rows);
         
         var coordinatesValid = viewPortColValid && viewPortRowValid;
         
@@ -100,7 +100,7 @@ ViewPort.prototype = {
         
         var newValue = this._left + delta;
         
-        var valid = (newValue > 0) && ((newValue + this._cols) <= this._maxCols);
+        var valid = (newValue >= 0) && ((newValue + this._cols) <= this._maxCols);
         
         this._left = valid ? newValue : this._left;
     },
@@ -112,7 +112,7 @@ ViewPort.prototype = {
         
         var newValue = this._top + delta;
         
-        var valid = (newValue > 0) && ((newValue + this._rows) <= this._maxRows);
+        var valid = (newValue >= 0) && ((newValue + this._rows) <= this._maxRows);
         
         this._top = valid ? newValue : this._top;
     },

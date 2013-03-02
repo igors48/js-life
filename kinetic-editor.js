@@ -116,8 +116,8 @@ KineticEditor.prototype = {
 
         var cellSize = this._viewport.getCellSize();
         var viewCell = new Kinetic.Circle({
-            x: (col + 1) * cellSize,
-            y: (row + 1) * cellSize,
+            x: (col + 1) * cellSize - cellSize / 4,
+            y: (row + 1) * cellSize - cellSize / 4,
             width: cellSize,
             height: cellSize,
             fill: this.EMPTY_CELL_COLOR
@@ -138,6 +138,8 @@ KineticEditor.prototype = {
         "use strict";
 
         var globalCoordinates = this._viewport.toGlobal(new Coordinates(col, row));
+        
+        alert(col + " " + row + " " + globalCoordinates.x() + " " + globalCoordinates.y());
         var isSet = this._model.toggle(globalCoordinates.x(), globalCoordinates.y());
 
         var color = isSet ? this.LIVE_CELL_COLOR : this.EMPTY_CELL_COLOR;
