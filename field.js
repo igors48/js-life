@@ -1,6 +1,7 @@
 //TODO try iterateCells;
 var Field = function () {
     "use strict";
+
     this._cells = [];
 };
 
@@ -8,6 +9,7 @@ Field.prototype = {
 
     putLiveCell: function (x, y) {
         "use strict";
+
         Assert.cellCoordinateValid(x);
         Assert.cellCoordinateValid(y);
         
@@ -19,11 +21,13 @@ Field.prototype = {
     
     cellCount: function () {
         "use strict";
+
         return this._cells.length;
     },
 
     cellState: function (x, y) {
         "use strict";
+
         Assert.cellCoordinateValid(x);
         Assert.cellCoordinateValid(y);
         
@@ -34,6 +38,7 @@ Field.prototype = {
     
     habitat: function () {
         "use strict";
+
         var length = this._cells.length;
         var i;
         
@@ -68,6 +73,7 @@ Field.prototype = {
     
     generationNext: function() {
         "use strict";
+
         var borningCells = [];
         var dyingCells = [];
         var livingCells = [];        
@@ -118,6 +124,7 @@ Field.prototype = {
     
     _updateCells: function(livingCells, borningCells) {
         "use strict";
+
         this._cells.length = 0;
         
         var length = livingCells.length;
@@ -137,6 +144,7 @@ Field.prototype = {
     
     _countNeighbors: function (x, y) {
         "use strict";
+
         var coordinates = new Coordinates(x, y);
         var neighbors = Neighbors.getNeighbors(coordinates);        
         var length = neighbors.length;
@@ -156,6 +164,7 @@ Field.prototype = {
     
     _findCell: function (x, y) {
         "use strict";
+
         var target = new Coordinates(x, y);
         var length = this._cells.length;
 

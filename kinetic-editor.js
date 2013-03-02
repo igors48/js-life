@@ -22,7 +22,7 @@ KineticEditor.prototype = {
         this._maxRows = maxRows;
         this._maxCols = maxCols;
         
-        this._viewport = new ViewPort(width, height, maxCols, maxRows, this.CELL_SIZE, this.CELL_SIZE, this.CELL_SIZE, 0);
+        this._viewport = new ViewPort(width, height, maxCols, maxRows, this.CELL_SIZE, this.CELL_SIZE, this.CELL_SIZE);
 
         this._model = new ToggleCellModel();
 

@@ -2,6 +2,7 @@ var Neighbors = Neighbors || {};
 
 Neighbors.getNeighbors = function (coordinates) {
     "use strict";
+    
     Assert.isCoordinates(coordinates);
 
     var NEIGHBORS_OFFSETS = [ new Offset(-1, -1),
@@ -38,6 +39,7 @@ Neighbors.getNeighbors = function (coordinates) {
 
 Neighbors.isValidNeighbor = function (x, y) {
     "use strict";
+    
     var xValid = (x >= 0);
     var yValid = (y >= 0);
     var neighborValid = (xValid && yValid);

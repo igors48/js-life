@@ -1,12 +1,12 @@
-var ViewPort = function (width, height, maxCols, maxRows, minCellSize, maxCellSize, initialCellSize, cellSizeStep) {
+var ViewPort = function (width, height, maxCols, maxRows, minCellSize, maxCellSize, initialCellSize) {
     "use strict";
     
-    this.init(width, height, maxCols, maxRows, minCellSize, maxCellSize, initialCellSize, cellSizeStep);
+    this.init(width, height, maxCols, maxRows, minCellSize, maxCellSize, initialCellSize);
 };
 
 ViewPort.prototype = {
     
-    init: function (width, height, maxCols, maxRows, minCellSize, maxCellSize, initialCellSize, cellSizeStep) {
+    init: function (width, height, maxCols, maxRows, minCellSize, maxCellSize, initialCellSize) {
         "use strict";
 
         Assert.isPositiveInteger(width);    
@@ -29,9 +29,6 @@ ViewPort.prototype = {
         
         Assert.isPositiveInteger(initialCellSize);    
         this._initialCellSize = initialCellSize; 
-        
-        Assert.isPositiveInteger(cellSizeStep);    
-        this._cellSizeStep = cellSizeStep;
         
         this._reset();
     },
