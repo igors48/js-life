@@ -96,11 +96,21 @@
         function scrollEditorDown() {
             editor.scrollY(-1);
         }
+        
+        function zoomEditorIn() {
+            editor.zoom(1);
+        }
+        
+        function zoomEditorOut() {
+            editor.zoom(-1);
+        }
     </script>
     <!--<button id="button" onclick="buttonClick()">Start</button>-->
     <button id="scrollLeftButton" onclick="scrollEditorLeft();">L</button>
     <button id="scrollRightButton" onclick="scrollEditorRight();">R</button>
     <button id="scrollTopButton" onclick="scrollEditorUp();">U</button>
-    <button id="scrollDowntButton" onclick="scrollEditorDown();">D</button>
+    <button id="scrollDownButton" onclick="scrollEditorDown();">D</button>
+    <button id="zoomInButton" onclick="zoomEditorIn();">Zoom In</button>
+    <button id="zoomOutButton" onclick="zoomEditorOut();">Zoom Out</button>
   </body>
 </html>

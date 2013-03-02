@@ -10,6 +10,8 @@ KineticEditor.prototype = {
     CLICK_EVENT: 'click',
     EMPTY_CELL_COLOR: 'silver',
     LIVE_CELL_COLOR: 'green',
+    MIN_CELL_SIZE: 4, 
+    MAX_CELL_SIZE: 25,
     
     init: function (container, width, height, maxCols, maxRows) {
         "use strict";
@@ -22,7 +24,7 @@ KineticEditor.prototype = {
         this._maxRows = maxRows;
         this._maxCols = maxCols;
         
-        this._viewport = new ViewPort(width, height, maxCols, maxRows, this.CELL_SIZE, this.CELL_SIZE, this.CELL_SIZE);
+        this._viewport = new ViewPort(width, height, maxCols, maxRows, this.MIN_CELL_SIZE, this.MAX_CELL_SIZE, this.CELL_SIZE);
 
         this._model = new ToggleCellModel();
 
@@ -34,7 +36,7 @@ KineticEditor.prototype = {
 
         this._layer = new Kinetic.Layer();
         stage.add(this._layer);
-        
+        /*
         var background = new Kinetic.Rect({
             x: 0,
             y: 0,
@@ -43,7 +45,7 @@ KineticEditor.prototype = {
             fill: 'gray'
         });
         this._layer.add(background);
-
+        */
         this._createViewCellsArray();    
         this._createViewCells();
     },
@@ -74,6 +76,19 @@ KineticEditor.prototype = {
         this._paintModelCells(this.LIVE_CELL_COLOR);
     },
 
+    zoom: function (delta) {
+        "use strict";
+        
+        Assert.isInteger(delta);
+        
+        //this._paintModelCells(this.EMPTY_CELL_COLOR);
+        this._viewport.zoom(delta);
+        this._clearViewCellsArray();
+        this._createViewCellsArray();
+        this._createViewCells();
+        this._paintModelCells(this.LIVE_CELL_COLOR);
+    },
+    
     _repaint: function () {
         "use strict";
         
@@ -83,22 +98,40 @@ KineticEditor.prototype = {
     _createViewCells: function () {
         "use strict";
         
-        this._createViewCellsArray();
-        
         var that = this;
-        this._iterateViewCellsArray(function (col, row) {
-            var viewCell = that._createViewCell(col, row);
-            that._viewCells[col][row] = viewCell;
-            that._layer.add(viewCell);
-        });
+        this._iterateViewCellsArray(
+            function (col, row) {
+                var viewCell = that._createViewCell(col, row);
+                that._viewCells[col][row] = viewCell;
+                that._layer.add(viewCell);
+            }
+        );
         
         this._repaint();
     },
     
-    _clearViewCells: function () {
+    _clearViewCellsArray: function () {
         "use strict";
 
-    //unbind events
+        var that = this;
+        this._iterateViewCellsArray(
+            function (col, row) {
+                var viewCell = that._viewCells[col][row];
+                viewCell.off(that.CLICK_EVENT);
+            }    
+        );
+        
+        that._layer.removeChildren();
+        
+        _.each(this._viewCells, 
+            function (array) {
+                array.length = 0;
+            }
+        );
+        
+        this._viewCells.length = 0;
+        
+        this._repaint();
     },
     
     _createViewCellsArray: function () {
