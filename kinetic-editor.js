@@ -14,14 +14,14 @@ KineticEditor.prototype = {
     init: function (container, width, height, maxCols, maxRows) {
         "use strict";
 
+         Assert.isPositiveInteger(width);    
+         Assert.isPositiveInteger(height);    
+         Assert.isPositiveInteger(maxCols);    
+         Assert.isPositiveInteger(maxRows);    
+
         this._maxRows = maxRows;
         this._maxCols = maxCols;
         
-        this._minViewCol = 0;
-        this._maxViewCol = 0;
-        this._minViewRow = 0;
-        this._maxViewRow = 0;
-
         this._viewport = new ViewPort(width, height, maxCols, maxRows, this.CELL_SIZE, this.CELL_SIZE, this.CELL_SIZE, 0);
         this._updateViewContext();
 
@@ -58,6 +58,8 @@ KineticEditor.prototype = {
     scrollX: function (delta) {
         "use strict";
 
+        Assert.isInteger(delta);
+        
         this._paintModelCells(this.EMPTY_CELL_COLOR);
         this._viewport.scrollX(delta);
         this._updateViewContext();
@@ -67,6 +69,8 @@ KineticEditor.prototype = {
     scrollY: function (delta) {
         "use strict";
         
+        Assert.isInteger(delta);
+        
         this._viewport.scrollY(delta);
         this._updateViewContext();
     },
@@ -75,11 +79,6 @@ KineticEditor.prototype = {
         "use strict";
         
         this._viewContext = this._viewport.getContext();
-
-        this._minViewCol = this._viewContext.left;
-        this._maxViewCol = this._viewContext.left + this._viewContext.cols;
-        this._minViewRow = this._viewContext.top;
-        this._maxViewCol = this._viewContext.top + this._viewContext.rows;
     },
     
     _repaint: function () {
@@ -120,20 +119,6 @@ KineticEditor.prototype = {
         }
     },
     
-    _iterateViewCellsArray: function (action) {
-        "use strict";
-
-        var colCount = this._viewCells.length;
-            
-        for (var col = 0; col < colCount; ++col) {
-            var rowCount = this._viewCells[col].length;
-        
-            for (var row = 0; row < rowCount; ++row) {
-                action(col, row);
-            }
-        }    
-    },
-    
     _createViewCell: function (col, row) {
         "use strict";
 
@@ -158,9 +143,12 @@ KineticEditor.prototype = {
 
     _onViewCellClick: function (col, row) {
         "use strict";
-        //TODO get cell state from model, not from viewCell
-        var color = this._viewCells[col][row].getFill();
-        color = (color === this.LIVE_CELL_COLOR) ? this.EMPTY_CELL_COLOR : this.LIVE_CELL_COLOR;
+
+        var globalCoordinates = this._viewport.toGlobal(new Coordinates(col, row));
+        var isSet = this._model.toggle(globalCoordinates.x(), globalCoordinates.y());
+
+        var color = isSet ? this.LIVE_CELL_COLOR : this.EMPTY_CELL_COLOR;
+
         this._viewCells[col][row].setFill(color);
         this._repaint();
     },
@@ -183,33 +171,6 @@ KineticEditor.prototype = {
         this._repaint();
     },
     
-    _toViewPort: function (col, row) {
-        "use strict";
-        
-        var viewPortCol = col - this._minViewCol;
-        var viewPortRow = row - this._minViewRow;
-        
-        return { col: viewPortCol, row: viewPortRow };
-    },
-
-    _fromViewPort: function (col, row) {
-        "use strict";
-        
-        var modelCol = col + this._minViewCol;
-        var modelRow = row + this._minViewRow;
-        
-        return { col: modelCol, row: modelRow };
-    },
-    
-    _isInViewPort: function (col, row) {
-        "use strict";
-
-        var colInViewPort = (this._minViewCol >= col) && (col <= this._maxViewCol);
-        var rowInViewPort = (this._minViewRow >= row) && (row <= this._maxViewRow);
-        
-        return colInViewPort && rowInViewPort;
-    },
-    
     _iterateModelCells: function (action) {
         "use strict";
 
@@ -220,7 +181,21 @@ KineticEditor.prototype = {
             var current = modelCells[index];
             action(current);
         }
-    }
+    },
+    
+    _iterateViewCellsArray: function (action) {
+        "use strict";
+
+        var colCount = this._viewCells.length;
+            
+        for (var col = 0; col < colCount; ++col) {
+            var rowCount = this._viewCells[col].length;
         
+            for (var row = 0; row < rowCount; ++row) {
+                action(col, row);
+            }
+        }    
+    }
+            
 };
 

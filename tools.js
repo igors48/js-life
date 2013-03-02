@@ -18,17 +18,3 @@ Tools.containsOnlyOne = function (coordinates, cells) {
     
     return counter === 1;
 }
-
-Tools.iterate = function (items, action) {
-    var length = items.length;
-    var index = 0;
-    
-    for (index = 0; index < length; ++i) {
-
-        if (index in items) {
-            var current = cells[index];
-            action(current);
-        }
-    }    
-}
-

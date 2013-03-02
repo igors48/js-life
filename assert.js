@@ -1,5 +1,23 @@
 var Assert = Assert || {};
 
+Assert.isInteger = function (value) {
+    "use strict";
+    var isInteger = AssertBase.isInteger(value);
+    
+    if (!isInteger) {
+        throw new Error('Value [ ' + value + ' ] is not integer');
+    }
+};
+
+Assert.isPositiveInteger = function (value) {
+    "use strict";
+    var isPositiveInteger = AssertBase.isPositiveInteger(value);
+    
+    if (!isPositiveInteger) {
+        throw new Error('Integer value [ ' + value + ' ] is negative');
+    }
+};
+
 Assert.cellCoordinateValid = function (value) {
     "use strict";
     var isPositiveInteger = AssertBase.isPositiveInteger(value);

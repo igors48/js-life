@@ -2,6 +2,7 @@ var AssertBase = AssertBase || {};
 
 AssertBase.isInteger = function (value) {
     "use strict";
+    
     var type = typeof value;
     var reminder = value % 1;
     var isInteger = (type === 'number' && reminder === 0);
@@ -11,6 +12,7 @@ AssertBase.isInteger = function (value) {
 
 AssertBase.isPositiveInteger = function (value) {
     "use strict";
+    
     var isInteger = AssertBase.isInteger(value);
     var isPositive = value >= 0;
     var isPositiveInteger = isInteger && isPositive;
@@ -20,6 +22,7 @@ AssertBase.isPositiveInteger = function (value) {
 
 AssertBase.isOneOfThese = function (value, validValues) {
     "use strict";
+    
     var length = validValues.length;
     var i;
 
