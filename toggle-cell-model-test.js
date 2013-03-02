@@ -14,7 +14,8 @@ test("If cell added then cell returns", function() {
     var y = 49;
     
     var model = new ToggleCellModel();
-    model.toggle(x, y);
+    var isSet = model.toggle(x, y);
+    ok(isSet, 'When cell setted true returns');
     
     var cells = model.cells();
     equal(cells.length, 1, 'There is one cell');    
@@ -35,7 +36,8 @@ test("If cell toggled then cell removed", function() {
     var model = new ToggleCellModel();
     model.toggle(xFirst, yFirst);
     model.toggle(xSecond, ySecond);
-    model.toggle(xFirst, yFirst);
+    var isSet = model.toggle(xFirst, yFirst);
+    ok(!isSet, 'When cell cleared false returns');
     
     var cells = model.cells();
     equal(cells.length, 1, 'There is one cells');    

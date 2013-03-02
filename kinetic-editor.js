@@ -16,9 +16,14 @@ KineticEditor.prototype = {
 
         this._maxRows = maxRows;
         this._maxCols = maxCols;
+        
+        this._minViewCol = 0;
+        this._maxViewCol = 0;
+        this._minViewRow = 0;
+        this._maxViewRow = 0;
 
         this._viewport = new ViewPort(width, height, maxCols, maxRows, this.CELL_SIZE, this.CELL_SIZE, this.CELL_SIZE, 0);
-        this._viewContext = this._viewport.getContext();
+        this._updateViewContext();
 
         this._model = new ToggleCellModel();
 
@@ -46,24 +51,40 @@ KineticEditor.prototype = {
     
     model: function () {
         "use strict";
+
         return this._model;
     },
     
     scrollX: function (delta) {
         "use strict";
-        
+
+        this._paintModelCells(this.EMPTY_CELL_COLOR);
         this._viewport.scrollX(delta);
-        this._viewContext = this._viewport.getContext();
+        this._updateViewContext();
+        this._paintModelCells(this.LIVE_CELL_COLOR);
     },
         
     scrollY: function (delta) {
         "use strict";
         
         this._viewport.scrollY(delta);
+        this._updateViewContext();
+    },
+    
+    _updateViewContext: function() {
+        "use strict";
+        
         this._viewContext = this._viewport.getContext();
+
+        this._minViewCol = this._viewContext.left;
+        this._maxViewCol = this._viewContext.left + this._viewContext.cols;
+        this._minViewRow = this._viewContext.top;
+        this._maxViewCol = this._viewContext.top + this._viewContext.rows;
     },
     
     _repaint: function () {
+        "use strict";
+        
         this._layer.draw();
     },
     
@@ -142,6 +163,63 @@ KineticEditor.prototype = {
         color = (color === this.LIVE_CELL_COLOR) ? this.EMPTY_CELL_COLOR : this.LIVE_CELL_COLOR;
         this._viewCells[col][row].setFill(color);
         this._repaint();
+    },
+    
+    _paintModelCells: function (color) {
+        "use strict";
+        
+        var that = this;
+        
+        this._iterateModelCells(
+            function (cell) {
+                
+                if (that._isInViewPort(cell.x(), cell.y())) {
+                    var coordinates = that._toViewPort(cell.x(), cell.y());
+                    that._viewCells[coordinates.col][coordinates.row].setFill(color);
+                }
+            }
+        );
+        
+        this._repaint();
+    },
+    
+    _toViewPort: function (col, row) {
+        "use strict";
+        
+        var viewPortCol = col - this._minViewCol;
+        var viewPortRow = row - this._minViewRow;
+        
+        return { col: viewPortCol, row: viewPortRow };
+    },
+
+    _fromViewPort: function (col, row) {
+        "use strict";
+        
+        var modelCol = col + this._minViewCol;
+        var modelRow = row + this._minViewRow;
+        
+        return { col: modelCol, row: modelRow };
+    },
+    
+    _isInViewPort: function (col, row) {
+        "use strict";
+
+        var colInViewPort = (this._minViewCol >= col) && (col <= this._maxViewCol);
+        var rowInViewPort = (this._minViewRow >= row) && (row <= this._maxViewRow);
+        
+        return colInViewPort && rowInViewPort;
+    },
+    
+    _iterateModelCells: function (action) {
+        "use strict";
+
+        var modelCells = this._model.cells();
+        var length = modelCells.length;
+        
+        for (var index = 0; index < length; ++index) {
+            var current = modelCells[index];
+            action(current);
+        }
     }
         
 };
