@@ -8,9 +8,8 @@ test("ViewPort initial state test", function() {
     var minCellSize = 0;
     var maxCellSize = 0;
     var initialCellSize = 10;
-    var cellSizeStep = 0;
     
-    var viewport = new ViewPort(width, height, maxCols, maxRows, minCellSize, maxCellSize, initialCellSize, cellSizeStep);
+    var viewport = new ViewPort(width, height, maxCols, maxRows, minCellSize, maxCellSize, initialCellSize);
     
     equal(viewport.getCols(), 5, "cols count is correct");
     equal(viewport.getRows(), 5, "rows count is correct");
@@ -31,9 +30,8 @@ test("ViewPort scroll x test", function() {
     var minCellSize = 0;
     var maxCellSize = 0;
     var initialCellSize = 10;
-    var cellSizeStep = 0;
     
-    var viewport = new ViewPort(width, height, maxCols, maxRows, minCellSize, maxCellSize, initialCellSize, cellSizeStep);
+    var viewport = new ViewPort(width, height, maxCols, maxRows, minCellSize, maxCellSize, initialCellSize);
     
     viewport.scrollX(1);
     
@@ -56,9 +54,8 @@ test("ViewPort invalid scroll x test", function() {
     var minCellSize = 0;
     var maxCellSize = 0;
     var initialCellSize = 10;
-    var cellSizeStep = 0;
     
-    var viewport = new ViewPort(width, height, maxCols, maxRows, minCellSize, maxCellSize, initialCellSize, cellSizeStep);
+    var viewport = new ViewPort(width, height, maxCols, maxRows, minCellSize, maxCellSize, initialCellSize);
     
     viewport.scrollX(10);
     
@@ -81,9 +78,8 @@ test("ViewPort scroll y test", function() {
     var minCellSize = 0;
     var maxCellSize = 0;
     var initialCellSize = 10;
-    var cellSizeStep = 0;
     
-    var viewport = new ViewPort(width, height, maxCols, maxRows, minCellSize, maxCellSize, initialCellSize, cellSizeStep);
+    var viewport = new ViewPort(width, height, maxCols, maxRows, minCellSize, maxCellSize, initialCellSize);
     
     viewport.scrollY(1);
     
@@ -106,9 +102,8 @@ test("ViewPort invalid scroll y test", function() {
     var minCellSize = 0;
     var maxCellSize = 0;
     var initialCellSize = 10;
-    var cellSizeStep = 0;
     
-    var viewport = new ViewPort(width, height, maxCols, maxRows, minCellSize, maxCellSize, initialCellSize, cellSizeStep);
+    var viewport = new ViewPort(width, height, maxCols, maxRows, minCellSize, maxCellSize, initialCellSize);
     
     viewport.scrollY(10);
     
@@ -131,9 +126,8 @@ test("ViewPort to Global coordinate conversion test", function() {
     var minCellSize = 0;
     var maxCellSize = 0;
     var initialCellSize = 10;
-    var cellSizeStep = 0;
     
-    var viewport = new ViewPort(width, height, maxCols, maxRows, minCellSize, maxCellSize, initialCellSize, cellSizeStep);
+    var viewport = new ViewPort(width, height, maxCols, maxRows, minCellSize, maxCellSize, initialCellSize);
 
     var viewPortCoordinates = new Coordinates(1, 2);
     var globalCoordinates = viewport.toGlobal(viewPortCoordinates);
@@ -152,9 +146,8 @@ test("Global to ViewPort coordinate conversion test", function() {
     var minCellSize = 0;
     var maxCellSize = 0;
     var initialCellSize = 10;
-    var cellSizeStep = 0;
     
-    var viewport = new ViewPort(width, height, maxCols, maxRows, minCellSize, maxCellSize, initialCellSize, cellSizeStep);
+    var viewport = new ViewPort(width, height, maxCols, maxRows, minCellSize, maxCellSize, initialCellSize);
 
     var globalCoordinates = new Coordinates(2, 3);
     var viewPortCoordinates = viewport.toViewPort(globalCoordinates);
@@ -178,9 +171,8 @@ test("ViewPort corner points test", function() {
     var minCellSize = 0;
     var maxCellSize = 0;
     var initialCellSize = 10;
-    var cellSizeStep = 0;
     
-    var viewport = new ViewPort(width, height, maxCols, maxRows, minCellSize, maxCellSize, initialCellSize, cellSizeStep);
+    var viewport = new ViewPort(width, height, maxCols, maxRows, minCellSize, maxCellSize, initialCellSize);
 
     var leftTopGlobal = new Coordinates(1, 1);
     var leftTopViewPort = viewport.toViewPort(leftTopGlobal);
@@ -205,5 +197,35 @@ test("ViewPort corner points test", function() {
     
     equal(rightBottomViewPort.x(), 4, "ViewPort right bottom x is correct"); 
     equal(rightBottomViewPort.y(), 4, "ViewPort right bottom y is correct");   
+});
+
+test("ViewPort corner points test", function() {
+    "use strict";
+
+    var width = 50;
+    var height = 50;
+    var maxCols = 7;
+    var maxRows = 7;
+    var minCellSize = 1;
+    var maxCellSize = 3;
+    var initialCellSize = 2;
+    
+    var viewport = new ViewPort(width, height, maxCols, maxRows, minCellSize, maxCellSize, initialCellSize);
+
+    viewport.zoom(-1);
+    
+    equal(viewport.getCellSize(), 1, "cell size decreased");
+
+    viewport.zoom(-1);
+    
+    equal(viewport.getCellSize(), 1, "cell size can not be lesser than minimum");
+
+    viewport.zoom(2);
+    
+    equal(viewport.getCellSize(), 3, "cell size increased");
+
+    viewport.zoom(1);
+    
+    equal(viewport.getCellSize(), 3, "cell size can not be greater than maximum");
 });
 

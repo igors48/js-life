@@ -30,6 +30,7 @@ ViewPort.prototype = {
         Assert.isPositiveInteger(initialCellSize);    
         this._initialCellSize = initialCellSize; 
         
+        this._cellSize = this._initialCellSize;
         this._reset();
     },
     
@@ -113,11 +114,24 @@ ViewPort.prototype = {
         
         this._top = valid ? newValue : this._top;
     },
+
+    zoom: function (delta) {
+        "use strict";
+        
+        Assert.isInteger(delta);
+        
+        var newValue = this._cellSize + delta;
+        
+        var valid = (newValue >= this._minCellSize) && (newValue <= this._maxCellSize);
+        
+        if (valid) {
+            this._cellSize = newValue;
+            this._reset();
+        }
+    },
     
     _reset: function () {
         "use strict";
-        
-        this._cellSize = this._initialCellSize;
         
         this._rows = Math.floor(this._height / this._cellSize);
         this._cols = Math.floor(this._width / this._cellSize);
