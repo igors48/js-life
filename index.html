@@ -55,6 +55,15 @@
             
             mode = 'play';
             
+            setTimeout(
+                function newGeneration() {
+                    generation();
+                    setTimeout(newGeneration, 100);
+                }
+            , 100);
+        }
+
+        function generation() {
             var generationReport = field.generationNext();
             var dying = generationReport.dyingCells();
             var borning = generationReport.borningCells();
@@ -101,6 +110,7 @@
             editor.zoom(-1);
         }
     </script>
+    
     <button id="button" onclick="buttonClick()">Start</button>
     <button id="scrollLeftButton" onclick="scrollEditorLeft();">L</button>
     <button id="scrollRightButton" onclick="scrollEditorRight();">R</button>
