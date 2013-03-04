@@ -1,11 +1,6 @@
 var Neighbors = Neighbors || {};
 
-Neighbors.getNeighbors = function (coordinates) {
-    "use strict";
-    
-    Assert.isCoordinates(coordinates);
-
-    var NEIGHBORS_OFFSETS = [ new Offset(-1, -1),
+Neighbors.NEIGHBORS_OFFSETS = [ new Offset(-1, -1),
                              new Offset(-1, 0),
                              new Offset(-1, +1),
                              new Offset(0, +1),
@@ -13,16 +8,16 @@ Neighbors.getNeighbors = function (coordinates) {
                              new Offset(+1, 0),
                              new Offset(+1, -1),
                              new Offset(0, -1) ];
-    var NEIGHBORS_COUNT = NEIGHBORS_OFFSETS.length;
+                             
+Neighbors.getNeighbors = function (coordinates) {
+    "use strict";
     
-    var neighbors = [];
-  
-    var i;
+    Assert.isCoordinates(coordinates);
 
-    for (i = 0; i < NEIGHBORS_COUNT; ++i) {
-  
-        if (i in NEIGHBORS_OFFSETS) {
-            var offset = NEIGHBORS_OFFSETS[i];
+    var neighbors = [];
+    
+    _.each(Neighbors.NEIGHBORS_OFFSETS,
+        function (offset) {
             var neighborX = coordinates.x() + offset.x();
             var neighborY = coordinates.y() + offset.y();
             var validNeighbor = Neighbors.isValidNeighbor(neighborX, neighborY);
@@ -32,13 +27,16 @@ Neighbors.getNeighbors = function (coordinates) {
                 neighbors.push(neigborCoordinates);
             }
         }
-    }
-    
+    );
+
     return neighbors;
 };
 
 Neighbors.isValidNeighbor = function (x, y) {
     "use strict";
+    
+    Assert.isInteger(x);
+    Assert.isInteger(y);
     
     var xValid = (x >= 0);
     var yValid = (y >= 0);

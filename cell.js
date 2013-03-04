@@ -1,6 +1,7 @@
 // TODO looks line state does not need => Cell == Coordinates
 var Cell = function (x, y, state) {
     "use strict";
+    
     this.init(x, y, state);
 };
 
@@ -8,6 +9,7 @@ Cell.prototype = {
 
     init: function (x, y, state) {
         "use strict";
+        
         Assert.cellCoordinateValid(x);
         Assert.cellCoordinateValid(y);
         this._coordinates = new Coordinates(x, y);
@@ -18,12 +20,15 @@ Cell.prototype = {
     
     coordinates: function () {
         "use strict";
+        
         return this._coordinates;
     },
     
     state: function () {
         "use strict";
+        
         return this._state;
     }
+    
 };
 

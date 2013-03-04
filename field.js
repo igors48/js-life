@@ -1,4 +1,3 @@
-//TODO try iterateCells;
 var Field = function () {
     "use strict";
 
@@ -39,18 +38,13 @@ Field.prototype = {
     habitat: function () {
         "use strict";
 
-        var length = this._cells.length;
-        var i;
-        
         var xMin = Number.MAX_VALUE;    
         var yMin = Number.MAX_VALUE;    
         var xMax = 0;    
         var yMax = 0;
         
-        for (i = 0; i < length; ++i) {
-  
-            if (i in this._cells) {
-                var candidate = this._cells[i];
+        _.each(this._cells,
+            function (candidate) {
                 var coordinates = candidate.coordinates();
                 
                 var x = coordinates.x();
@@ -62,7 +56,7 @@ Field.prototype = {
                 yMin = Math.min(y, yMin);
                 yMax = Math.max(y, yMax);
             }
-        }        
+        );
         
         var topLeft = new Coordinates(xMin, yMin);
         var bottomRight = new Coordinates(xMax, yMax);
@@ -126,20 +120,20 @@ Field.prototype = {
         "use strict";
 
         this._cells.length = 0;
+
+        var that = this;
         
-        var length = livingCells.length;
+        _.each(livingCells,
+            function (cell) {
+                that.putLiveCell(cell.x(), cell.y());
+            }
+        );
 
-        for (var i = 0; i < length; ++i) {
-            var cell = livingCells[i];
-            this.putLiveCell(cell.x(), cell.y());
-        }
-
-        length = borningCells.length;
-
-        for (var i = 0; i < length; ++i) {
-            var cell = borningCells[i];
-            this.putLiveCell(cell.x(), cell.y());
-        }
+        _.each(borningCells,
+            function (cell) {
+                that.putLiveCell(cell.x(), cell.y());
+            }
+        );
     },
     
     _countNeighbors: function (x, y) {
@@ -147,17 +141,18 @@ Field.prototype = {
 
         var coordinates = new Coordinates(x, y);
         var neighbors = Neighbors.getNeighbors(coordinates);        
-        var length = neighbors.length;
         var count = 0;
+        var that = this;
         
-        for (var i = 0; i < length; ++i) {
-            var current = neighbors[i];
-            var neighbor = this._findCell(current.x(), current.y());
+        _.each(neighbors,
+            function (current) {
+                var neighbor = that._findCell(current.x(), current.y());
             
-            if (neighbor) {
-                ++count;
+                if (neighbor) {
+                    ++count;
+                }
             }
-        }
+        );
         
         return count;
     },
@@ -166,21 +161,22 @@ Field.prototype = {
         "use strict";
 
         var target = new Coordinates(x, y);
-        var length = this._cells.length;
-
-        for (var i = 0; i < length; ++i) {
-  
-            if (i in this._cells) {
-                var candidate = this._cells[i];
-                var coordinates = candidate.coordinates();
+        var result = null;
+        
+        _.find(this._cells,
+            function (cell) {
+                var coordinates = cell.coordinates();
                 
                 if (target.equals(coordinates)) {
-                    return candidate;
+                    result = cell;
+                    return true;
                 }
+                
+                return false;
             }
-        }
+        );
         
-        return null;
+        return result;
     }
     
 };

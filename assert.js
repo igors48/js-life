@@ -72,3 +72,23 @@ Assert.isToggleCellModel = function (value) {
         throw new Error('Is not an ToggleCellModel value');
     }
 };
+
+Assert.isArea = function (value) {
+    "use strict";
+    
+    var isArea = value instanceof Area;
+    
+    if (!isArea) {
+        throw new Error('Is not an Area value');
+    }
+};
+
+Assert.isArray = function (value) {
+    "use strict";
+    
+    var isArray = _.isArray(value);;
+    
+    if (!isArray) {
+        throw new Error('Is not an Array value');
+    }
+};

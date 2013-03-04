@@ -9,9 +9,16 @@ GenerationReport.prototype = {
     init: function (borningCells, dyingCells, livingCells, habitat) {
         "use strict";
 
+        Assert.isArray(borningCells);
         this._borningCells = borningCells;
+
+        Assert.isArray(dyingCells);
         this._dyingCells = dyingCells;
+
+        Assert.isArray(livingCells);
         this._livingCells = livingCells;
+        
+        Assert.isArea(habitat);
         this._habitat = habitat;
     },
     
@@ -35,6 +42,7 @@ GenerationReport.prototype = {
 
     habitat: function () {
         "use strict";
+
         return this._habitat;
     }
     
