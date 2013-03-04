@@ -62,3 +62,13 @@ Assert.isCoordinates = function (value) {
         throw new Error('Is not an Coordinates value');
     }
 };
+
+Assert.isToggleCellModel = function (value) {
+    "use strict";
+    
+    var isToggleCellModel = value instanceof ToggleCellModel;
+    
+    if (!isToggleCellModel) {
+        throw new Error('Is not an ToggleCellModel value');
+    }
+};

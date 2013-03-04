@@ -21,6 +21,8 @@ KineticEditor.prototype = {
         Assert.isPositiveInteger(maxCols);    
         Assert.isPositiveInteger(maxRows);    
 
+        this._playMode = false;
+        
         this._maxRows = maxRows;
         this._maxCols = maxCols;
         
@@ -77,6 +79,23 @@ KineticEditor.prototype = {
         this._createViewCellsArray();
         this._createViewCells();
         this._paintModelCells(this.LIVE_CELL_COLOR);
+    },
+    
+    replaceModel: function (newModel) {
+        "use strict";
+        
+        Assert.isToggleCellModel(newModel);
+
+        this._setVisibleModelCellsColors(this.EMPTY_CELL_COLOR);
+        this._model = newModel;
+        this._setVisibleModelCellsColors(this.LIVE_CELL_COLOR);
+        this._repaint();
+    },
+    
+    switchToPlayMode: function() {
+        "use strict";
+        
+        this._playMode = true;
     },
     
     _repaint: function () {
@@ -158,6 +177,10 @@ KineticEditor.prototype = {
     _onViewCellClick: function (col, row) {
         "use strict";
 
+        if (this._playMode) {
+            return;
+        }
+        
         var globalCoordinates = this._viewport.toGlobal(new Coordinates(col, row));
         
         var isSet = this._model.toggle(globalCoordinates.x(), globalCoordinates.y());
@@ -171,6 +194,13 @@ KineticEditor.prototype = {
     _paintModelCells: function (color) {
         "use strict";
         
+        this._setVisibleModelCellsColors(color);
+        this._repaint();
+    },
+ 
+    _setVisibleModelCellsColors: function (color) {
+        "use strict";
+        
         var that = this;
         
         this._iterateModelCells(
@@ -182,8 +212,6 @@ KineticEditor.prototype = {
                 }
             }
         );
-        
-        this._repaint();
     },
     
     _iterateModelCells: function (action) {

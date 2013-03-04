@@ -40,7 +40,7 @@
             
                 var model = editor.model();
                 var cells = model.cells();
-                editor.switchToViewMode();
+                editor.switchToPlayMode();
             
                 field = new Field();
             
@@ -60,25 +60,21 @@
             var borning = generationReport.borningCells();
             var living = generationReport.livingCells();
             
-            editor.resetCells();
+            var generationModel = new ToggleCellModel();
             
-            length = living.length;
+            _.each(living,
+                function (cell) {
+                    generationModel.toggle(cell.x(), cell.y());
+                }
+            );
+
+            _.each(borning,
+                function (cell) {
+                    generationModel.toggle(cell.x(), cell.y());
+                }
+            );
             
-            for (var i = 0; i < length; ++i) {
-                var current = living[i];
-                
-                editor.paintCell(current.x(), current.y(), 'green');
-            }
-            
-            length = borning.length;
-            
-            for (var i = 0; i < length; ++i) {
-                var current = borning[i];
-                
-                editor.paintCell(current.x(), current.y(), 'green');
-            }
-            
-            editor.repaint();
+            editor.replaceModel(generationModel);
         }
         
         function scrollEditorRight() {
@@ -105,7 +101,7 @@
             editor.zoom(-1);
         }
     </script>
-    <!--<button id="button" onclick="buttonClick()">Start</button>-->
+    <button id="button" onclick="buttonClick()">Start</button>
     <button id="scrollLeftButton" onclick="scrollEditorLeft();">L</button>
     <button id="scrollRightButton" onclick="scrollEditorRight();">R</button>
     <button id="scrollTopButton" onclick="scrollEditorUp();">U</button>
