@@ -21,6 +21,7 @@ Life105FormatReader.prototype = {
 		while(!_.isNull(current)) {
 		
 			current = reader.next();
+			//reader.back();
 		}
 	}
 	

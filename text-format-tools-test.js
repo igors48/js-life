@@ -33,3 +33,20 @@ test("Cell block header must contains three space separated tokens only", functi
 	ok(header instanceof TextFormatReaderError, 'error returns');
 });
 
+test("Valid cell block header parsed correctly", function() {
+    "use strict";
+
+	var header = TextFormatTools.parseCellBlockHeader('#P -1 4');	
+	
+	equal(header.x(), -1, 'x offset is valid');
+	equal(header.y(), 4, 'y offset is valid');
+});
+
+test("Invalid offsets in cell block header causes an error", function() {
+    "use strict";
+
+	var header = TextFormatTools.parseCellBlockHeader('#P a 4');	
+	
+	ok(header instanceof TextFormatReaderError, 'error returns');
+});
+

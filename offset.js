@@ -1,4 +1,3 @@
-//TODO determine the need
 var Offset = function (x, y) {
     "use strict";
     
@@ -10,10 +9,10 @@ Offset.prototype = {
     init: function (x, y) {
         "use strict";
     
-        Assert.offsetValid(x);
+        Assert.isInteger(x);
         this._x = x;
         
-        Assert.offsetValid(y);
+        Assert.isInteger(y);
         this._y = y;
     },
     

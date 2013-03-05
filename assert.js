@@ -54,15 +54,6 @@ Assert.cellStateValid = function (value) {
     }
 };
 
-Assert.offsetValid = function (value) {
-    "use strict";
-    var isOffsetValid = AssertBase.isOneOfThese(value, [-1, 0, +1]);
-    
-    if (!isOffsetValid) {
-        throw new Error('Offset value [ ' + value + ' ] is invalid');
-    }
-};
-
 Assert.isOffset = function (value) {
     "use strict";
     var isOffset = value instanceof Offset;

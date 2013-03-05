@@ -41,5 +41,11 @@ TextFormatTools.parseCellBlockHeader = function(line) {
 	var offsetX = parseInt(parts[1]);
 	var offsetY = parseInt(parts[2]);
 	
-	//TODO whats returns
+	if (_.isNaN(offsetX) || _.isNaN(offsetY)) {
+		return new TextFormatReaderError(0, 0, 'Wrong cell block header [ ' + line + ' ]');
+	}
+	
+	var result = new Offset(offsetX, offsetY);
+	
+	return result;
 }
