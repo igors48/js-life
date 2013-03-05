@@ -1,5 +1,14 @@
 var Assert = Assert || {};
 
+Assert.isString = function (value) {
+    "use strict";
+    var isString = _.isString(value);
+    
+    if (!isString) {
+        throw new Error('Value [ ' + value + ' ] is not string');
+    }
+};
+
 Assert.isInteger = function (value) {
     "use strict";
     var isInteger = AssertBase.isInteger(value);
@@ -14,7 +23,7 @@ Assert.isPositiveInteger = function (value) {
     var isPositiveInteger = AssertBase.isPositiveInteger(value);
     
     if (!isPositiveInteger) {
-        throw new Error('Integer value [ ' + value + ' ] is negative');
+        throw new Error('Value [ ' + value + ' ] is not positive integer');
     }
 };
 

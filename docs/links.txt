@@ -1,0 +1,6 @@
+File formats
+http://www.conwaylife.com/wiki/Life_1.05
+http://www.conwaylife.com/wiki/Plaintext
+
+READING FILES IN JAVASCRIPT USING THE FILE APIS
+http://www.html5rocks.com/en/tutorials/file/dndfiles/
