@@ -1,5 +1,14 @@
 var Assert = Assert || {};
 
+Assert.isOneSymbolString = function (value) {
+    "use strict";
+    var isOneSymbolString = (_.isString(value)) && (value.length === 1);
+    
+    if (!isOneSymbolString) {
+        throw new Error('Value [ ' + value + ' ] is not one symbol string');
+    }
+};
+
 Assert.isString = function (value) {
     "use strict";
     var isString = _.isString(value);
