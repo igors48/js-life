@@ -61,6 +61,8 @@ Life105FormatReader.prototype = {
 	},
     
     _readAsDescriptionLine: function (line) {
+		"use strict";
+    
 		var description = line.substring(this.DESCRIPTION_LINE_START.length);
 		description = _.str.trim(description);
 		
@@ -70,6 +72,8 @@ Life105FormatReader.prototype = {
     },
     
 	_readAsCellBlockStartLine: function (line) {
+		"use strict";
+    
         this._closeCurrentCellBlock();
         this._resetCurrentCellBlock();
 		
@@ -85,6 +89,8 @@ Life105FormatReader.prototype = {
     },
     
     _readAsCellBlockLine: function(line) {
+		"use strict";
+    
 		var cellOffsets = TextFormatTools.parseCellBlockLine(line, this.DEAD_CELL, this.ALIVE_CELL);
 		
 		if (cellOffsets instanceof TextFormatReaderError) {
@@ -97,7 +103,8 @@ Life105FormatReader.prototype = {
     },
     
     _closeCurrentCellBlock: function () {
-        
+		"use strict";
+    
 		if (this._currentCellBlockCellsOffsets.length !== 0) {
 			var newCellBlock = new CellBlock(this._currentCellBlockOffset, this._currentCellBlockCellsOffsets);
 		
@@ -106,6 +113,8 @@ Life105FormatReader.prototype = {
     },
     
     _resetCurrentCellBlock: function () {
+		"use strict";
+    
         this._currentCellBlockOffset = new Offset(0, 0);
         this._currentCellBlockCellsOffsets = [];
     }

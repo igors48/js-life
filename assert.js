@@ -2,6 +2,7 @@ var Assert = Assert || {};
 
 Assert.isOneSymbolString = function (value) {
     "use strict";
+	
     var isOneSymbolString = (_.isString(value)) && (value.length === 1);
     
     if (!isOneSymbolString) {
@@ -11,6 +12,7 @@ Assert.isOneSymbolString = function (value) {
 
 Assert.isString = function (value) {
     "use strict";
+	
     var isString = _.isString(value);
     
     if (!isString) {
@@ -20,6 +22,7 @@ Assert.isString = function (value) {
 
 Assert.isInteger = function (value) {
     "use strict";
+	
     var isInteger = AssertBase.isInteger(value);
     
     if (!isInteger) {
@@ -29,6 +32,7 @@ Assert.isInteger = function (value) {
 
 Assert.isPositiveInteger = function (value) {
     "use strict";
+	
     var isPositiveInteger = AssertBase.isPositiveInteger(value);
     
     if (!isPositiveInteger) {
@@ -38,6 +42,7 @@ Assert.isPositiveInteger = function (value) {
 
 Assert.cellCoordinateValid = function (value) {
     "use strict";
+	
     var isPositiveInteger = AssertBase.isPositiveInteger(value);
     
     if (!isPositiveInteger) {
@@ -47,6 +52,7 @@ Assert.cellCoordinateValid = function (value) {
 
 Assert.cellStateValid = function (value) {
     "use strict";
+	
     var isStateValid = AssertBase.isOneOfThese(value, [1, 2]);
     
     if (!isStateValid) {
@@ -56,6 +62,7 @@ Assert.cellStateValid = function (value) {
 
 Assert.isOffset = function (value) {
     "use strict";
+	
     var isOffset = value instanceof Offset;
     
     if (!isOffset) {
@@ -65,6 +72,7 @@ Assert.isOffset = function (value) {
 
 Assert.isCoordinates = function (value) {
     "use strict";
+	
     var isCoordinates = value instanceof Coordinates;
     
     if (!isCoordinates) {
