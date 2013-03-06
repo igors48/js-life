@@ -2,3 +2,4 @@
 002	read local file
 003 CellBlockContainer converter
 004 create project structure
+005 init object fields in constructor function not in init method
