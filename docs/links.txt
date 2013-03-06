@@ -1,3 +1,7 @@
+Wiki
+http://www.conwaylife.com/wiki/Main_Page
+
+
 File formats
 http://www.conwaylife.com/wiki/Life_1.05
 http://www.conwaylife.com/wiki/Plaintext

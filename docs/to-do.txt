@@ -6,3 +6,5 @@
 0006 [ ]	revisit QUnit
 0007 [ ]	Golly file format
 0008 [ ]	RLE file format
+0009 [ ]	age counter
+0010 [ ]	display description
