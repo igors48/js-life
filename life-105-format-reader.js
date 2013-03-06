@@ -27,8 +27,9 @@ Life105FormatReader.prototype = {
 		var current = reader.next();
 		var error = null;
         
-		while((current) || (!error)) {
-            
+		while((current) && (!error)) {
+            current = _.str.trim(current);
+			
             if (current.indexOf(this.DESCRIPTION_LINE_START) === 0) {
                 error = this._readAsDescriptionLine(current);
             } 
@@ -51,32 +52,62 @@ Life105FormatReader.prototype = {
         if (error) {
             return error;
         }
+
+        this._closeCurrentCellBlock();
+		
+		var cellBlockContainer = new CellBlockContainer(this._descriptions, this._cellBlocks);
+		
+		return cellBlockContainer;
 	},
     
     _readAsDescriptionLine: function (line) {
-        this._descriptions.push(line);
+		var description = line.substring(this.DESCRIPTION_LINE_START.length);
+		description = _.str.trim(description);
+		
+        this._descriptions.push(description);
         
         return null;
     },
     
 	_readAsCellBlockStartLine: function (line) {
-        
-        if (this._currentCellBlockOffset) {
-            this._closeCurrentCellBlock();
-        }
-        
+        this._closeCurrentCellBlock();
         this._resetCurrentCellBlock();
+		
+		var cellBlockOffset = TextFormatTools.parseCellBlockHeader(line);
+
+		if (cellBlockOffset instanceof TextFormatReaderError) {
+			return cellBlockOffset;
+		}
+		
+		this._currentCellBlockOffset = cellBlockOffset;
+		
+		return null;
     },
     
     _readAsCellBlockLine: function(line) {
+		var cellOffsets = TextFormatTools.parseCellBlockLine(line, this.DEAD_CELL, this.ALIVE_CELL);
+		
+		if (cellOffsets instanceof TextFormatReaderError) {
+			return cellOffsets;
+		}
+		
+		this._currentCellBlockCellsOffsets.push(cellOffsets);
+		
+		return null;
     },
     
     _closeCurrentCellBlock: function () {
+        
+		if (this._currentCellBlockCellsOffsets.length !== 0) {
+			var newCellBlock = new CellBlock(this._currentCellBlockOffset, this._currentCellBlockCellsOffsets);
+		
+			this._cellBlocks.push(newCellBlock);
+		}
     },
     
-    _resetCurrentCellBlock(): function () {
-        this._currentCellBlockOffset = null;
-        this._currentCellBlockCellsOffsets = null;
+    _resetCurrentCellBlock: function () {
+        this._currentCellBlockOffset = new Offset(0, 0);
+        this._currentCellBlockCellsOffsets = [];
     }
     
 }

@@ -35,10 +35,10 @@ test("Stone will not change", function() {
     equal(generationReport.dyingCells().length, 0, "No dying cell");
     equal(generationReport.borningCells().length, 0, "No borning cells");
     
-    ok(Tools.containsOnlyOne(new Coordinates(1, 1), generationReport.livingCells()));
-    ok(Tools.containsOnlyOne(new Coordinates(1, 2), generationReport.livingCells()));
-    ok(Tools.containsOnlyOne(new Coordinates(2, 1), generationReport.livingCells()));
-    ok(Tools.containsOnlyOne(new Coordinates(2, 2), generationReport.livingCells()));
+    ok(TestTools.containsOnlyOne(new Coordinates(1, 1), generationReport.livingCells()));
+    ok(TestTools.containsOnlyOne(new Coordinates(1, 2), generationReport.livingCells()));
+    ok(TestTools.containsOnlyOne(new Coordinates(2, 1), generationReport.livingCells()));
+    ok(TestTools.containsOnlyOne(new Coordinates(2, 2), generationReport.livingCells()));
 });
 
 test("Rotator is rotating", function() {
@@ -57,13 +57,13 @@ test("Rotator is rotating", function() {
     equal(dyingCells.length, 2, "Two dying cell");
     equal(borningCells.length, 2, "Two borning cells");
 
-    ok(Tools.containsOnlyOne(new Coordinates(3, 3), livingCells));
+    ok(TestTools.containsOnlyOne(new Coordinates(3, 3), livingCells));
     
-    ok(Tools.containsOnlyOne(new Coordinates(3, 2), borningCells));
-    ok(Tools.containsOnlyOne(new Coordinates(3, 4), borningCells));
+    ok(TestTools.containsOnlyOne(new Coordinates(3, 2), borningCells));
+    ok(TestTools.containsOnlyOne(new Coordinates(3, 4), borningCells));
 
-    ok(Tools.containsOnlyOne(new Coordinates(4, 3), dyingCells));
-    ok(Tools.containsOnlyOne(new Coordinates(2, 3), dyingCells));
+    ok(TestTools.containsOnlyOne(new Coordinates(4, 3), dyingCells));
+    ok(TestTools.containsOnlyOne(new Coordinates(2, 3), dyingCells));
 
     generationReport = field.generationNext();
     livingCells = generationReport.livingCells();
@@ -74,12 +74,12 @@ test("Rotator is rotating", function() {
     equal(generationReport.dyingCells().length, 2, "Two dying cell");
     equal(generationReport.borningCells().length, 2, "Two borning cells");
 
-    ok(Tools.containsOnlyOne(new Coordinates(3, 3), livingCells));
+    ok(TestTools.containsOnlyOne(new Coordinates(3, 3), livingCells));
     
-    ok(Tools.containsOnlyOne(new Coordinates(3, 2), dyingCells));
-    ok(Tools.containsOnlyOne(new Coordinates(3, 4), dyingCells));
+    ok(TestTools.containsOnlyOne(new Coordinates(3, 2), dyingCells));
+    ok(TestTools.containsOnlyOne(new Coordinates(3, 4), dyingCells));
 
-    ok(Tools.containsOnlyOne(new Coordinates(4, 3), borningCells));
-    ok(Tools.containsOnlyOne(new Coordinates(2, 3), borningCells));
+    ok(TestTools.containsOnlyOne(new Coordinates(4, 3), borningCells));
+    ok(TestTools.containsOnlyOne(new Coordinates(2, 3), borningCells));
 });
 
