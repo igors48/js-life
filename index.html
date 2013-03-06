@@ -34,43 +34,59 @@
     <script src="text-format-tools.js"></script>
     <script src="cell-block.js"></script>
     <script src="cell-block-container.js"></script>
+    <script src="cell-block-container-mapper.js"></script>
 
     <script>
-        var editor = new KineticEditor('container', 475, 475, 60, 60);
+        var editor = new KineticEditor('container', 475, 475, 200, 200);
         var mode = 'edit';
         var field;
         
         function buttonClick() {
-            
+			
+			if (mode === 'play') {
+				return;
+			}
+			
             if (mode === 'edit') {
                 var button = document.getElementById('button');
                 button.innerHTML = 'Step';
             
+                editor.switchToPlayMode();
+
                 var model = editor.model();
                 var cells = model.cells();
-                editor.switchToPlayMode();
-            
-                field = new Field();
-            
-                var length = cells.length;
-            
-                for (var i = 0; i < length; ++i) {
-                    var current = cells[i];
-                
-                    field.putLiveCell(current.x(), current.y());
-                }
+
+				field = createField(cells);
             }    
             
             mode = 'play';
-            
+
+			animate();
+        }
+
+		function createField(cells) {
+            field = new Field();
+
+			var that = this;
+			
+			_.each(cells,
+				function (current) {
+					that.field.putLiveCell(current.x(), current.y());
+				}
+			);
+			
+			return field;
+		}		
+		
+		function animate() {
             setTimeout(
                 function newGeneration() {
                     generation();
-                    setTimeout(newGeneration, 100);
+                    setTimeout(newGeneration, 10);
                 }
-            , 100);
-        }
-
+            , 10);
+		}
+		
         function generation() {
             var generationReport = field.generationNext();
             var dying = generationReport.dyingCells();
@@ -156,8 +172,21 @@
 				
 				var formatReader = new Life105FormatReader();
 				var cellBlockContainer = formatReader.read(stringArrayReader);		
-				
-				alert(content);
+				var cells = CellBlockContainerMapper.map(cellBlockContainer, 100, 100);
+				/*
+				field = createField(cells);
+				mode = 'play';
+				animate();
+				*/
+				var model = new ToggleCellModel();
+            
+				_.each(cells,
+					function (cell) {
+						model.toggle(cell.x(), cell.y());
+					}
+				);
+
+				editor.replaceModel(model);
 			};
 			
 			reader.readAsText(file);

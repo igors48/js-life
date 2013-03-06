@@ -1,5 +1,8 @@
-001	integrate underscore.string library
-002	read local file
-003 CellBlockContainer converter
-004 create project structure
-005 init object fields in constructor function not in init method
+0001 [ ]	integrate underscore.string library
+0002 [ ]	read local file
+0003 [ ]	CellBlockContainer converter
+0004 [ ]	create project structure
+0005 [ ]	init object fields in constructor function not in init method
+0006 [ ]	revisit QUnit
+0007 [ ]	Golly file format
+0008 [ ]	RLE file format

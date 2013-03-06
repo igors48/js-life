@@ -109,3 +109,13 @@ Assert.isArray = function (value) {
         throw new Error('Is not an Array value');
     }
 };
+
+Assert.isCellBlockContainer = function (value) {
+    "use strict";
+    
+    var isCellBlockContainer = value instanceof CellBlockContainer;
+    
+    if (!isCellBlockContainer) {
+        throw new Error('Is not an CellBlockContainer value');
+    }
+};
