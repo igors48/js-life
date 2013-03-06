@@ -37,7 +37,10 @@
     <script src="cell-block-container-mapper.js"></script>
 
     <script>
-        var editor = new KineticEditor('container', 475, 475, 200, 200);
+        var COLS = 200;
+        var ROWS = 200;
+        
+        var editor = new KineticEditor('container', 475, 475, COLS, ROWS);
         var mode = 'edit';
         var field;
         
@@ -172,12 +175,8 @@
 				
 				var formatReader = new Life105FormatReader();
 				var cellBlockContainer = formatReader.read(stringArrayReader);		
-				var cells = CellBlockContainerMapper.map(cellBlockContainer, 100, 100);
-				/*
-				field = createField(cells);
-				mode = 'play';
-				animate();
-				*/
+				var cells = CellBlockContainerMapper.map(cellBlockContainer, COLS, ROWS);
+
 				var model = new ToggleCellModel();
             
 				_.each(cells,

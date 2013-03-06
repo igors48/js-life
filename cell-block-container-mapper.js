@@ -1,14 +1,16 @@
 var CellBlockContainerMapper = CellBlockContainerMapper || {};
 
-CellBlockContainerMapper.map = function (container, originCol, originRow) {
+CellBlockContainerMapper.map = function (container, cols, rows) {
 	"use strict";
 	
 	Assert.isCellBlockContainer(container);
-	Assert.isPositiveInteger(originCol);
-	Assert.isPositiveInteger(originRow);
+	Assert.isPositiveInteger(cols);
+	Assert.isPositiveInteger(rows);
 
+    var originCol = Math.floor(cols / 2);
+    var originRow = Math.floor(rows / 2);
+    
 	var cells = [];
-	//var that = this;
 	
 	_.each(container.cellBlocks(), 
 		function (cellBlock) {
@@ -21,10 +23,13 @@ CellBlockContainerMapper.map = function (container, originCol, originRow) {
 
 CellBlockContainerMapper._mapCellBlock = function (cellBlock, originCol, originRow, cells) {
 	"use strict";
-	
+	var blockOffset = cellBlock.blockOffset();
+    var correctedCol = originCol + blockOffset.x();
+    var correctedRow = originRow + blockOffset.y();
+    
 	_.each(cellBlock.cellsOffsets(),
 		function (line, index) {
-			CellBlockContainerMapper._mapCellLine(line, originCol, originRow + index, cells);
+			CellBlockContainerMapper._mapCellLine(line, correctedCol, correctedRow + index, cells);
 		}
 	);
 };
