@@ -8,3 +8,5 @@
 0008 [ ]	RLE file format
 0009 [ ]	age counter
 0010 [ ]	display description
+0011 [ ]    adaptive field size
+0012 [ ]    paste cells feature

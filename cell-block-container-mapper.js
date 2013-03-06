@@ -23,6 +23,7 @@ CellBlockContainerMapper.map = function (container, cols, rows) {
 
 CellBlockContainerMapper._mapCellBlock = function (cellBlock, originCol, originRow, cells) {
 	"use strict";
+    
 	var blockOffset = cellBlock.blockOffset();
     var correctedCol = originCol + blockOffset.x();
     var correctedRow = originRow + blockOffset.y();

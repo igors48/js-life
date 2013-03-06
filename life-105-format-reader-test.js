@@ -53,6 +53,28 @@ test("One cell block readed", function() {
 	TestTools.assertCellBlockParametersValid(firstCellBlock, -1, -2, [[1], [0]]);
 });
 
+test("One cell block with empty line readed", function() {
+    "use strict";
+
+	var reader = new StringArrayReader([
+		'#Life 1.05',
+		'#P -1 -2',
+		'.*.',
+		'.',
+		'*..'
+	]);
+	
+	var formatReader = new Life105FormatReader();
+
+	var result = formatReader.read(reader);	
+	
+	equal(result.cellBlocks().length, 1, 'one cell block readed');
+	
+	var firstCellBlock = result.cellBlocks()[0];
+	
+	TestTools.assertCellBlockParametersValid(firstCellBlock, -1, -2, [[1], [], [0]]);
+});
+
 test("Two cell blocks readed", function() {
     "use strict";
 

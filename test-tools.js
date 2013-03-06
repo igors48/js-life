@@ -19,6 +19,7 @@ TestTools.assertCellBlockParametersValid = function (cellBlock, offsetX, offsetY
 
 	equal(cellBlock.blockOffset().x(), offsetX, 'block offset x is valid');
 	equal(cellBlock.blockOffset().y(), offsetY, 'block offset y is valid');
+	equal(cellBlock.cellsOffsets().length, lineOffsets.length, 'lines counts are the same');
 
 	_.each(lineOffsets,
 		function (line, index) {
@@ -29,7 +30,8 @@ TestTools.assertCellBlockParametersValid = function (cellBlock, offsetX, offsetY
 }
 
 TestTools.asserttArraysAreEqual = function (first, second) {
-	
+	equal(first.length, second.length, 'length are equals');
+    
 	_.each(first,
 		function (value, index) {
 			equal(value, second[index], 'Elements at index [ ' + index + ' ] are not equals');
