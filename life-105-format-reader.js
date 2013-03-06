@@ -13,7 +13,7 @@ Life105FormatReader.prototype = {
 	read: function (reader) {
 		"use strict";
     
-		var signature = reader.next();
+		var signature = _.str.trim(reader.next());
 		
 		if (this.SIGNATURE !== signature) {
 			return new TextFormatReaderError(0, 0, 'Signature is not found');

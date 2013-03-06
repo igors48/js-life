@@ -13,6 +13,7 @@
     
     <script src="kinetic-v4.3.3.js"></script>
     <script src="underscore.js"></script>
+    <script src="underscore.string.js"></script>
     
     <script src="assert-base.js"></script>
     <script src="assert.js"></script>
@@ -26,6 +27,13 @@
     <script src="neighbors.js"></script>
     <script src="generation-report.js"></script>
     <script src="viewport.js"></script>
+	
+    <script src="string-array-reader.js"></script>
+    <script src="life-105-format-reader.js"></script>
+    <script src="text-format-reader-error.js"></script>
+    <script src="text-format-tools.js"></script>
+    <script src="cell-block.js"></script>
+    <script src="cell-block-container.js"></script>
 
     <script>
         var editor = new KineticEditor('container', 475, 475, 60, 60);
@@ -109,6 +117,52 @@
         function zoomEditorOut() {
             editor.zoom(-1);
         }
+
+		function handleFileSelect(event) {
+			event.stopPropagation();
+			event.preventDefault();
+
+			var files = event.target.files;
+			var firstFile = files[0];
+			
+			readFile(firstFile);
+		}
+  
+		function handleFileDrop(event) {
+			event.stopPropagation();
+			event.preventDefault();
+
+			var files = event.dataTransfer.files;;
+			var firstFile = files[0];
+			
+			readFile(firstFile);
+		}
+		
+		function handleDragOver(event) {
+			event.stopPropagation();
+			event.preventDefault();
+
+			event.dataTransfer.dropEffect = 'copy';
+		}
+
+		function readFile(file)	{
+			var reader = new FileReader();
+			
+			reader.onload = function (event) {
+				var content = event.currentTarget.result;
+				
+				var lines = _.str.lines(content);
+				var stringArrayReader = new StringArrayReader(lines);
+				
+				var formatReader = new Life105FormatReader();
+				var cellBlockContainer = formatReader.read(stringArrayReader);		
+				
+				alert(content);
+			};
+			
+			reader.readAsText(file);
+		}
+		
     </script>
     
     <button id="button" onclick="buttonClick()">Start</button>
@@ -120,6 +174,14 @@
     <button id="zoomOutButton" onclick="zoomEditorOut();">Zoom Out</button>
 	
 	<input type="file" id="files" name="files[]" multiple />
+	
+	<script>
+		document.getElementById('files').addEventListener('change', handleFileSelect, false);
+		
+		var dropZone = document.getElementById('container');
+		dropZone.addEventListener('dragover', handleDragOver, false);
+		dropZone.addEventListener('drop', handleFileDrop, false);
+	</script>
 	
   </body>
 </html>
