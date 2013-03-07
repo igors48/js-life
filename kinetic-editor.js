@@ -6,7 +6,7 @@ var KineticEditor = function (container, width, height, maxCols, maxRows) {
 
 KineticEditor.prototype = {
 
-    CELL_SIZE: 15,
+    CELL_SIZE: 8,
     CLICK_EVENT: 'click',
     EMPTY_CELL_COLOR: 'silver',
     LIVE_CELL_COLOR: 'green',
@@ -85,11 +85,54 @@ KineticEditor.prototype = {
         "use strict";
         
         Assert.isToggleCellModel(newModel);
+        
+        this._layer.removeChildren();
+        this._model = newModel;
+        
+        var cellSize = this._viewport.getCellSize();
 
+        var viewCell = new Kinetic.Circle({
+            x: 0,
+            y: 0,
+            width: cellSize,
+            height: cellSize,
+            fill: this.LIVE_CELL_COLOR
+        });
+        
+        var that = this;
+
+        viewCell.toImage(
+            {
+                width: cellSize,
+                height: cellSize,
+                callback: function(img) {
+                    
+                    that._iterateModelCells(
+                        function (cell) {
+                            var viewPortCoordinates = that._viewport.toViewPort(cell);
+                
+                            if (viewPortCoordinates) {
+                                var image = new Kinetic.Image({
+                                    image: img,
+                                    x: (viewPortCoordinates.x() + 1) * cellSize - cellSize / 4,
+                                    y: (viewPortCoordinates.y() + 1) * cellSize - cellSize / 4
+                                });
+
+                                that._layer.add(image);
+                            }
+                        }
+                    );
+                    
+                    that._layer.draw();
+                }
+            }
+        );
+        /*
         this._setVisibleModelCellsColors(this.EMPTY_CELL_COLOR);
         this._model = newModel;
         this._setVisibleModelCellsColors(this.LIVE_CELL_COLOR);
         this._repaint();
+        */
     },
     
     switchToPlayMode: function() {
