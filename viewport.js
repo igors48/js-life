@@ -91,6 +91,19 @@ ViewPort.prototype = {
         return coordinatesValid ? new Coordinates(viewPortCol, viewPortRow) : null;
     },
     
+    toViewCell: function (layerCoordinates) {
+        "use strict";
+        
+        Assert.isCoordinates(layerCoordinates);
+
+        var col = Math.floor(layerCoordinates.x() / this._cellSize);
+        var row = Math.floor(layerCoordinates.y() / this._cellSize);
+        
+        var result = new Coordinates(col, row);
+        
+        return result;
+    },
+    
     scrollX: function (delta) {
         "use strict";
         

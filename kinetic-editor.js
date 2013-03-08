@@ -6,7 +6,7 @@ var KineticEditor = function (container, width, height, maxCols, maxRows) {
 
 KineticEditor.prototype = {
 
-    CELL_SIZE: 8,
+    CELL_SIZE: 15,
     CLICK_EVENT: 'click',
     EMPTY_CELL_COLOR: 'silver',
     LIVE_CELL_COLOR: 'green',
@@ -36,11 +36,36 @@ KineticEditor.prototype = {
             height: height
         });
 
-        this._layer = new Kinetic.Layer();
-        stage.add(this._layer);
+        this._backgroundLayer = new Kinetic.Layer();
+        this._modelLayer = new Kinetic.Layer();
+        
+        var backgroundRect = new Kinetic.Rect({
+            x: 0,
+            y: 0,
+            width: width,
+            height: height,
+            fill: 'silver'
+        });
 
+        this._backgroundLayer.add(backgroundRect);
+        var that = this;
+        this._backgroundLayer.on(this.CLICK_EVENT,
+            function (event) {
+                var x = event.layerX;
+                var y = event.layerY;
+                
+                that._onLayerClick(x, y);
+            }
+        );
+
+        stage.add(this._backgroundLayer);
+        stage.add(this._modelLayer);
+        
+
+        /*
         this._createViewCellsArray();    
         this._createViewCells();
+        */
     },
     
     model: function () {
@@ -86,12 +111,12 @@ KineticEditor.prototype = {
         
         Assert.isToggleCellModel(newModel);
         
-        this._layer.removeChildren();
+        this._modelLayer.removeChildren();
         this._model = newModel;
         
         var cellSize = this._viewport.getCellSize();
 
-        var viewCell = new Kinetic.Circle({
+        var viewCell = new Kinetic.Rect({
             x: 0,
             y: 0,
             width: cellSize,
@@ -114,31 +139,34 @@ KineticEditor.prototype = {
                             if (viewPortCoordinates) {
                                 var image = new Kinetic.Image({
                                     image: img,
-                                    x: (viewPortCoordinates.x() + 1) * cellSize - cellSize / 4,
-                                    y: (viewPortCoordinates.y() + 1) * cellSize - cellSize / 4
+                                    x: (viewPortCoordinates.x()) * cellSize,
+                                    y: (viewPortCoordinates.y()) * cellSize
                                 });
 
-                                that._layer.add(image);
+                                that._modelLayer.add(image);
                             }
                         }
                     );
                     
-                    that._layer.draw();
+                    that._modelLayer.draw();
                 }
             }
         );
-        /*
-        this._setVisibleModelCellsColors(this.EMPTY_CELL_COLOR);
-        this._model = newModel;
-        this._setVisibleModelCellsColors(this.LIVE_CELL_COLOR);
-        this._repaint();
-        */
     },
     
-    switchToPlayMode: function() {
+    switchToPlayMode: function () {
         "use strict";
         
         this._playMode = true;
+    },
+    
+    _onLayerClick: function (x, y) {
+        var clickCoordinates = new Coordinates(x, y);
+        var viewCellCoordinates = this._viewport.toViewCell(clickCoordinates);
+        var modelCellCoordinates = this._viewport.toGlobal(viewCellCoordinates);
+        
+        this._model.toggle(modelCellCoordinates.x(), modelCellCoordinates.y());
+        this.replaceModel(this._model);
     },
     
     _repaint: function () {

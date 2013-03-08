@@ -136,6 +136,32 @@ test("ViewPort to Global coordinate conversion test", function() {
     equal(globalCoordinates.y(), 3, "Global y is correct"); 
 });
 
+test("ViewPort to View cell coordinate conversion test", function() {
+    "use strict";
+
+    var width = 50;
+    var height = 50;
+    var maxCols = 7;
+    var maxRows = 7;
+    var minCellSize = 0;
+    var maxCellSize = 0;
+    var initialCellSize = 10;
+    
+    var viewport = new ViewPort(width, height, maxCols, maxRows, minCellSize, maxCellSize, initialCellSize);
+
+    var layerCoordinates = new Coordinates(0, 0);
+    var viewCellCoordinates = viewport.toViewCell(layerCoordinates);
+    
+    equal(viewCellCoordinates.x(), 0, "view cell x is correct"); 
+    equal(viewCellCoordinates.y(), 0, "view cell y is correct"); 
+
+    layerCoordinates = new Coordinates(width - 1, height - 1);
+    viewCellCoordinates = viewport.toViewCell(layerCoordinates);
+    
+    equal(viewCellCoordinates.x(), 4, "view cell x is correct"); 
+    equal(viewCellCoordinates.y(), 4, "view cell y is correct"); 
+});
+
 test("Global to ViewPort coordinate conversion test", function() {
     "use strict";
 
@@ -199,7 +225,7 @@ test("ViewPort corner points test", function() {
     equal(rightBottomViewPort.y(), 4, "ViewPort right bottom y is correct");   
 });
 
-test("ViewPort corner points test", function() {
+test("ViewPort zoom test", function() {
     "use strict";
 
     var width = 50;
