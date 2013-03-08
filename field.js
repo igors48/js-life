@@ -1,7 +1,7 @@
 var Field = function () {
     "use strict";
 
-    this._cells = [];
+    this._cells = new CellsList();
 };
 
 Field.prototype = {
@@ -12,16 +12,13 @@ Field.prototype = {
         Assert.cellCoordinateValid(x);
         Assert.cellCoordinateValid(y);
         
-        //TODO provide constants for Cell state
-        var newLiveCell = new Cell(x, y, 1);
-        
-        this._cells.push(newLiveCell);
+        this._cells.add(x, y);
     },
     
     cellCount: function () {
         "use strict";
 
-        return this._cells.length;
+        return this._cells.count();
     },
 
     cellState: function (x, y) {
@@ -32,12 +29,14 @@ Field.prototype = {
         
         var cell = this._findCell(x, y);
         
-        return cell === null ? null : cell.state();
+        return cell === null ? null : 1;//cell.state();
     },
     
     habitat: function () {
         "use strict";
-
+        
+        return this._cells.habitat();
+        /*
         var xMin = Number.MAX_VALUE;    
         var yMin = Number.MAX_VALUE;    
         var xMax = 0;    
@@ -63,6 +62,7 @@ Field.prototype = {
         var habitat = new Area(topLeft, bottomRight);
         
         return habitat;
+        */
     },
     
     generationNext: function() {
@@ -119,7 +119,8 @@ Field.prototype = {
     _updateCells: function(livingCells, borningCells) {
         "use strict";
 
-        this._cells.length = 0;
+        //this._cells.length = 0;
+        this._cells = new CellsList();
 
         var that = this;
         
@@ -159,7 +160,11 @@ Field.prototype = {
     
     _findCell: function (x, y) {
         "use strict";
-
+        
+        var exists = this._cells.exists(x, y);
+        //FIXME
+        return exists ? new Cell(x, y, 1) : null;
+        /*
         var target = new Coordinates(x, y);
         var result = null;
         
@@ -177,6 +182,7 @@ Field.prototype = {
         );
         
         return result;
+        */
     }
     
 };

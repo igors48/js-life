@@ -69,8 +69,8 @@ CellsList.prototype = {
                 var rowMaxCol = _.max(row);
                 var rowMinCol = _.min(row);
 
-                colMin = Math.min(colMin, rowMaxCol);
-                colMax = Math.max(colMax, rowMinCol);
+                colMin = Math.min(colMin, rowMinCol);
+                colMax = Math.max(colMax, rowMaxCol);
             }
         );
         
