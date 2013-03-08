@@ -10,7 +10,7 @@ KineticEditor.prototype = {
     CLICK_EVENT: 'click',
     BACKGROUND_COLOR: 'silver',
     LIVE_CELL_COLOR: 'green',
-    MIN_CELL_SIZE: 4, 
+    MIN_CELL_SIZE: 1, 
     MAX_CELL_SIZE: 25,
     
     init: function (container, width, height, maxCols, maxRows) {
