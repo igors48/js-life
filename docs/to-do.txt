@@ -10,3 +10,4 @@
 0010 [ ]	display description
 0011 [ ]    adaptive field size
 0012 [ ]    paste cells feature
+0013 [ ]    sync wrapper for kinetic-editor._cacheCellView

@@ -85,9 +85,9 @@
             setTimeout(
                 function newGeneration() {
                     generation();
-                    setTimeout(newGeneration, 50);
+                    setTimeout(newGeneration, 5);
                 }
-            , 50);
+            , 5);
 		}
 		
         function generation() {
@@ -110,7 +110,7 @@
                 }
             );
             
-            editor.replaceModel(generationModel);
+            editor.paintModel(generationModel);
         }
         
         function scrollEditorRight() {
@@ -185,7 +185,7 @@
 					}
 				);
 
-				editor.replaceModel(model);
+				editor.paintModel(model);
 			};
 			
 			reader.readAsText(file);
