@@ -45,9 +45,21 @@ Field.prototype = {
             function (current) {
                 var neighbors = current.state();
                 
+                var x = current.coordinates().x();
+                var y = current.coordinates().y();
+                
+                var existent = that._cells.exists(x, y);
+                
+                if (existent) {
                 if (neighbors === 2 || neighbors === 3) {
                     var livingCell = new Coordinates(current.coordinates().x(), current.coordinates().y());
                     livingCells.push(livingCell);
+                }
+                } else {
+                    if (neighbors === 3) {
+                        var borningCell = new Coordinates(x, y);
+                        borningCells.push(borningCell);
+                    }
                 }
             }
         );
