@@ -24,6 +24,7 @@ Field.prototype = {
     generationNext: function () {
         "use strict";
 
+        var previousGenerationHabitat = this._cells.habitat();    
         var cells = this._cells.cells();
         var map = new CellsList();
         var that = this;
@@ -44,7 +45,10 @@ Field.prototype = {
             function (current) {
                 var neighbors = current.state();
                 
-                if ()
+                if (neighbors === 2 || neighbors === 3) {
+                    var livingCell = new Coordinates(current.coordinates().x(), current.coordinates().y());
+                    livingCells.push(livingCell);
+                }
             }
         );
         
@@ -58,8 +62,8 @@ Field.prototype = {
     _processLiveCell: function (cell, map) {
         "use strict";
 
-        var x = cell.x();    
-        var y = cell.y();
+        var x = cell.coordinates().x();    
+        var y = cell.coordinates().y();
         
         this._storeNeighborsCount(x, y, map);
 
@@ -68,7 +72,7 @@ Field.prototype = {
         
         var that = this;
         
-        _each(neighbors,
+        _.each(neighbors,
             function (current) {
                 that._storeNeighborsCount(current.x(), current.y(), map);
             }
