@@ -7,6 +7,27 @@ var CellsList = function () {
 
 CellsList.prototype = {
 
+    cells: function () {
+        "use strict";
+        
+        var result = [];
+        
+        _.each(this._list,
+            function (row, index) {
+            
+                _.each(row,
+                    function (item) {
+                        var cell = new Coordinates(item, index);
+                        
+                        result.push(cell);
+                    }
+                );
+            }
+        );
+        
+        return result;
+    },
+    
     add: function (x, y) {
         "use strict";
     

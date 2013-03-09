@@ -84,3 +84,23 @@ test("Habitat calculation", function() {
     var expected = new Area(new Coordinates(xFirst, yFirst), new Coordinates(xSecond, ySecond));    
     ok(actual.equals(expected), 'habitat is valid');
 });
+
+test("All added cells returns in list", function() {
+    "use strict";
+    
+    var list = new CellsList();
+    
+    var xFirst = 48;
+    var yFirst = 49;
+    var xSecond = 148;
+    var ySecond = 149;
+    
+    list.add(xFirst, yFirst);
+    list.add(xSecond, ySecond);
+ 
+    var cells = list.cells();
+    
+    equal(cells.length, 2, 'cell list length valid');
+    ok(cells[0].equals(new Coordinates(xFirst, yFirst)), 'first cell valid');
+    ok(cells[1].equals(new Coordinates(xSecond, ySecond)), 'second cell valid');
+});
