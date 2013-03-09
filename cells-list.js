@@ -29,7 +29,9 @@ CellsList.prototype = {
         
         if (this.exists(x, y)) {    
             var row = this._row(y);
-            this._list[y] = _.without(row, x);
+            var rest = this._list[y].slice(x + 1);
+            this._list[y].length = x;
+            this._list[y].push.apply(this._list[y], rest);
         
             --this._count;
         }
