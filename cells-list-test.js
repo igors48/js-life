@@ -92,15 +92,39 @@ test("All added cells returns in list", function() {
     
     var xFirst = 48;
     var yFirst = 49;
+    var valueFirst = 349;
+    
     var xSecond = 148;
     var ySecond = 149;
+    var valueSecond = 749;
     
-    list.add(xFirst, yFirst);
-    list.add(xSecond, ySecond);
+    list.add(xFirst, yFirst, valueFirst);
+    list.add(xSecond, ySecond, valueSecond);
  
     var cells = list.cells();
     
     equal(cells.length, 2, 'cell list length valid');
-    ok(cells[0].equals(new Coordinates(xFirst, yFirst)), 'first cell valid');
-    ok(cells[1].equals(new Coordinates(xSecond, ySecond)), 'second cell valid');
+    ok(cells[0].equals(new Cell(xFirst, yFirst, valueFirst)), 'first cell valid');
+    ok(cells[1].equals(new Cell(xSecond, ySecond, valueSecond)), 'second cell valid');
 });
+
+test("Add and get value test", function() {
+    "use strict";
+    
+    var list = new CellsList();
+    
+    var x = 48;
+    var y = 49;
+    var value = 148;
+    
+    list.add(x, y, value);
+ 
+    var restored = list.get(x, y);
+    
+    equal(restored, value, 'restored value valid');
+    
+    var notExists = list.get(x + 1, y);
+
+    equal(notExists, null, 'not existent value reaturns as null');    
+});
+

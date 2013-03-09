@@ -53,7 +53,7 @@ Assert.cellCoordinateValid = function (value) {
 Assert.cellStateValid = function (value) {
     "use strict";
 	
-    var isStateValid = AssertBase.isOneOfThese(value, [1, 2]);
+    var isStateValid = AssertBase.isInteger(value);
     
     if (!isStateValid) {
         throw new Error('Cell state [ ' + value + ' ] is invalid');

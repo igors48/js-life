@@ -1,4 +1,3 @@
-// TODO looks line state does not need => Cell == Coordinates
 var Cell = function (x, y, state) {
     "use strict";
     
@@ -28,6 +27,19 @@ Cell.prototype = {
         "use strict";
         
         return this._state;
+    },
+    
+    equals: function (that) {
+        "use strict";
+
+        if (!(that instanceof Cell)) {
+            return false;
+        }
+        
+        var coordinatesEqual = this._coordinates.equals(that.coordinates());
+        var statesEqual = this._state === that.state();
+        
+        return coordinatesEqual && statesEqual;
     }
     
 };

@@ -21,49 +21,32 @@ Field.prototype = {
         return this._cells.habitat();
     },
     
-    generationNext: function() {
+    generationNext: function () {
         "use strict";
 
+        var cells = this._cells.cells();
+        var map = new CellsList();
+        var that = this;
+        
+        _.each(cells,
+            function (cell) {
+                that._processLiveCell(cell, map);
+            }
+        );
+        
+        var mapValues = map.cells();
+        
         var borningCells = [];
         var dyingCells = [];
         var livingCells = [];        
-        var previousGenerationHabitat = this.habitat();
-        var potentiallyArea = previousGenerationHabitat.shrink();
-        
-        var topLeft = potentiallyArea.topLeft();        
-        var bottomRight = potentiallyArea.bottomRight();
-        
-        var xMin = topLeft.x();
-        var xMax = bottomRight.x();
 
-        var yMin = topLeft.y();
-        var yMax = bottomRight.y();
-        
-        for (var x = xMin; x <= xMax; ++x) {
-            
-            for (var y = yMin; y <= yMax; ++y) {
-                var exists = this._findCell(x, y);
-                var neighbors = this._countNeighbors(x, y);
+        _.each(mapValues,
+            function (current) {
+                var neighbors = current.state();
                 
-                if (exists) {
-                
-                    if (neighbors < 2 || neighbors > 3) {
-                        var dyingCell = new Coordinates(x ,y);
-                        dyingCells.push(dyingCell);    
-                    }
-                    
-                    if (neighbors === 2 || neighbors === 3) {
-                        var livingCell = new Coordinates(x, y);
-                        livingCells.push(livingCell);
-                    }
-                }
-                
-                if (!exists && neighbors === 3) {
-                    var borningCell = new Coordinates(x ,y);
-                    borningCells.push(borningCell);    
-                }
+                if ()
             }
-        }
+        );
         
         this._updateCells(livingCells, borningCells);
         
@@ -71,8 +54,38 @@ Field.prototype = {
         
         return generationReport;
     },
+
+    _processLiveCell: function (cell, map) {
+        "use strict";
+
+        var x = cell.x();    
+        var y = cell.y();
+        
+        this._storeNeighborsCount(x, y, map);
+
+        var coordinates = new Coordinates(x, y);    
+        var neighbors = Neighbors.getNeighbors(coordinates);
+        
+        var that = this;
+        
+        _each(neighbors,
+            function (current) {
+                that._storeNeighborsCount(current.x(), current.y(), map);
+            }
+        );        
+    },
+
+    _storeNeighborsCount: function (x, y, map) {
+
+        if (map.exists(x, y)) {
+            return;
+        }
+        
+        var neighborsCount = this._countNeighbors(x, y);
+        map.add(x, y, neighborsCount);
+    },
     
-    _updateCells: function(livingCells, borningCells) {
+    _updateCells: function (livingCells, borningCells) {
         "use strict";
 
         this._cells = new CellsList();

@@ -13,11 +13,11 @@ CellsList.prototype = {
         var result = [];
         
         _.each(this._list,
-            function (row, index) {
+            function (row, rowIndex) {
             
                 _.each(row,
-                    function (item) {
-                        var cell = new Coordinates(item, index);
+                    function (value, colIndex) {
+                        var cell = new Cell(colIndex, rowIndex, value);
                         
                         result.push(cell);
                     }
@@ -28,18 +28,33 @@ CellsList.prototype = {
         return result;
     },
     
-    add: function (x, y) {
+    add: function (x, y, value) {
         "use strict";
     
         Assert.isPositiveInteger(x);
         Assert.isPositiveInteger(y);
 
+        value = value || x;
+        Assert.isPositiveInteger(value);
+
         if (!this.exists(x, y)) {    
             var row = this._row(y);
-            row[x] = x;
+            row[x] = value;
         
             ++this._count;
         }
+    },
+    
+    get: function (x, y) {
+        "use strict";
+    
+        Assert.isPositiveInteger(x);
+        Assert.isPositiveInteger(y);
+
+        var row = this._row(y);
+        var result = x in row ? row[x] : null;
+
+        return result;    
     },
     
     remove: function (x, y) {
