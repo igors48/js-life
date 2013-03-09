@@ -48,14 +48,22 @@ Field.prototype = {
                 var x = current.coordinates().x();
                 var y = current.coordinates().y();
                 
+                //TODO away from this search
                 var existent = that._cells.exists(x, y);
                 
                 if (existent) {
-                if (neighbors === 2 || neighbors === 3) {
-                    var livingCell = new Coordinates(current.coordinates().x(), current.coordinates().y());
-                    livingCells.push(livingCell);
-                }
+                
+                    if (neighbors < 2 || neighbors > 3) {
+                        var dyingCell = new Coordinates(x ,y);
+                        dyingCells.push(dyingCell);    
+                    }
+                    
+                    if (neighbors === 2 || neighbors === 3) {
+                        var livingCell = new Coordinates(x, y);
+                        livingCells.push(livingCell);
+                    }
                 } else {
+                
                     if (neighbors === 3) {
                         var borningCell = new Coordinates(x, y);
                         borningCells.push(borningCell);

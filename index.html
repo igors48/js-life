@@ -38,8 +38,8 @@
     <script src="cell-block-container-mapper.js"></script>
 
     <script>
-        var COLS = 200;
-        var ROWS = 200;
+        var COLS = 1000;
+        var ROWS = 1000;
         
         var editor = new KineticEditor('container', 475, 475, COLS, ROWS);
         var mode = 'edit';
@@ -101,12 +101,14 @@
             
             _.each(living,
                 function (cell) {
+                    //TODO from toggle to set without checking exists
                     generationModel.toggle(cell.x(), cell.y());
                 }
             );
 
             _.each(borning,
                 function (cell) {
+                    //TODO from toggle to set without checking exists
                     generationModel.toggle(cell.x(), cell.y());
                 }
             );
