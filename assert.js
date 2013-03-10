@@ -20,6 +20,16 @@ Assert.isString = function (value) {
     }
 };
 
+Assert.isBoolean = function (value) {
+    "use strict";
+	
+    var isBoolean = _.isBoolean(value);
+    
+    if (!isBoolean) {
+        throw new Error('Value [ ' + value + ' ] is not Boolean');
+    }
+};
+
 Assert.isInteger = function (value) {
     "use strict";
 	

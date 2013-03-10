@@ -13,7 +13,8 @@ Cell.prototype = {
         Assert.cellCoordinateValid(y);
         this._coordinates = new Coordinates(x, y);
         
-        Assert.cellStateValid(state);
+       //TODO create notNull && notUndefined assertion 
+       //Assert.cellStateValid(state);
         this._state = state;
     },
     

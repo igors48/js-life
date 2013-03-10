@@ -35,7 +35,8 @@ CellsList.prototype = {
         Assert.isPositiveInteger(y);
 
         value = value || x;
-        Assert.isPositiveInteger(value);
+        //TODO create notNull && notUndefined assertion 
+        //Assert.isPositiveInteger(value);
 
         if (!this.exists(x, y)) {    
             var row = this._row(y);

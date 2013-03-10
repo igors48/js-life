@@ -43,13 +43,14 @@ Field.prototype = {
 
         _.each(mapValues,
             function (current) {
-                var neighbors = current.state();
+                var neighborsAndStatus = current.state();
+                var neighbors = neighborsAndStatus.neighborsCount();
                 
                 var x = current.coordinates().x();
                 var y = current.coordinates().y();
                 
                 //TODO away from this search
-                var existent = that._cells.exists(x, y);
+                var existent = !neighborsAndStatus.isEmpty();//that._cells.exists(x, y);
                 
                 if (existent) {
                 
@@ -106,7 +107,11 @@ Field.prototype = {
         }
         
         var neighborsCount = this._countNeighbors(x, y);
-        map.add(x, y, neighborsCount);
+        var isEmpty = !this._cells.exists(x, y);
+        
+        var neighborsAndStatus = new NeighborsAndStatus(neighborsCount, isEmpty);
+        
+        map.add(x, y, neighborsAndStatus);
     },
     
     _updateCells: function (livingCells, borningCells) {
