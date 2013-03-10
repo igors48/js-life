@@ -5,6 +5,7 @@ http://www.conwaylife.com/wiki/Main_Page
 File formats
 http://www.conwaylife.com/wiki/Life_1.05
 http://www.conwaylife.com/wiki/Plaintext
+http://www.conwaylife.com/wiki/Rle
 
 READING FILES IN JAVASCRIPT USING THE FILE APIS
 http://www.html5rocks.com/en/tutorials/file/dndfiles/
