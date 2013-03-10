@@ -24,6 +24,22 @@ test("If cell added then cell returns", function() {
     ok((new Coordinates(x, y)).equals(cell), 'Cell coordinates valid');    
 });
 
+test("If cell put then cell returns", function() {
+    "use strict";
+
+    var x = 48;
+    var y = 49;
+    
+    var model = new ToggleCellModel();
+    model.put(x, y);
+    
+    var cells = model.cells();
+    equal(cells.length, 1, 'There is one cell');    
+    
+    var cell = cells[0];
+    ok((new Coordinates(x, y)).equals(cell), 'Cell coordinates valid');    
+});
+
 test("If cell toggled then cell removed", function() {
     "use strict";
 

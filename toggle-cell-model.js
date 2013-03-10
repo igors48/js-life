@@ -12,6 +12,16 @@ ToggleCellModel.prototype = {
         this._cells = [];
     },
     
+    put: function (x, y) {
+        "use strict";
+
+        Assert.cellCoordinateValid(x);
+        Assert.cellCoordinateValid(y);
+
+        var coordinates = new Coordinates(x, y);
+        this._cells.push(coordinates);
+    },
+    
     toggle: function (x, y) {
         "use strict";
 

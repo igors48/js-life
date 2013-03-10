@@ -101,15 +101,13 @@
             
             _.each(living,
                 function (cell) {
-                    //TODO from toggle to set without checking exists
-                    generationModel.toggle(cell.x(), cell.y());
+                    generationModel.put(cell.x(), cell.y());
                 }
             );
 
             _.each(borning,
                 function (cell) {
-                    //TODO from toggle to set without checking exists
-                    generationModel.toggle(cell.x(), cell.y());
+                    generationModel.put(cell.x(), cell.y());
                 }
             );
             
@@ -184,7 +182,7 @@
             
 				_.each(cells,
 					function (cell) {
-						model.toggle(cell.x(), cell.y());
+						model.put(cell.x(), cell.y());
 					}
 				);
 
