@@ -1,21 +1,15 @@
 var CellBlock = function (blockOffset, cellsOffsets) {
     "use strict";
     
-    this.init(blockOffset, cellsOffsets);
+    Assert.isOffset(blockOffset);
+    this._blockOffset = blockOffset;
+        
+    Assert.isArray(cellsOffsets);
+    this._cellsOffsets = cellsOffsets;
 }
 
 CellBlock.prototype = {
 
-    init: function (blockOffset, cellsOffsets) {
-        "use strict";
-    
-        Assert.isOffset(blockOffset);
-        this._blockOffset = blockOffset;
-        
-        Assert.isArray(cellsOffsets);
-        this._cellsOffsets = cellsOffsets;
-    },
-	
 	blockOffset: function() {
         "use strict";
     

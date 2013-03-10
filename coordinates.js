@@ -1,21 +1,15 @@
 var Coordinates = function (x, y) {
     "use strict";
     
-    this.init(x, y);
+    Assert.cellCoordinateValid(x);
+    this._x = x;
+        
+    Assert.cellCoordinateValid(y);
+    this._y = y;
 };
 
 Coordinates.prototype = {
 
-    init: function (x, y) {
-        "use strict";
-        
-        Assert.cellCoordinateValid(x);
-        this._x = x;
-        
-        Assert.cellCoordinateValid(y);
-        this._y = y;
-    },
-    
     x: function () {
         "use strict";
         

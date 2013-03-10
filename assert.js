@@ -20,6 +20,17 @@ Assert.isString = function (value) {
     }
 };
 
+Assert.isNotNullAndDefined = function (value) {
+    "use strict";
+	
+    var isNull = _.isNull(value);
+    var isUndefined = _.isUndefined(value);
+    
+    if (isNull || isUndefined) {
+        throw new Error('Value [ ' + value + ' ] is null or undefined');
+    }
+};
+
 Assert.isBoolean = function (value) {
     "use strict";
 	

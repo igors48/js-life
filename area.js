@@ -1,21 +1,15 @@
 var Area = function (topLeft, bottomRight) {
     "use strict";
     
-    this.init(topLeft, bottomRight);
+    Assert.isCoordinates(topLeft);
+    this._topLeft = topLeft;
+        
+    Assert.isCoordinates(bottomRight);
+    this._bottomRight = bottomRight;
 }
 
 Area.prototype = {
 
-    init: function (topLeft, bottomRight) {
-        "use strict";
-    
-        Assert.isCoordinates(topLeft);
-        this._topLeft = topLeft;
-        
-        Assert.isCoordinates(bottomRight);
-        this._bottomRight = bottomRight;
-    },
-    
     topLeft: function () {
         "use strict";
         

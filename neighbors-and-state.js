@@ -1,4 +1,4 @@
-var NeighborsAndStatus = function (neighborsCount, isEmpty) {
+var NeighborsAndState = function (neighborsCount, isEmpty) {
     "use strict";
     
     Assert.isPositiveInteger(neighborsCount);
@@ -8,7 +8,7 @@ var NeighborsAndStatus = function (neighborsCount, isEmpty) {
     this._isEmpty = isEmpty;
 }
 
-NeighborsAndStatus.prototype = {
+NeighborsAndState.prototype = {
 
     neighborsCount: function () {
         "use strict";

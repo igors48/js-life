@@ -43,14 +43,13 @@ Field.prototype = {
 
         _.each(mapValues,
             function (current) {
-                var neighborsAndStatus = current.state();
+                var neighborsAndStatus = current.value();
                 var neighbors = neighborsAndStatus.neighborsCount();
                 
                 var x = current.coordinates().x();
                 var y = current.coordinates().y();
                 
-                //TODO away from this search
-                var existent = !neighborsAndStatus.isEmpty();//that._cells.exists(x, y);
+                var existent = !neighborsAndStatus.isEmpty();
                 
                 if (existent) {
                 
@@ -86,7 +85,7 @@ Field.prototype = {
         var x = cell.coordinates().x();    
         var y = cell.coordinates().y();
         
-        this._storeNeighborsCount(x, y, map);
+        this._storeNeighborsCountAndCellState(x, y, true, map);
 
         var coordinates = new Coordinates(x, y);    
         var neighbors = Neighbors.getNeighbors(coordinates);
@@ -95,21 +94,21 @@ Field.prototype = {
         
         _.each(neighbors,
             function (current) {
-                that._storeNeighborsCount(current.x(), current.y(), map);
+                that._storeNeighborsCountAndCellState(current.x(), current.y(), false, map);
             }
         );        
     },
 
-    _storeNeighborsCount: function (x, y, map) {
+    _storeNeighborsCountAndCellState: function (x, y, liveCell, map) {
 
         if (map.exists(x, y)) {
             return;
         }
         
         var neighborsCount = this._countNeighbors(x, y);
-        var isEmpty = !this._cells.exists(x, y);
+        var isEmpty = liveCell ? false : !this._cells.exists(x, y);
         
-        var neighborsAndStatus = new NeighborsAndStatus(neighborsCount, isEmpty);
+        var neighborsAndStatus = new NeighborsAndState(neighborsCount, isEmpty);
         
         map.add(x, y, neighborsAndStatus);
     },
