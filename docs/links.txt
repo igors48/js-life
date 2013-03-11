@@ -9,3 +9,11 @@ http://www.conwaylife.com/wiki/Rle
 
 READING FILES IN JAVASCRIPT USING THE FILE APIS
 http://www.html5rocks.com/en/tutorials/file/dndfiles/
+
+Normalize.css
+http://nicolasgallagher.com/about-normalize-css/
+
+HTML5 boilerplate
+http://html5boilerplate.com/
+https://github.com/h5bp/html5-boilerplate/blob/master/doc/usage.md
+http://starwebdesign.com.ua/blog/2011/02/16/initializr-generator-chistogo-i-nastraivaemogo-html5-shablona-osnovannogo-na-boilerplate/
