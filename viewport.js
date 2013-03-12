@@ -1,38 +1,31 @@
 var ViewPort = function (width, height, maxCols, maxRows, minCellSize, maxCellSize, initialCellSize) {
     "use strict";
     
-    this.init(width, height, maxCols, maxRows, minCellSize, maxCellSize, initialCellSize);
+    Assert.isPositiveInteger(width);    
+    this._width = width; 
+        
+    Assert.isPositiveInteger(height);    
+    this._height = height; 
+        
+    Assert.isPositiveInteger(maxCols);    
+    this._maxCols = maxCols; 
+        
+    Assert.isPositiveInteger(maxRows);    
+    this._maxRows = maxRows; 
+        
+    Assert.isPositiveInteger(minCellSize);    
+    this._minCellSize = minCellSize; 
+        
+    Assert.isPositiveInteger(maxCellSize);    
+    this._maxCellSize = maxCellSize; 
+        
+    Assert.isPositiveInteger(initialCellSize);    
+    this._initialCellSize = initialCellSize;
+
+    this._init();    
 };
 
 ViewPort.prototype = {
-    
-    init: function (width, height, maxCols, maxRows, minCellSize, maxCellSize, initialCellSize) {
-        "use strict";
-
-        Assert.isPositiveInteger(width);    
-        this._width = width; 
-        
-        Assert.isPositiveInteger(height);    
-        this._height = height; 
-        
-        Assert.isPositiveInteger(maxCols);    
-        this._maxCols = maxCols; 
-        
-        Assert.isPositiveInteger(maxRows);    
-        this._maxRows = maxRows; 
-        
-        Assert.isPositiveInteger(minCellSize);    
-        this._minCellSize = minCellSize; 
-        
-        Assert.isPositiveInteger(maxCellSize);    
-        this._maxCellSize = maxCellSize; 
-        
-        Assert.isPositiveInteger(initialCellSize);    
-        this._initialCellSize = initialCellSize; 
-        
-        this._cellSize = this._initialCellSize;
-        this._reset();
-    },
     
     getCols: function () {
         "use strict";
@@ -141,6 +134,21 @@ ViewPort.prototype = {
             this._cellSize = newValue;
             this._reset();
         }
+    },
+    
+    zoomToFit: function(area) {
+        "use strict";
+
+        Assert.isArea(area);
+
+        
+    },
+    
+    _init: function () {
+        "use strict";
+
+        this._cellSize = this._initialCellSize;
+        this._reset();
     },
     
     _reset: function () {
