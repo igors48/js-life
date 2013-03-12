@@ -22,6 +22,22 @@ Area.prototype = {
         return this._bottomRight;
     },
     
+    width: function () {
+        "use strict";
+
+        var width = this._bottomRight.x() - this._topLeft.x();
+
+        return width;    
+    },
+    
+    height: function () {
+        "use strict";
+
+        var height = this._bottomRight.y() - this._topLeft.y();
+
+        return height;    
+    },
+    
     shrink: function () {
         "use strict";
         
