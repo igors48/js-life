@@ -131,24 +131,51 @@ ViewPort.prototype = {
         var valid = (newValue >= this._minCellSize) && (newValue <= this._maxCellSize);
         
         if (valid) {
-            this._cellSize = newValue;
-            this._reset();
+            this._zoomTo(newValue);
         }
     },
     
-    zoomToFit: function(area) {
+    zoomToFit: function (area) {
         "use strict";
 
         Assert.isArea(area);
 
+        var width = area.width();        
+        var cellWidth = Math.floor(this._width / width);
+        cellWidth = cellWidth < this._minCellSize ? this._minCellSize : cellWidth;
+        cellWidth = cellWidth > this._maxCellSize ? this._maxCellSize : cellWidth;
+
+        var height = area.height();
+        var cellHeight = Math.floor(this._height / height);
+        cellHeight = cellHeight < this._minCellSize ? this._minCellSize : cellHeight;
+        cellHeight = cellHeight > this._maxCellSize ? this._maxCellSize : cellHeight;
         
+        var cellSize = Math.min(cellWidth, cellHeight);
+        
+        this._zoomTo(cellSize);
+        
+        var viewPortCenterX = Math.floor(this._left + this._cols / 2);
+        var viewPortCenterY = Math.floor(this._top + this._rows / 2);
+        var areaCenter = area.center();    
+        
+        var deltaX = areaCenter.x() - viewPortCenterX;
+        var deltaY = areaCenter.y() - viewPortCenterY;
+        
+        this.scrollX(deltaX);
+        this.scrollY(deltaY);
+    },
+    
+    _zoomTo: function (cellSize) {
+        "use strict";
+
+        this._cellSize = cellSize;
+        this._reset();
     },
     
     _init: function () {
         "use strict";
 
-        this._cellSize = this._initialCellSize;
-        this._reset();
+        this._zoomTo(this._initialCellSize);
     },
     
     _reset: function () {
