@@ -17,3 +17,6 @@ HTML5 boilerplate
 http://html5boilerplate.com/
 https://github.com/h5bp/html5-boilerplate/blob/master/doc/usage.md
 http://starwebdesign.com.ua/blog/2011/02/16/initializr-generator-chistogo-i-nastraivaemogo-html5-shablona-osnovannogo-na-boilerplate/
+
+KineticJS ScrollBars
+http://www.html5canvastutorials.com/labs/html5-canvas-simple-scrollbars-with-kineticjs/
