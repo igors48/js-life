@@ -73,13 +73,16 @@
             field = new Field();
 
 			var that = this;
-			
+            			
 			_.each(cells,
 				function (current) {
-					that.field.putLiveCell(current.x(), current.y());
+                    var x = current.x();
+                    var y = current.y();
+                    
+					that.field.putLiveCell(x, y);
 				}
 			);
-			
+			            
 			return field;
 		}		
 		
@@ -181,13 +184,29 @@
 
 				var model = new ToggleCellModel();
             
-				_.each(cells,
+			    var rowMin = Number.MAX_VALUE;
+                var rowMax = 0;
+                var colMin = Number.MAX_VALUE;
+                var colMax = 0;
+                
+                _.each(cells,
 					function (cell) {
-						model.put(cell.x(), cell.y());
+                        var x = cell.x();
+                        var y = cell.y();
+                        
+						model.put(x, y);
+                    
+                        rowMin = Math.min(rowMin, y);
+                        rowMax = Math.max(rowMax, y);
+                        colMin = Math.min(colMin, x);
+                        colMax = Math.max(colMax, x);
 					}
 				);
+				
+                editor.paintModel(model);
 
-				editor.paintModel(model);
+                var area = new Area(new Coordinates(colMin, rowMin), new Coordinates(colMax, rowMax));
+                editor.zoomToFit(area);
 			};
 			
 			reader.readAsText(file);

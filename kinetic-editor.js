@@ -101,6 +101,16 @@ KineticEditor.prototype = {
         this.paintModel(this._model);
     },
     
+    zoomToFit: function (area) {
+        "use strict";
+        
+        Assert.isArea(area);
+        
+        this._viewport.zoomToFit(area);
+        this._cacheCellView();
+        this.paintModel(this._model);
+    },
+    
     paintModel: function (newModel) {
         "use strict";
         
