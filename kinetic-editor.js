@@ -146,6 +146,8 @@ KineticEditor.prototype = {
     },
 
     _cacheCellViewAndPaint: function () {
+        "use strict";
+        
         var cellSize = this._viewport.getCellSize();
 
         var viewCell = new Kinetic.Rect({
@@ -169,6 +171,7 @@ KineticEditor.prototype = {
     },
     
     _onLayerClick: function (event) {
+        "use strict";
         
         if (this._playMode) {
             return;
