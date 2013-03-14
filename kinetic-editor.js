@@ -64,7 +64,7 @@ KineticEditor.prototype = {
         stage.add(this._backgroundLayer);
         stage.add(this._modelLayer);
 
-        this._cacheCellView();
+        this._cacheCellViewAndPaint();
     },
     
     model: function () {
@@ -97,8 +97,7 @@ KineticEditor.prototype = {
         Assert.isInteger(delta);
         
         this._viewport.zoom(delta);
-        this._cacheCellView();
-        this.paintModel(this._model);
+        this._cacheCellViewAndPaint();
     },
     
     zoomToFit: function (area) {
@@ -107,8 +106,7 @@ KineticEditor.prototype = {
         Assert.isArea(area);
         
         this._viewport.zoomToFit(area);
-        this._cacheCellView();
-        this.paintModel(this._model);
+        this._cacheCellViewAndPaint();
     },
     
     paintModel: function (newModel) {
@@ -147,7 +145,7 @@ KineticEditor.prototype = {
         this._playMode = true;
     },
 
-    _cacheCellView: function () {
+    _cacheCellViewAndPaint: function () {
         var cellSize = this._viewport.getCellSize();
 
         var viewCell = new Kinetic.Rect({
@@ -165,6 +163,7 @@ KineticEditor.prototype = {
             height: cellSize,
             callback: function(image) {
                 that._cachedCellView = image;
+                that.paintModel(that._model);
             }
         });
     },
