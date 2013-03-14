@@ -255,3 +255,22 @@ test("ViewPort zoom test", function() {
     equal(viewport.getCellSize(), 3, "cell size can not be greater than maximum");
 });
 
+test("ViewPort zoom to fit test", function() {
+    "use strict";
+
+    var width = 150;
+    var height = 50;
+    var maxCols = 200;
+    var maxRows = 100;
+    var minCellSize = 1;
+    var maxCellSize = 10;
+    var initialCellSize = 2;
+    
+    var viewport = new ViewPort(width, height, maxCols, maxRows, minCellSize, maxCellSize, initialCellSize);
+    
+    var area = new Area(new Coordinates(5, 4), new Coordinates(20, 10));
+    
+    viewport.zoomToFit(area);
+    
+    equal(viewport.getCellSize(), 8, "zoom value valid");
+});

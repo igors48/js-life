@@ -42,3 +42,26 @@ test("Area shrink near border test", function() {
     
     ok(shrinked.equals(expected), "shrinked == expected");
 });
+
+test("Area width and height calculation test", function() {
+    "use strict";
+    
+    var area = new Area(new Coordinates(5, 3), new Coordinates(8, 10));
+    
+    var width = area.width();
+    var height = area.height();
+    
+    equal(width, 3, "width valid");
+    equal(height, 7, "height valid");
+});
+
+test("Area center calculation test", function() {
+    "use strict";
+    
+    var area = new Area(new Coordinates(5, 3), new Coordinates(8, 10));
+    
+    var center = area.center();
+    
+    equal(center.x(), 6, "center x valid");
+    equal(center.y(), 6, "center y valid");
+});
