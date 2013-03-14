@@ -20,3 +20,7 @@ http://starwebdesign.com.ua/blog/2011/02/16/initializr-generator-chistogo-i-nast
 
 KineticJS ScrollBars
 http://www.html5canvastutorials.com/labs/html5-canvas-simple-scrollbars-with-kineticjs/
+
+JS Best practices
+http://habrahabr.ru/post/172751/
+http://habrahabr.ru/post/162317/
