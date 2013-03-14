@@ -57,6 +57,24 @@ ViewPort.prototype = {
         return this._cellSize;
     },
 
+    getHorizontalScrollRatio: function () {
+        "use strict";
+
+        var maxLeft = this._maxCols - this._cols;
+        var ratio = this._left / maxLeft;
+        
+        return ratio;
+    },
+    
+    setHorizontalScrollRatio: function (ratio) {
+        "use strict";
+        
+        Assert.isNumber(ratio);
+        
+        var maxLeft = this._maxCols - this._cols;
+        this._left = Math.floor(maxLeft * ratio);
+    },
+    
     toGlobal: function (viewPortCoordinates) {
         "use strict";
         

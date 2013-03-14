@@ -51,6 +51,16 @@ Assert.isInteger = function (value) {
     }
 };
 
+Assert.isNumber = function (value) {
+    "use strict";
+	
+    var isNumber = (_.isNumber(value)) && (!_.isNaN(value));
+    
+    if (!isNumber) {
+        throw new Error('Value [ ' + value + ' ] is not number');
+    }
+};
+
 Assert.isPositiveInteger = function (value) {
     "use strict";
 	

@@ -16,6 +16,7 @@ KineticEditor.prototype = {
     SCROLL_BAR_WIDTH: 20,
     SCROLL_BAR_AREA_FILL: 'black',
     SCROLL_BAR_AREA_OPACITY: 0.3,
+    SCROLL_THUMB_WIDTH: 50,
     SCROLL_BAR_THUMB_FILL: '#9f005b',
     SCROLL_BAR_THUMB_OPACITY: 0.9,
 
@@ -144,11 +145,12 @@ KineticEditor.prototype = {
 
     _initHorizontalScrollBar: function (width, height) {
         var horizontalScrollAreaLeft = this.SCROLL_BAR_INDENT;
-        var horizontalScrollAreaRight = width - this.SCROLL_BAR_INDENT;
         var horizontalScrollAreaTop = height - this.SCROLL_BAR_INDENT - this.SCROLL_BAR_WIDTH;
 
         var horizontalScrollAreaWidth = width - 2 * this.SCROLL_BAR_INDENT - this.SCROLL_BAR_WIDTH;
         var horizontalScrollAreaHeight = this.SCROLL_BAR_WIDTH;
+        
+        var horizontalScrollAreaRight = horizontalScrollAreaLeft + horizontalScrollAreaWidth;
         
         var horizontalScrollArea = new Kinetic.Rect({
             x: horizontalScrollAreaLeft,
@@ -159,11 +161,14 @@ KineticEditor.prototype = {
             opacity: this.SCROLL_BAR_AREA_OPACITY
         });
 
-        var horizontalScrollThumbLeft = horizontalScrollAreaLeft;
-        var horizontalScrollThumbTop = horizontalScrollAreaTop;
-
-        var horizontalScrollThumbWidth = 50;
+        var horizontalScrollThumbWidth = this.SCROLL_THUMB_WIDTH;
         var horizontalScrollThumbHeight = this.SCROLL_BAR_WIDTH;
+
+        var horizontalScrollThumbLeftMax = horizontalScrollAreaRight - horizontalScrollThumbWidth;
+
+        var ratio = this._viewport.getHorizontalScrollRatio();
+        var horizontalScrollThumbLeft = horizontalScrollAreaLeft + Math.floor((horizontalScrollAreaWidth - horizontalScrollThumbWidth) * ratio);
+        var horizontalScrollThumbTop = horizontalScrollAreaTop;
 
         var horizontalScrollThumb = new Kinetic.Rect({
             x: horizontalScrollThumbLeft,
@@ -175,13 +180,12 @@ KineticEditor.prototype = {
             draggable: true,
             dragBoundFunc: function(pos) {
                 var newX = pos.x;
-                var maxX = horizontalScrollAreaRight - horizontalScrollThumbWidth;
                 
                 if (newX < horizontalScrollAreaLeft) {
                     newX = horizontalScrollAreaLeft;
                 }
-                else if (newX > maxX) {
-                    newX = maxX;
+                else if (newX > horizontalScrollThumbLeftMax) {
+                    newX = horizontalScrollThumbLeftMax;
                 }
                 
                 return {
@@ -191,8 +195,24 @@ KineticEditor.prototype = {
             }
         });
         
+        var that = this;
+        
+        horizontalScrollThumb.on('dragmove',
+            function () {
+                that._onHorizontalThumbDrag(horizontalScrollThumb.getPosition().x - horizontalScrollAreaLeft, horizontalScrollThumbLeftMax - horizontalScrollAreaLeft);
+            }
+        );
+        
         this._controlLayer.add(horizontalScrollArea);
         this._controlLayer.add(horizontalScrollThumb);
+    },
+    
+    _onHorizontalThumbDrag: function (position, maximum) {
+        "use strict";
+
+        var ratio = position / maximum;
+        this._viewport.setHorizontalScrollRatio(ratio);
+        this.paintModel(this._model);
     },
     
     _initModelLayer: function () {
