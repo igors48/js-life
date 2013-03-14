@@ -12,6 +12,13 @@ KineticEditor.prototype = {
     LIVE_CELL_COLOR: 'green',
     MIN_CELL_SIZE: 1, 
     MAX_CELL_SIZE: 25,
+    SCROLL_BAR_INDENT: 5,
+    SCROLL_BAR_WIDTH: 20,
+    SCROLL_BAR_AREA_FILL: 'black',
+    SCROLL_BAR_AREA_OPACITY: 0.3,
+    SCROLL_BAR_THUMB_FILL: '#9f005b',
+    SCROLL_BAR_THUMB_OPACITY: 0.9,
+
     
     init: function (container, width, height, maxCols, maxRows) {
         "use strict";
@@ -38,35 +45,19 @@ KineticEditor.prototype = {
 
         this._backgroundLayer = new Kinetic.Layer();
         this._modelLayer = new Kinetic.Layer();
+        this._controlLayer = new Kinetic.Layer();
+    
+        this._initBackgroundLayer(width, height);
+        this._initModelLayer();
+        this._initControlLayer(width, height);
         
-        var backgroundRect = new Kinetic.Rect({
-            x: 0,
-            y: 0,
-            width: width,
-            height: height,
-            fill: this.BACKGROUND_COLOR
-        });
-
-        this._backgroundLayer.add(backgroundRect);
-        
-        var that = this;
-        this._backgroundLayer.on(this.CLICK_EVENT,
-            function (event) {
-                that._onLayerClick(event);
-            }
-        );
-        this._modelLayer.on(this.CLICK_EVENT,
-            function (event) {
-                that._onLayerClick(event);
-            }
-        );
-
         stage.add(this._backgroundLayer);
         stage.add(this._modelLayer);
+        stage.add(this._controlLayer);
 
         this._cacheCellViewAndPaint();
     },
-    
+
     model: function () {
         "use strict";
 
@@ -145,6 +136,98 @@ KineticEditor.prototype = {
         this._playMode = true;
     },
 
+    _initControlLayer: function (width, height) {
+        "use strict";
+
+        this._initHorizontalScrollBar(width, height);
+    },
+
+    _initHorizontalScrollBar: function (width, height) {
+        var horizontalScrollAreaLeft = this.SCROLL_BAR_INDENT;
+        var horizontalScrollAreaRight = width - this.SCROLL_BAR_INDENT;
+        var horizontalScrollAreaTop = height - this.SCROLL_BAR_INDENT - this.SCROLL_BAR_WIDTH;
+
+        var horizontalScrollAreaWidth = width - 2 * this.SCROLL_BAR_INDENT - this.SCROLL_BAR_WIDTH;
+        var horizontalScrollAreaHeight = this.SCROLL_BAR_WIDTH;
+        
+        var horizontalScrollArea = new Kinetic.Rect({
+            x: horizontalScrollAreaLeft,
+            y: horizontalScrollAreaTop,
+            width: horizontalScrollAreaWidth,
+            height: horizontalScrollAreaHeight,
+            fill: this.SCROLL_BAR_AREA_FILL,
+            opacity: this.SCROLL_BAR_AREA_OPACITY
+        });
+
+        var horizontalScrollThumbLeft = horizontalScrollAreaLeft;
+        var horizontalScrollThumbTop = horizontalScrollAreaTop;
+
+        var horizontalScrollThumbWidth = 50;
+        var horizontalScrollThumbHeight = this.SCROLL_BAR_WIDTH;
+
+        var horizontalScrollThumb = new Kinetic.Rect({
+            x: horizontalScrollThumbLeft,
+            y: horizontalScrollThumbTop,
+            width: horizontalScrollThumbWidth,
+            height: horizontalScrollThumbHeight,
+            fill: this.SCROLL_BAR_THUMB_FILL,
+            opacity: this.SCROLL_BAR_THUMB_OPACITY,
+            draggable: true,
+            dragBoundFunc: function(pos) {
+                var newX = pos.x;
+                var maxX = horizontalScrollAreaRight - horizontalScrollThumbWidth;
+                
+                if (newX < horizontalScrollAreaLeft) {
+                    newX = horizontalScrollAreaLeft;
+                }
+                else if (newX > maxX) {
+                    newX = maxX;
+                }
+                
+                return {
+                    x: newX,
+                    y: horizontalScrollThumbTop
+                }
+            }
+        });
+        
+        this._controlLayer.add(horizontalScrollArea);
+        this._controlLayer.add(horizontalScrollThumb);
+    },
+    
+    _initModelLayer: function () {
+        "use strict";
+
+        var that = this;
+        this._modelLayer.on(this.CLICK_EVENT,
+            function (event) {
+                that._onLayerClick(event);
+            }
+        );
+
+    },
+    
+    _initBackgroundLayer: function (width, height) {
+        "use strict";
+
+        var backgroundRect = new Kinetic.Rect({
+            x: 0,
+            y: 0,
+            width: width,
+            height: height,
+            fill: this.BACKGROUND_COLOR
+        });
+
+        this._backgroundLayer.add(backgroundRect);
+        
+        var that = this;
+        this._backgroundLayer.on(this.CLICK_EVENT,
+            function (event) {
+                that._onLayerClick(event);
+            }
+        );
+    },
+    
     _cacheCellViewAndPaint: function () {
         "use strict";
         
