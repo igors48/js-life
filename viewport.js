@@ -75,6 +75,24 @@ ViewPort.prototype = {
         this._left = Math.floor(maxLeft * ratio);
     },
     
+    getVerticalScrollRatio: function () {
+        "use strict";
+
+        var maxTop = this._maxRows - this._rows;
+        var ratio = this._top / maxTop;
+        
+        return ratio;
+    },
+
+    setVerticalScrollRatio: function (ratio) {
+        "use strict";
+        
+        Assert.isNumber(ratio);
+        
+        var maxTop = this._maxRows - this._rows;
+        this._top = Math.floor(maxTop * ratio);
+    },
+    
     toGlobal: function (viewPortCoordinates) {
         "use strict";
         

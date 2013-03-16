@@ -12,8 +12,9 @@ KineticEditor.prototype = {
     LIVE_CELL_COLOR: 'green',
     MIN_CELL_SIZE: 1, 
     MAX_CELL_SIZE: 25,
+    
     SCROLL_BAR_INDENT: 5,
-    SCROLL_BAR_WIDTH: 20,
+    SCROLL_BAR_WIDTH: 15,
     SCROLL_BAR_AREA_FILL: 'black',
     SCROLL_BAR_AREA_OPACITY: 0.3,
     SCROLL_BAR_AREA_CLICK_RATIO: 4,
@@ -83,6 +84,7 @@ KineticEditor.prototype = {
         
         this._viewport.scrollY(delta);
         this.paintModel(this._model);
+        this._syncVerticalThumbPositionWithViewport();
     },
 
     zoom: function (delta) {
@@ -279,31 +281,31 @@ KineticEditor.prototype = {
                 }
             }
         });
-/*        
-        this._syncHorizontalThumbPositionWithViewport();
+        
+        this._syncVerticalThumbPositionWithViewport();
         
         var that = this;
 
-        this._horizontalScrollThumb.on('dragmove',
+        this._verticalScrollThumb.on('dragmove',
             function () {
-                that._onHorizontalThumbDrag(that._horizontalScrollThumb.getX() - horizontalScrollAreaLeft, horizontalScrollThumbLeftMax - horizontalScrollAreaLeft);
+                that._onVerticalThumbDrag(that._verticalScrollThumb.getY() - verticalScrollAreaTop, verticalScrollThumbTopMax - verticalScrollAreaTop);
             }
         );
         
-        this._horizontalScrollArea.on('click',
+        this._verticalScrollArea.on('click',
             function (event) {
-                var x = event.layerX;
+                var y = event.layerY;
 
-                if (x < that._horizontalScrollThumb.getX()) {
-                    that._onHorizontalLeftScrollAreaClick();
+                if (y < that._verticalScrollThumb.getY()) {
+                    that._onVerticalTopScrollAreaClick();
                 }
                 
-                if (x > that._horizontalScrollThumb.getX() + that._horizontalScrollThumb.getWidth()) {
-                    that._onHorizontalRightScrollAreaClick();
+                if (y > that._verticalScrollThumb.getY() + that._verticalScrollThumb.getHeight()) {
+                    that._onVerticalBottomScrollAreaClick();
                 }
             }
         );
-        */
+        
         this._controlLayer.add(this._verticalScrollArea);
         this._controlLayer.add(this._verticalScrollThumb);
     },
@@ -313,6 +315,14 @@ KineticEditor.prototype = {
 
         var ratio = position / maximum;
         this._viewport.setHorizontalScrollRatio(ratio);
+        this.paintModel(this._model);
+    },
+    
+    _onVerticalThumbDrag: function (position, maximum) {
+        "use strict";
+
+        var ratio = position / maximum;
+        this._viewport.setVerticalScrollRatio(ratio);
         this.paintModel(this._model);
     },
     
@@ -328,6 +338,18 @@ KineticEditor.prototype = {
         this.scrollX(Math.floor(this._viewport.getCols() / this.SCROLL_BAR_AREA_CLICK_RATIO));
     },
     
+    _onVerticalTopScrollAreaClick: function () {
+        "use strict";
+
+        this.scrollY(-Math.floor(this._viewport.getRows() / this.SCROLL_BAR_AREA_CLICK_RATIO));
+    },
+    
+    _onVerticalBottomScrollAreaClick: function () {
+        "use strict";
+
+        this.scrollY(Math.floor(this._viewport.getRows() / this.SCROLL_BAR_AREA_CLICK_RATIO));
+    },
+    
     _syncHorizontalThumbPositionWithViewport: function () {
         "use strict";
 
@@ -335,6 +357,17 @@ KineticEditor.prototype = {
         var horizontalScrollThumbLeft = this._horizontalScrollArea.getX() + Math.floor((this._horizontalScrollArea.getWidth() - this.SCROLL_THUMB_WIDTH) * ratio);
         
         this._horizontalScrollThumb.setX(horizontalScrollThumbLeft);
+        
+        this._controlLayer.draw();
+    },
+    
+    _syncVerticalThumbPositionWithViewport: function () {
+        "use strict";
+
+        var ratio = this._viewport.getVerticalScrollRatio();
+        var verticalScrollThumbLeft = this._verticalScrollArea.getY() + Math.floor((this._verticalScrollArea.getHeight() - this.SCROLL_THUMB_WIDTH) * ratio);
+        
+        this._verticalScrollThumb.setY(verticalScrollThumbLeft);
         
         this._controlLayer.draw();
     },
