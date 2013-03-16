@@ -143,9 +143,12 @@ KineticEditor.prototype = {
         "use strict";
 
         this._initHorizontalScrollBar(width, height);
+        this._initVerticalScrollBar(width, height);
     },
 
     _initHorizontalScrollBar: function (width, height) {
+        "use strict";
+
         var horizontalScrollAreaLeft = this.SCROLL_BAR_INDENT;
         var horizontalScrollAreaTop = height - this.SCROLL_BAR_INDENT - this.SCROLL_BAR_WIDTH;
 
@@ -222,6 +225,87 @@ KineticEditor.prototype = {
         
         this._controlLayer.add(this._horizontalScrollArea);
         this._controlLayer.add(this._horizontalScrollThumb);
+    },
+    
+    _initVerticalScrollBar: function (width, height) {
+        "use strict";
+
+        var verticalScrollAreaLeft = width - this.SCROLL_BAR_INDENT - this.SCROLL_BAR_WIDTH;
+        var verticalScrollAreaTop = this.SCROLL_BAR_INDENT;
+
+        var verticalScrollAreaWidth = this.SCROLL_BAR_WIDTH;
+        var verticalScrollAreaHeight = height - 2 * this.SCROLL_BAR_INDENT - this.SCROLL_BAR_WIDTH;
+        
+        var verticalScrollAreaBottom = verticalScrollAreaTop + verticalScrollAreaHeight;
+        
+        this._verticalScrollArea = new Kinetic.Rect({
+            x: verticalScrollAreaLeft,
+            y: verticalScrollAreaTop,
+            width: verticalScrollAreaWidth,
+            height: verticalScrollAreaHeight,
+            fill: this.SCROLL_BAR_AREA_FILL,
+            opacity: this.SCROLL_BAR_AREA_OPACITY
+        });
+
+        var verticalScrollThumbWidth = this.SCROLL_BAR_WIDTH;
+        var verticalScrollThumbHeight = this.SCROLL_THUMB_WIDTH;
+
+        var verticalScrollThumbTopMax = verticalScrollAreaBottom - verticalScrollThumbHeight;
+
+        var verticalScrollThumbLeft = verticalScrollAreaLeft;
+        var verticalScrollThumbTop = verticalScrollAreaTop;
+
+        this._verticalScrollThumb = new Kinetic.Rect({
+            x: verticalScrollThumbLeft,
+            y: verticalScrollThumbTop,
+            width: verticalScrollThumbWidth,
+            height: verticalScrollThumbHeight,
+            fill: this.SCROLL_BAR_THUMB_FILL,
+            opacity: this.SCROLL_BAR_THUMB_OPACITY,
+            draggable: true,
+            dragBoundFunc: function(position) {
+                var newY = position.y;
+                
+                if (newY < verticalScrollAreaTop) {
+                    newY = verticalScrollAreaTop;
+                }
+                else if (newY > verticalScrollThumbTopMax) {
+                    newY = verticalScrollThumbTopMax;
+                }
+                
+                return {
+                    x: verticalScrollThumbLeft,
+                    y: newY
+                }
+            }
+        });
+/*        
+        this._syncHorizontalThumbPositionWithViewport();
+        
+        var that = this;
+
+        this._horizontalScrollThumb.on('dragmove',
+            function () {
+                that._onHorizontalThumbDrag(that._horizontalScrollThumb.getX() - horizontalScrollAreaLeft, horizontalScrollThumbLeftMax - horizontalScrollAreaLeft);
+            }
+        );
+        
+        this._horizontalScrollArea.on('click',
+            function (event) {
+                var x = event.layerX;
+
+                if (x < that._horizontalScrollThumb.getX()) {
+                    that._onHorizontalLeftScrollAreaClick();
+                }
+                
+                if (x > that._horizontalScrollThumb.getX() + that._horizontalScrollThumb.getWidth()) {
+                    that._onHorizontalRightScrollAreaClick();
+                }
+            }
+        );
+        */
+        this._controlLayer.add(this._verticalScrollArea);
+        this._controlLayer.add(this._verticalScrollThumb);
     },
     
     _onHorizontalThumbDrag: function (position, maximum) {
