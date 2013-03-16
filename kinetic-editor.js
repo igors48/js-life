@@ -48,7 +48,8 @@ KineticEditor.prototype = {
 
         this._backgroundLayer = new Kinetic.Layer();
         this._modelLayer = new Kinetic.Layer();
-        this._controlLayer = new Kinetic.Layer();
+        this._scrollBarsLayer = new Kinetic.Layer();
+        this._cellHighlightingLayer = new Kinetic.Layer();
     
         this._initBackgroundLayer(width, height);
         this._initModelLayer();
@@ -56,7 +57,8 @@ KineticEditor.prototype = {
         
         stage.add(this._backgroundLayer);
         stage.add(this._modelLayer);
-        stage.add(this._controlLayer);
+        stage.add(this._cellHighlightingLayer);
+        stage.add(this._scrollBarsLayer);
 
         this._cacheCellViewAndPaint();
     },
@@ -225,8 +227,8 @@ KineticEditor.prototype = {
             }
         );
         
-        this._controlLayer.add(this._horizontalScrollArea);
-        this._controlLayer.add(this._horizontalScrollThumb);
+        this._scrollBarsLayer.add(this._horizontalScrollArea);
+        this._scrollBarsLayer.add(this._horizontalScrollThumb);
     },
     
     _initVerticalScrollBar: function (width, height) {
@@ -306,8 +308,8 @@ KineticEditor.prototype = {
             }
         );
         
-        this._controlLayer.add(this._verticalScrollArea);
-        this._controlLayer.add(this._verticalScrollThumb);
+        this._scrollBarsLayer.add(this._verticalScrollArea);
+        this._scrollBarsLayer.add(this._verticalScrollThumb);
     },
     
     _onHorizontalThumbDrag: function (position, maximum) {
@@ -358,7 +360,7 @@ KineticEditor.prototype = {
         
         this._horizontalScrollThumb.setX(horizontalScrollThumbLeft);
         
-        this._controlLayer.draw();
+        this._scrollBarsLayer.draw();
     },
     
     _syncVerticalThumbPositionWithViewport: function () {
@@ -369,7 +371,7 @@ KineticEditor.prototype = {
         
         this._verticalScrollThumb.setY(verticalScrollThumbLeft);
         
-        this._controlLayer.draw();
+        this._scrollBarsLayer.draw();
     },
     
     _initModelLayer: function () {
