@@ -8,6 +8,7 @@ KineticEditor.prototype = {
 
     CLICK_EVENT: 'click',
     DRAG_MOVE_EVENT: 'dragmove',
+    MOUSE_OVER_EVENT: 'mouseover',
     
     CELL_SIZE: 15,    
     BACKGROUND_COLOR: 'silver',
@@ -407,6 +408,11 @@ KineticEditor.prototype = {
                 that._onLayerClick(event);
             }
         );
+        this._backgroundLayer.on(this.MOUSE_OVER_EVENT,
+            function (event) {
+                that._onMouseOver(event);
+            }
+        );
     },
     
     _cacheCellViewAndPaint: function () {
@@ -452,6 +458,38 @@ KineticEditor.prototype = {
         this.paintModel(this._model);
     },
 
+    _onMouseOver: function (event) {
+        "use strict";
+        
+        if (this._playMode) {
+            return;
+        }
+
+        var x = event.layerX;
+        var y = event.layerY;
+
+        var coordinates = new Coordinates(x, y);
+        var viewCellCoordinates = this._viewport.toViewCell(coordinates);
+        
+        this._highlightCell(viewCellCoordinates);
+    },
+
+    _highlightCell: function(coordinates) {
+        "use strict";
+        
+        var cellSize = this._viewport.getCellSize();
+                
+        var cell = new Kinetic.Rect({
+            x: (coordinates.x()) * cellSize,
+            y: (coordinates.y()) * cellSize,
+            width: cellSize,
+            height: cellSize
+        });
+
+        this._cellHighlightingLayer.add(cell);
+        this._cellHighlightingLayer.draw();
+    },
+    
     _iterateModelCells: function (action) {
         "use strict";
 
