@@ -6,8 +6,10 @@ var KineticEditor = function (container, width, height, maxCols, maxRows) {
 
 KineticEditor.prototype = {
 
-    CELL_SIZE: 15,
     CLICK_EVENT: 'click',
+    DRAG_MOVE_EVENT: 'dragmove',
+    
+    CELL_SIZE: 15,    
     BACKGROUND_COLOR: 'silver',
     LIVE_CELL_COLOR: 'green',
     MIN_CELL_SIZE: 1, 
@@ -207,13 +209,13 @@ KineticEditor.prototype = {
         
         var that = this;
 
-        this._horizontalScrollThumb.on('dragmove',
+        this._horizontalScrollThumb.on(this.DRAG_MOVE_EVENT,
             function () {
                 that._onHorizontalThumbDrag(that._horizontalScrollThumb.getX() - horizontalScrollAreaLeft, horizontalScrollThumbLeftMax - horizontalScrollAreaLeft);
             }
         );
         
-        this._horizontalScrollArea.on('click',
+        this._horizontalScrollArea.on(this.CLICK_EVENT,
             function (event) {
                 var x = event.layerX;
 
@@ -288,13 +290,13 @@ KineticEditor.prototype = {
         
         var that = this;
 
-        this._verticalScrollThumb.on('dragmove',
+        this._verticalScrollThumb.on(this.DRAG_MOVE_EVENT,
             function () {
                 that._onVerticalThumbDrag(that._verticalScrollThumb.getY() - verticalScrollAreaTop, verticalScrollThumbTopMax - verticalScrollAreaTop);
             }
         );
         
-        this._verticalScrollArea.on('click',
+        this._verticalScrollArea.on(this.CLICK_EVENT,
             function (event) {
                 var y = event.layerY;
 
