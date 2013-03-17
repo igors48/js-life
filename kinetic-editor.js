@@ -8,7 +8,8 @@ KineticEditor.prototype = {
 
     CLICK_EVENT: 'click',
     DRAG_MOVE_EVENT: 'dragmove',
-    MOUSE_OVER_EVENT: 'mouseover',
+    MOUSE_MOVE_EVENT: 'mousemove',
+    MOUSE_OUT_EVENT: 'mouseout',
     
     CELL_SIZE: 15,    
     BACKGROUND_COLOR: 'silver',
@@ -408,9 +409,14 @@ KineticEditor.prototype = {
                 that._onLayerClick(event);
             }
         );
-        this._backgroundLayer.on(this.MOUSE_OVER_EVENT,
+        this._backgroundLayer.on(this.MOUSE_MOVE_EVENT,
             function (event) {
                 that._onMouseOver(event);
+            }
+        );
+        this._backgroundLayer.on(this.MOUSE_OUT_EVENT,
+            function (event) {
+                that._onMouseOut(event);
             }
         );
     },
@@ -471,7 +477,19 @@ KineticEditor.prototype = {
         var coordinates = new Coordinates(x, y);
         var viewCellCoordinates = this._viewport.toViewCell(coordinates);
         
+        this._removeHighlightedCell();
         this._highlightCell(viewCellCoordinates);
+    },
+
+    _onMouseOut: function () {
+        "use strict";
+        
+        if (this._playMode) {
+            return;
+        }
+        
+        this._removeHighlightedCell();
+        this._cellHighlightingLayer.draw();
     },
 
     _highlightCell: function(coordinates) {
@@ -483,11 +501,18 @@ KineticEditor.prototype = {
             x: (coordinates.x()) * cellSize,
             y: (coordinates.y()) * cellSize,
             width: cellSize,
-            height: cellSize
+            height: cellSize,
+            fill: 'red'
         });
 
         this._cellHighlightingLayer.add(cell);
         this._cellHighlightingLayer.draw();
+    },
+    
+    _removeHighlightedCell: function() {
+        "use strict";
+        
+        this._cellHighlightingLayer.removeChildren();
     },
     
     _iterateModelCells: function (action) {
