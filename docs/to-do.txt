@@ -1,6 +1,6 @@
 0001 [ ]	integrate underscore.string library
-0002 [ ]	read local file
-0003 [ ]	CellBlockContainer converter
+0002 [*]	read local file
+0003 [*]	CellBlockContainer converter
 0004 [ ]	create project structure
 0005 [ ]	init object fields in constructor function not in init method
 0006 [ ]	revisit QUnit
@@ -10,4 +10,6 @@
 0010 [ ]	display description
 0011 [ ]    adaptive field size
 0012 [ ]    paste cells feature
-0013 [ ]    sync wrapper for kinetic-editor._cacheCellView
+0013 [*]    sync wrapper for kinetic-editor._cacheCellView
+0014 [ ]    bind/unbind editor events handlers
+0015 [ ]    extract scrollbars to its own classes
