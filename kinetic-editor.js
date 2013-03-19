@@ -12,8 +12,14 @@ KineticEditor.prototype = {
     MOUSE_OUT_EVENT: 'mouseout',
     
     CELL_SIZE: 15,    
+    
     BACKGROUND_COLOR: 'silver',
+    BACKGROUND_OPACITY: 0.5,
+    
+    HIGHLIGHTED_CELL_COLOR: 'red',
+    
     LIVE_CELL_COLOR: 'green',
+    
     MIN_CELL_SIZE: 1, 
     MAX_CELL_SIZE: 25,
     
@@ -25,8 +31,7 @@ KineticEditor.prototype = {
     SCROLL_THUMB_WIDTH: 50,
     SCROLL_BAR_THUMB_FILL: '#9f005b',
     SCROLL_BAR_THUMB_OPACITY: 0.9,
-
-    
+  
     init: function (container, width, height, maxCols, maxRows) {
         "use strict";
 
@@ -59,9 +64,9 @@ KineticEditor.prototype = {
         this._initModelLayer();
         this._initControlLayer(width, height);
         
+        stage.add(this._cellHighlightingLayer);
         stage.add(this._backgroundLayer);
         stage.add(this._modelLayer);
-        stage.add(this._cellHighlightingLayer);
         stage.add(this._scrollBarsLayer);
 
         this._cacheCellViewAndPaint();
@@ -78,6 +83,7 @@ KineticEditor.prototype = {
 
         Assert.isInteger(delta);
         
+        this._removeHighlightedCell();
         this._viewport.scrollX(delta);
         this.paintModel(this._model);
         this._syncHorizontalThumbPositionWithViewport();
@@ -88,6 +94,7 @@ KineticEditor.prototype = {
         
         Assert.isInteger(delta);
         
+        this._removeHighlightedCell();
         this._viewport.scrollY(delta);
         this.paintModel(this._model);
         this._syncVerticalThumbPositionWithViewport();
@@ -98,6 +105,7 @@ KineticEditor.prototype = {
         
         Assert.isInteger(delta);
         
+        this._removeHighlightedCell();
         this._viewport.zoom(delta);
         this._cacheCellViewAndPaint();
     },
@@ -107,6 +115,7 @@ KineticEditor.prototype = {
         
         Assert.isArea(area);
         
+        this._removeHighlightedCell();
         this._viewport.zoomToFit(area);
         this._cacheCellViewAndPaint();
     },
@@ -398,22 +407,26 @@ KineticEditor.prototype = {
             y: 0,
             width: width,
             height: height,
+            opacity: this.BACKGROUND_OPACITY,
             fill: this.BACKGROUND_COLOR
         });
 
         this._backgroundLayer.add(backgroundRect);
         
         var that = this;
+        
         this._backgroundLayer.on(this.CLICK_EVENT,
             function (event) {
                 that._onLayerClick(event);
             }
         );
+        
         this._backgroundLayer.on(this.MOUSE_MOVE_EVENT,
             function (event) {
                 that._onMouseOver(event);
             }
         );
+        
         this._backgroundLayer.on(this.MOUSE_OUT_EVENT,
             function (event) {
                 that._onMouseOut(event);
@@ -502,7 +515,7 @@ KineticEditor.prototype = {
             y: (coordinates.y()) * cellSize,
             width: cellSize,
             height: cellSize,
-            fill: 'red'
+            fill: this.HIGHLIGHTED_CELL_COLOR
         });
 
         this._cellHighlightingLayer.add(cell);
