@@ -13,3 +13,5 @@
 0013 [*]    sync wrapper for kinetic-editor._cacheCellView
 0014 [ ]    bind/unbind editor events handlers
 0015 [ ]    extract scrollbars to its own classes
+0016 [ ]    viewport unit testing
+0017 [ ]    off field cell behaviour
