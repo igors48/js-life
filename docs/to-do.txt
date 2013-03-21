@@ -16,3 +16,6 @@
 0016 [ ]    viewport unit testing
 0017 [ ]    off field cell behaviour
 0018 [ ]	breakable tasks 
+0019 [ ]	viewport navigator
+0029 [ ]	zoom control on canvas
+
