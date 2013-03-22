@@ -156,6 +156,24 @@ KineticEditor.prototype = {
         this._playMode = true;
     },
 
+    paintCell: function (coordinates) {
+        "use strict";
+        
+        var viewPortCoordinates = that._viewport.toViewPort(cell);
+                
+        if (viewPortCoordinates) {
+            var image = new Kinetic.Image({
+                image: that._cachedCellView,
+                x: (viewPortCoordinates.x()) * cellSize,
+                y: (viewPortCoordinates.y()) * cellSize
+            });
+
+            that._modelLayer.add(image);
+        }
+    },
+    
+    // this._painter.clear();
+    
     _initControlLayer: function (width, height) {
         "use strict";
 
