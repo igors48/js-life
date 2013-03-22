@@ -24,3 +24,6 @@ http://www.html5canvastutorials.com/labs/html5-canvas-simple-scrollbars-with-kin
 JS Best practices
 http://habrahabr.ru/post/172751/
 http://habrahabr.ru/post/162317/
+
+Selenium + NodeJS
+http://habrahabr.ru/company/yandex/blog/173769/
