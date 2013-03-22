@@ -125,25 +125,15 @@ KineticEditor.prototype = {
         
         Assert.isToggleCellModel(newModel);
         
-        this._modelLayer.removeChildren();
+        //this._modelLayer.removeChildren();
+        this.clear();
         this._model = newModel;
         
-        var cellSize = this._viewport.getCellSize();
         var that = this;
 
         that._iterateModelCells(
             function (cell) {
-                var viewPortCoordinates = that._viewport.toViewPort(cell);
-                
-                if (viewPortCoordinates) {
-                    var image = new Kinetic.Image({
-                        image: that._cachedCellView,
-                        x: (viewPortCoordinates.x()) * cellSize,
-                        y: (viewPortCoordinates.y()) * cellSize
-                    });
-
-                    that._modelLayer.add(image);
-                }
+                that.paintCell(cell);
             }
         );
                     
@@ -159,20 +149,25 @@ KineticEditor.prototype = {
     paintCell: function (coordinates) {
         "use strict";
         
-        var viewPortCoordinates = that._viewport.toViewPort(cell);
+        var cellSize = this._viewport.getCellSize();        
+        var viewPortCoordinates = this._viewport.toViewPort(coordinates);
                 
         if (viewPortCoordinates) {
             var image = new Kinetic.Image({
-                image: that._cachedCellView,
+                image: this._cachedCellView,
                 x: (viewPortCoordinates.x()) * cellSize,
                 y: (viewPortCoordinates.y()) * cellSize
             });
 
-            that._modelLayer.add(image);
+            this._modelLayer.add(image);
         }
     },
     
-    // this._painter.clear();
+    clear: function () {
+        "use strict";
+    
+        this._modelLayer.removeChildren();
+    },
     
     _initControlLayer: function (width, height) {
         "use strict";
