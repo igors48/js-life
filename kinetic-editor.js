@@ -125,7 +125,6 @@ KineticEditor.prototype = {
         
         Assert.isToggleCellModel(newModel);
         
-        //this._modelLayer.removeChildren();
         this.clear();
         this._model = newModel;
         
@@ -148,15 +147,14 @@ KineticEditor.prototype = {
 
     paintCell: function (coordinates) {
         "use strict";
-        
-        var cellSize = this._viewport.getCellSize();        
+                        
         var viewPortCoordinates = this._viewport.toViewPort(coordinates);
                 
         if (viewPortCoordinates) {
             var image = new Kinetic.Image({
                 image: this._cachedCellView,
-                x: (viewPortCoordinates.x()) * cellSize,
-                y: (viewPortCoordinates.y()) * cellSize
+                x: (viewPortCoordinates.x()) * this._cachedCellSize,
+                y: (viewPortCoordinates.y()) * this._cachedCellSize
             });
 
             this._modelLayer.add(image);
@@ -450,21 +448,21 @@ KineticEditor.prototype = {
     _cacheCellViewAndPaint: function () {
         "use strict";
         
-        var cellSize = this._viewport.getCellSize();
+        this._cachedCellSize = this._viewport.getCellSize();
 
         var viewCell = new Kinetic.Rect({
             x: 0,
             y: 0,
-            width: cellSize,
-            height: cellSize,
+            width: this._cachedCellSize,
+            height: this._cachedCellSize,
             fill: this.LIVE_CELL_COLOR
         });
         
         var that = this;
 
         viewCell.toImage({
-            width: cellSize,
-            height: cellSize,
+            width: this._cachedCellSize,
+            height: this._cachedCellSize,
             callback: function(image) {
                 that._cachedCellView = image;
                 that.paintModel(that._model);
@@ -521,13 +519,11 @@ KineticEditor.prototype = {
     _highlightCell: function(coordinates) {
         "use strict";
         
-        var cellSize = this._viewport.getCellSize();
-                
         var cell = new Kinetic.Rect({
-            x: (coordinates.x()) * cellSize,
-            y: (coordinates.y()) * cellSize,
-            width: cellSize,
-            height: cellSize,
+            x: (coordinates.x()) * this._cachedCellSize,
+            y: (coordinates.y()) * this._cachedCellSize,
+            width: this._cachedCellSize,
+            height: this._cachedCellSize,
             fill: this.HIGHLIGHTED_CELL_COLOR
         });
 
