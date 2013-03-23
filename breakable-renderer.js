@@ -22,7 +22,7 @@ BreakableRenderer.prototype = {
         this.restart();    
     },
     
-    paintPart: function () {
+    render: function () {
         "use strict";
         
         var count = 0;
@@ -36,6 +36,8 @@ BreakableRenderer.prototype = {
             ++this._index;
             ++count;
         }
+        
+        this._painter.draw();
         
         return this._index === maxIndex;
     },

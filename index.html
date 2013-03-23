@@ -37,12 +37,15 @@
     <script src="cell-block.js"></script>
     <script src="cell-block-container.js"></script>
     <script src="cell-block-container-mapper.js"></script>
+    
+    <script src="breakable-renderer.js"></script>
 
     <script>
         var COLS = 2000;
         var ROWS = 2000;
         
         var editor = new KineticEditor('container', 1200, 550, COLS, ROWS);
+        var renderer = new BreakableRenderer(100, editor);
         var mode = 'edit';
         var field;
         
@@ -94,6 +97,31 @@
                 }
             , 5);
 		}
+
+        var rendering = false;
+        
+		function render() {
+            
+            if (rendering) {
+                return;
+            }
+
+            rendering = true;
+            
+            setTimeout(
+                function doRender() {
+                    var completed = renderer.render();
+                    
+                    if (completed) {
+                        rendering = false;
+                    } else {
+                        setTimeout(doRender, 5);
+                    }
+                }
+            , 5);
+            
+            console.log('render complete');
+		}
 		
         function generation() {
             var generationReport = field.generationNext();
@@ -120,10 +148,16 @@
         
         function scrollEditorRight() {
             editor.scrollX(-1);
+            
+            renderer.restart();
+            render();
         }
 
         function scrollEditorLeft() {
             editor.scrollX(1);
+            
+            renderer.restart();
+            render();
         }
 
         function scrollEditorUp() {
@@ -203,10 +237,12 @@
 					}
 				);
 				
-                editor.paintModel(model);
-
+                //editor.paintModel(model);
+                renderer.replaceModel(cells);
+                render();
+                
                 var area = new Area(new Coordinates(colMin, rowMin), new Coordinates(colMax, rowMax));
-                editor.zoomToFit(area);
+                //editor.zoomToFit(area);
 			};
 			
 			reader.readAsText(file);

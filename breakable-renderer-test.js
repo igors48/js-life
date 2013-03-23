@@ -9,19 +9,19 @@ BreakableRendererTestTools.createModel = function () {
 BreakableRendererTestTools.assertModelPainted = function (renderer, painter) {
     "use strict";
     
-    var completed = renderer.paintPart();
+    var completed = renderer.render();
     var paintedCellCount = painter.getPaintedCellCount();
     
     ok(!completed, "Painting is not completed");
     equal(paintedCellCount, 2, "Painted cell count is valid");
 
-    completed = renderer.paintPart();
+    completed = renderer.render();
     paintedCellCount = painter.getPaintedCellCount();
     
     ok(!completed, "Painting is not completed");
     equal(paintedCellCount, 4, "Painted cell count is valid");
 
-    completed = renderer.paintPart();
+    completed = renderer.render();
     paintedCellCount = painter.getPaintedCellCount();
     
     ok(completed, "Painting is completed");
@@ -34,7 +34,7 @@ test("Empty model does not draw", function() {
     var painter = new PainterStub();
     var renderer = new BreakableRenderer(4, painter);
     
-    var completed = renderer.paintPart();
+    var completed = renderer.render();
     var paintedCellCount = painter.getPaintedCellCount();
     
     ok(completed, "Draw completed after first call");
@@ -89,7 +89,7 @@ test("Painting process really restarted", function() {
     var model = BreakableRendererTestTools.createModel();
     renderer.replaceModel(model);
 
-    var completed = renderer.paintPart();
+    var completed = renderer.render();
     var paintedCellCount = painter.getPaintedCellCount();
     
     ok(!completed, "Painting is not completed");
@@ -98,6 +98,21 @@ test("Painting process really restarted", function() {
     renderer.restart();
     
     BreakableRendererTestTools.assertModelPainted(renderer, painter);
+});
+
+test("After rendering painter redraw", function() {
+    "use strict";
+    
+    var painter = new PainterStub();
+    var renderer = new BreakableRenderer(2, painter);
+    
+    var model = BreakableRendererTestTools.createModel();
+    renderer.replaceModel(model);
+
+    var completed = renderer.render();
+    var draw = painter.isDraw();
+    
+    ok(draw, "Painter draw");
 });
 
 

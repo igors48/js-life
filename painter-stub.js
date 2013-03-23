@@ -3,6 +3,7 @@ var PainterStub = function () {
     
     this._paintedCellCount = 0;
     this._cleared = false;
+    this._draw = false;
 };
 
 PainterStub.prototype = {
@@ -27,7 +28,13 @@ PainterStub.prototype = {
         this._paintedCellCount = 0;
         this._reseted = false;
     },
+
+    draw: function () {
+        "use strict";
     
+        this._draw = true;
+    },
+
     getPaintedCellCount: function () {
         "use strict";
     
@@ -38,6 +45,12 @@ PainterStub.prototype = {
         "use strict";
     
         return this._cleared;
+    },
+    
+    isDraw: function () {
+        "use strict";
+    
+        return this._draw;
     }
     
 };

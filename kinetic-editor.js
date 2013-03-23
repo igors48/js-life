@@ -85,7 +85,7 @@ KineticEditor.prototype = {
         
         this._removeHighlightedCell();
         this._viewport.scrollX(delta);
-        this.paintModel(this._model);
+        //this.paintModel(this._model);
         this._syncHorizontalThumbPositionWithViewport();
     },
         
@@ -136,7 +136,7 @@ KineticEditor.prototype = {
             }
         );
                     
-        that._modelLayer.draw();
+        this._modelLayer.draw();
     },
     
     switchToPlayMode: function () {
@@ -165,6 +165,12 @@ KineticEditor.prototype = {
         "use strict";
     
         this._modelLayer.removeChildren();
+    },
+    
+    draw: function () {
+        "use strict";
+    
+        this._modelLayer.draw();
     },
     
     _initControlLayer: function (width, height) {
