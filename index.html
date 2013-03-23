@@ -97,31 +97,6 @@
                 }
             , 5);
 		}
-
-        var rendering = false;
-        
-		function render() {
-            
-            if (rendering) {
-                return;
-            }
-
-            rendering = true;
-            
-            setTimeout(
-                function doRender() {
-                    var completed = renderer.render();
-                    
-                    if (completed) {
-                        rendering = false;
-                    } else {
-                        setTimeout(doRender, 5);
-                    }
-                }
-            , 5);
-            
-            console.log('render complete');
-		}
 		
         function generation() {
             var generationReport = field.generationNext();
@@ -146,26 +121,56 @@
             editor.paintModel(generationModel);
         }
         
-        function scrollEditorRight() {
-            editor.scrollX(-1);
+        var rendering = false;
+        
+		function render() {
             
+            if (rendering) {
+                return;
+            }
+
+            rendering = true;
+            
+            setTimeout(
+                function doRender() {
+                    var completed = renderer.render();
+                    
+                    if (completed) {
+                        rendering = false;
+                    } else {
+                        setTimeout(doRender, 5);
+                    }
+                }
+            , 5);
+		}
+        
+        function redraw() {
             renderer.restart();
             render();
+        }
+        
+        function scrollEditorRight() {
+            editor.scrollX(-1);
+
+            redraw();    
         }
 
         function scrollEditorLeft() {
             editor.scrollX(1);
-            
-            renderer.restart();
-            render();
+
+            redraw();
         }
 
         function scrollEditorUp() {
             editor.scrollY(1);
+
+            redraw();
         }
 
         function scrollEditorDown() {
             editor.scrollY(-1);
+
+            redraw();
         }
         
         function zoomEditorIn() {

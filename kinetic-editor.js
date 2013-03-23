@@ -96,7 +96,7 @@ KineticEditor.prototype = {
         
         this._removeHighlightedCell();
         this._viewport.scrollY(delta);
-        this.paintModel(this._model);
+        //this.paintModel(this._model);
         this._syncVerticalThumbPositionWithViewport();
     },
 

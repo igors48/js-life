@@ -21,4 +21,5 @@
 0030 [ ]	adjust canvas size based on screen size
 0031 [ ]    cache cell highlihter
 0032 [ ]    extract main app from index.html
+0033 [ ]    potentially visible cell must be repainted first
 
