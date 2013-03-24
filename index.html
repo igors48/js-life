@@ -44,8 +44,8 @@
         var COLS = 2000;
         var ROWS = 2000;
         
-        var editor = new KineticEditor('container', 1200, 550, COLS, ROWS);
-        var renderer = new BreakableRenderer(100, editor);
+        var editor = new KineticEditor('container', 1200, 550, COLS, ROWS, this);
+        var renderer = new BreakableRenderer(300, editor);
         var mode = 'edit';
         var field;
         
@@ -138,10 +138,10 @@
                     if (completed) {
                         rendering = false;
                     } else {
-                        setTimeout(doRender, 5);
+                        setTimeout(doRender, 1);
                     }
                 }
-            , 5);
+            , 1);
 		}
         
         function redraw() {
@@ -152,25 +152,18 @@
         function scrollEditorRight() {
             editor.scrollX(-1);
 
-            redraw();    
         }
 
         function scrollEditorLeft() {
             editor.scrollX(1);
-
-            redraw();
         }
 
         function scrollEditorUp() {
             editor.scrollY(1);
-
-            redraw();
         }
 
         function scrollEditorDown() {
             editor.scrollY(-1);
-
-            redraw();
         }
         
         function zoomEditorIn() {
