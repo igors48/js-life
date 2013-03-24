@@ -49,8 +49,6 @@ KineticEditor.prototype = {
         
         this._viewport = new ViewPort(width, height, maxCols, maxRows, this.MIN_CELL_SIZE, this.MAX_CELL_SIZE, this.CELL_SIZE);
 
-        this._model = new ToggleCellModel();
-
         var stage = new Kinetic.Stage({
             container: container,
             width: width,
@@ -74,12 +72,6 @@ KineticEditor.prototype = {
         this._cacheCellViewAndPaint();
     },
 
-    model: function () {
-        "use strict";
-
-        return this._model;
-    },
-    
     scrollX: function (delta) {
         "use strict";
 
@@ -89,7 +81,7 @@ KineticEditor.prototype = {
         this._viewport.scrollX(delta);
         this._syncHorizontalThumbPositionWithViewport();
 
-        this._listener.redraw();
+        this._listener.onRedraw();
     },
         
     scrollY: function (delta) {
@@ -101,7 +93,7 @@ KineticEditor.prototype = {
         this._viewport.scrollY(delta);
         this._syncVerticalThumbPositionWithViewport();
 
-        this._listener.redraw();
+        this._listener.onRedraw();
     },
 
     zoom: function (delta) {
@@ -122,25 +114,6 @@ KineticEditor.prototype = {
         this._removeHighlightedCell();
         this._viewport.zoomToFit(area);
         this._cacheCellViewAndPaint();
-    },
-    
-    paintModel: function (newModel) {
-        "use strict";
-        
-        Assert.isToggleCellModel(newModel);
-        
-        this.clear();
-        this._model = newModel;
-        
-        var that = this;
-
-        that._iterateModelCells(
-            function (cell) {
-                that.paintCell(cell);
-            }
-        );
-                    
-        this._modelLayer.draw();
     },
     
     switchToPlayMode: function () {
@@ -351,7 +324,7 @@ KineticEditor.prototype = {
 
         var ratio = position / maximum;
         this._viewport.setHorizontalScrollRatio(ratio);
-        this._listener.redraw();
+        this._listener.onRedraw();
     },
     
     _onVerticalThumbDrag: function (position, maximum) {
@@ -359,7 +332,7 @@ KineticEditor.prototype = {
 
         var ratio = position / maximum;
         this._viewport.setVerticalScrollRatio(ratio);
-        this._listener.redraw();
+        this._listener.onRedraw();
     },
     
     _onHorizontalLeftScrollAreaClick: function () {
@@ -414,7 +387,7 @@ KineticEditor.prototype = {
         var that = this;
         this._modelLayer.on(this.CLICK_EVENT,
             function (event) {
-                that._onLayerClick(event);
+                that._onModelLayerClick(event);
             }
         );
 
@@ -438,7 +411,7 @@ KineticEditor.prototype = {
         
         this._backgroundLayer.on(this.CLICK_EVENT,
             function (event) {
-                that._onLayerClick(event);
+                that._onModelLayerClick(event);
             }
         );
         
@@ -475,13 +448,12 @@ KineticEditor.prototype = {
             height: this._cachedCellSize,
             callback: function(image) {
                 that._cachedCellView = image;
-               // that.paintModel(that._model);
-                that._listener.redraw();
+                that._listener.onRedraw();
             }
         });
     },
     
-    _onLayerClick: function (event) {
+    _onModelLayerClick: function (event) {
         "use strict";
         
         if (this._playMode) {
@@ -495,9 +467,7 @@ KineticEditor.prototype = {
         var viewCellCoordinates = this._viewport.toViewCell(clickCoordinates);
         var modelCellCoordinates = this._viewport.toGlobal(viewCellCoordinates);
         
-        this._model.toggle(modelCellCoordinates.x(), modelCellCoordinates.y());
-        //this.paintModel(this._model);
-        this._listener.redraw();
+        this._listener.onToggleCell(modelCellCoordinates);
     },
 
     _onMouseOver: function (event) {
@@ -549,17 +519,5 @@ KineticEditor.prototype = {
         this._cellHighlightingLayer.removeChildren();
     },
     
-    _iterateModelCells: function (action) {
-        "use strict";
-
-        var modelCells = this._model.cells();
-
-        _.each(modelCells,
-            function (cell) {
-                action(cell);
-            }
-        );
-    },
-
 };
 

@@ -22,4 +22,4 @@
 0031 [ ]    cache cell highlihter
 0032 [ ]    extract main app from index.html
 0033 [ ]    potentially visible cell must be repainted first
-
+0034 [ ]    assert in index.html

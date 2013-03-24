@@ -44,6 +44,7 @@
         var COLS = 2000;
         var ROWS = 2000;
         
+        var model = new ToggleCellModel();
         var editor = new KineticEditor('container', 1200, 550, COLS, ROWS, this);
         var renderer = new BreakableRenderer(300, editor);
         var mode = 'edit';
@@ -61,7 +62,6 @@
             
                 editor.switchToPlayMode();
 
-                var model = editor.model();
                 var cells = model.cells();
 
 				field = createField(cells);
@@ -104,21 +104,23 @@
             var borning = generationReport.borningCells();
             var living = generationReport.livingCells();
             
-            var generationModel = new ToggleCellModel();
+            this.model = new ToggleCellModel();
             
             _.each(living,
                 function (cell) {
-                    generationModel.put(cell.x(), cell.y());
+                    this.model.put(cell.x(), cell.y());
                 }
             );
 
             _.each(borning,
                 function (cell) {
-                    generationModel.put(cell.x(), cell.y());
+                    this.model.put(cell.x(), cell.y());
                 }
             );
             
-            editor.paintModel(generationModel);
+            renderer.replaceModel(this.model.cells());
+            
+            onRedraw();
         }
         
         var rendering = false;
@@ -144,14 +146,20 @@
             , 1);
 		}
         
-        function redraw() {
+        function onRedraw() {
             renderer.restart();
             render();
         }
         
+        function onToggleCell(coordinates) {
+            model.toggle(coordinates.x(), coordinates.y());
+            renderer.replaceModel(model.cells());
+            
+            onRedraw();
+        }
+        
         function scrollEditorRight() {
             editor.scrollX(-1);
-
         }
 
         function scrollEditorLeft() {
@@ -203,7 +211,8 @@
 
 		function readFile(file)	{
 			var reader = new FileReader();
-			
+			var that = this;
+            
 			reader.onload = function (event) {
 				var content = event.currentTarget.result;
 				
@@ -214,7 +223,7 @@
 				var cellBlockContainer = formatReader.read(stringArrayReader);		
 				var cells = CellBlockContainerMapper.map(cellBlockContainer, COLS, ROWS);
 
-				var model = new ToggleCellModel();
+				that.model = new ToggleCellModel();
             
 			    var rowMin = Number.MAX_VALUE;
                 var rowMax = 0;
@@ -235,12 +244,11 @@
 					}
 				);
 				
-                //editor.paintModel(model);
                 renderer.replaceModel(cells);
                 render();
                 
                 var area = new Area(new Coordinates(colMin, rowMin), new Coordinates(colMax, rowMax));
-                //editor.zoomToFit(area);
+                editor.zoomToFit(area);
 			};
 			
 			reader.readAsText(file);
