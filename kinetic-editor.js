@@ -1,7 +1,7 @@
-var KineticEditor = function (container, width, height, maxCols, maxRows) {
+var KineticEditor = function (container, width, height, maxCols, maxRows, listener) {
     "use strict";
     
-    this.init(container, width, height, maxCols, maxRows);
+    this.init(container, width, height, maxCols, maxRows, listener);
 }
 
 KineticEditor.prototype = {
@@ -32,14 +32,16 @@ KineticEditor.prototype = {
     SCROLL_BAR_THUMB_FILL: '#9f005b',
     SCROLL_BAR_THUMB_OPACITY: 0.9,
   
-    init: function (container, width, height, maxCols, maxRows) {
+    init: function (container, width, height, maxCols, maxRows, listener) {
         "use strict";
 
         Assert.isPositiveInteger(width);    
         Assert.isPositiveInteger(height);    
         Assert.isPositiveInteger(maxCols);    
         Assert.isPositiveInteger(maxRows);    
-
+        Assert.isNotNullAndDefined(listener);
+        this._listener = listener;
+        
         this._playMode = false;
         
         this._maxRows = maxRows;
@@ -85,8 +87,9 @@ KineticEditor.prototype = {
         
         this._removeHighlightedCell();
         this._viewport.scrollX(delta);
-        //this.paintModel(this._model);
         this._syncHorizontalThumbPositionWithViewport();
+
+        this._listener.redraw();
     },
         
     scrollY: function (delta) {
@@ -96,8 +99,9 @@ KineticEditor.prototype = {
         
         this._removeHighlightedCell();
         this._viewport.scrollY(delta);
-        //this.paintModel(this._model);
         this._syncVerticalThumbPositionWithViewport();
+
+        this._listener.redraw();
     },
 
     zoom: function (delta) {
@@ -347,7 +351,7 @@ KineticEditor.prototype = {
 
         var ratio = position / maximum;
         this._viewport.setHorizontalScrollRatio(ratio);
-        this.paintModel(this._model);
+        this._listener.redraw();
     },
     
     _onVerticalThumbDrag: function (position, maximum) {
@@ -355,7 +359,7 @@ KineticEditor.prototype = {
 
         var ratio = position / maximum;
         this._viewport.setVerticalScrollRatio(ratio);
-        this.paintModel(this._model);
+        this._listener.redraw();
     },
     
     _onHorizontalLeftScrollAreaClick: function () {
@@ -471,7 +475,8 @@ KineticEditor.prototype = {
             height: this._cachedCellSize,
             callback: function(image) {
                 that._cachedCellView = image;
-                that.paintModel(that._model);
+               // that.paintModel(that._model);
+                that._listener.redraw();
             }
         });
     },
@@ -491,7 +496,8 @@ KineticEditor.prototype = {
         var modelCellCoordinates = this._viewport.toGlobal(viewCellCoordinates);
         
         this._model.toggle(modelCellCoordinates.x(), modelCellCoordinates.y());
-        this.paintModel(this._model);
+        //this.paintModel(this._model);
+        this._listener.redraw();
     },
 
     _onMouseOver: function (event) {
