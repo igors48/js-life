@@ -39,7 +39,13 @@ BreakableRenderer.prototype = {
         
         this._painter.draw();
         
-        return this._index === maxIndex;
+        return this.complete();
+    },
+    
+    complete: function () {
+        "use strict";
+
+        return this._index >= this._model.length;    
     },
     
     restart: function () {

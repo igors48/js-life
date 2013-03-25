@@ -13,18 +13,21 @@ BreakableRendererTestTools.assertModelPainted = function (renderer, painter) {
     var paintedCellCount = painter.getPaintedCellCount();
     
     ok(!completed, "Painting is not completed");
+    ok(!renderer.complete(), "Painting is not completed");
     equal(paintedCellCount, 2, "Painted cell count is valid");
 
     completed = renderer.render();
     paintedCellCount = painter.getPaintedCellCount();
     
     ok(!completed, "Painting is not completed");
+    ok(!renderer.complete(), "Painting is not completed");
     equal(paintedCellCount, 4, "Painted cell count is valid");
 
     completed = renderer.render();
     paintedCellCount = painter.getPaintedCellCount();
     
     ok(completed, "Painting is completed");
+    ok(renderer.complete(), "Painting is completed");
     equal(paintedCellCount, 5, "Painted cell count is valid");
 };    
 

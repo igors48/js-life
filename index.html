@@ -41,13 +41,15 @@
         var COLS = 2000;
         var ROWS = 2000;
         
-		var CELL_RENDERED_PER_CALL = 30000;
-		var CELL_RECALCULATED_PER_CALL = 30000;
+		var CELL_RENDERED_PER_CALL = 200;
+		var CELL_RECALCULATED_PER_CALL = 200;
 		
         var model = new ToggleCellModel();
         var editor = new KineticEditor('container', 1200, 550, COLS, ROWS, this);
         var renderer = new BreakableRenderer(CELL_RENDERED_PER_CALL, editor);
         var mode = 'edit';
+        var rendering = false;
+        
         var field;
         
         function buttonClick() {
@@ -56,20 +58,20 @@
 				return;
 			}
 			
-            if (mode === 'edit') {
-                var button = document.getElementById('button');
-                button.innerHTML = 'Step';
+            var button = document.getElementById('button');
+            button.innerHTML = 'Step';
             
-                editor.switchToPlayMode();
+            editor.switchToPlayMode();
 
-                var cells = model.cells();
+            var cells = model.cells();
 
-				field = createField(cells);
-            }    
+            field = createField(cells);                
+            renderer.replaceModel(cells);
             
             mode = 'play';
 
-			animate();
+			//animate();
+            render();
         }
 
 		function createField(cells) {
@@ -115,16 +117,31 @@
             }
 
             rendering = true;
-            
+
             setTimeout(
                 function doRender() {
-                    var completed = renderer.render();
                     
-                    if (completed) {
-                        rendering = false;
+                    if (renderer.complete()) {
+                    
+                        if (mode === 'play') {
+                            var recalculationCompleted = field.generationNext();
+
+                            if (recalculationCompleted) {
+                                var newModel = field.cells();
+                                renderer.replaceModel(newModel);
+                            } else {
+                                setTimeout(doRender, 1);
+                            }
+                        } else {
+                            rendering = false;
+                            
+                            return;
+                        }
                     } else {
-                        setTimeout(doRender, 1);
+                        renderer.render();
                     }
+                    
+                    setTimeout(doRender, 1);
                 }
             , 1);
 		}
