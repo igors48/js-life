@@ -41,9 +41,12 @@
         var COLS = 2000;
         var ROWS = 2000;
         
+		var CELL_RENDERED_PER_CALL = 30000;
+		var CELL_RECALCULATED_PER_CALL = 30000;
+		
         var model = new ToggleCellModel();
         var editor = new KineticEditor('container', 1200, 550, COLS, ROWS, this);
-        var renderer = new BreakableRenderer(30000, editor);
+        var renderer = new BreakableRenderer(CELL_RENDERED_PER_CALL, editor);
         var mode = 'edit';
         var field;
         
@@ -70,7 +73,7 @@
         }
 
 		function createField(cells) {
-            field = new Field();
+            field = new Field(CELL_RECALCULATED_PER_CALL);
 
 			var that = this;
             			
