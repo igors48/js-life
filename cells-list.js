@@ -27,6 +27,27 @@ CellsList.prototype = {
         
         return result;
     },
+
+    cellsCoordinates: function () {
+        "use strict";
+        
+        var result = [];
+        
+        _.each(this._list,
+            function (row, rowIndex) {
+            
+                _.each(row,
+                    function (value, colIndex) {
+                        var coordinates = new Coordinates(colIndex, rowIndex);
+                        
+                        result.push(coordinates);
+                    }
+                );
+            }
+        );
+        
+        return result;
+    },
     
     add: function (x, y, value) {
         "use strict";

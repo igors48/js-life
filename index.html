@@ -26,7 +26,6 @@
     <script src="area.js"></script>
     <script src="offset.js"></script>
     <script src="neighbors.js"></script>
-    <script src="generation-report.js"></script>
     <script src="viewport.js"></script>
 	
     <script src="string-array-reader.js"></script>
@@ -98,26 +97,9 @@
 		}
 		
         function generation() {
-            var generationReport = field.generationNext();
-            var dying = generationReport.dyingCells();
-            var borning = generationReport.borningCells();
-            var living = generationReport.livingCells();
-            
-            this.model = new ToggleCellModel();
-            
-            _.each(living,
-                function (cell) {
-                    this.model.put(cell.x(), cell.y());
-                }
-            );
+            field.generationNext();
 
-            _.each(borning,
-                function (cell) {
-                    this.model.put(cell.x(), cell.y());
-                }
-            );
-            
-            renderer.replaceModel(this.model.cells());
+            renderer.replaceModel(field.cellsCoordinates());
             
             onRedraw();
         }
