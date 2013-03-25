@@ -39,16 +39,23 @@ Field.prototype = {
 		}
 		
         var that = this;
+        var count = 0;
+        var maxIndex = this._list.length;
+        
+        while (count < this._cellsPerCall && this._index < maxIndex) {
+            var cell = this._list[this._index];
+			
+            this._processLiveCell(cell);
 
-        _.each(this._list,
-            function (cell) {
-                that._processLiveCell(cell);
-            }
-        );
+            ++this._index;
+            ++count;
+		}
 
 		this._cells = this._newModel;
 		
 		this._finished = true;
+
+        return this._index === maxIndex;
     },
 
 	_restart: function () {
