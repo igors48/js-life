@@ -29,49 +29,16 @@ Field.prototype = {
         var map = new CellsList();
         var that = this;
         
-        _.each(cells,
-            function (cell) {
-                that._processLiveCell(cell, map);
-            }
-        );
-        
-        var mapValues = map.cells();
-        
+        var livingCells = [];        
         var borningCells = [];
         var dyingCells = [];
-        var livingCells = [];        
 
-        _.each(mapValues,
-            function (current) {
-                var neighborsAndStatus = current.value();
-                var neighbors = neighborsAndStatus.neighborsCount();
-                
-                var x = current.coordinates().x();
-                var y = current.coordinates().y();
-                
-                var existent = !neighborsAndStatus.isEmpty();
-                
-                if (existent) {
-                
-                    if (neighbors < 2 || neighbors > 3) {
-                        var dyingCell = new Coordinates(x ,y);
-                        dyingCells.push(dyingCell);    
-                    }
-                    
-                    if (neighbors === 2 || neighbors === 3) {
-                        var livingCell = new Coordinates(x, y);
-                        livingCells.push(livingCell);
-                    }
-                } else {
-                
-                    if (neighbors === 3) {
-                        var borningCell = new Coordinates(x, y);
-                        borningCells.push(borningCell);
-                    }
-                }
+        _.each(cells,
+            function (cell) {
+                that._processLiveCell(cell, map, livingCells, borningCells, dyingCells);
             }
         );
-        
+
         this._updateCells(livingCells, borningCells);
         
         var generationReport = new GenerationReport(borningCells, dyingCells, livingCells, previousGenerationHabitat);
@@ -79,13 +46,13 @@ Field.prototype = {
         return generationReport;
     },
 
-    _processLiveCell: function (cell, map) {
+    _processLiveCell: function (cell, map, livingCells, borningCells, dyingCells) {
         "use strict";
 
         var x = cell.coordinates().x();    
         var y = cell.coordinates().y();
         
-        this._storeNeighborsCountAndCellState(x, y, true, map);
+        this._storeNeighborsCountAndCellState(x, y, true, map, livingCells, borningCells, dyingCells);
 
         var coordinates = new Coordinates(x, y);    
         var neighbors = Neighbors.getNeighbors(coordinates);
@@ -94,12 +61,12 @@ Field.prototype = {
         
         _.each(neighbors,
             function (current) {
-                that._storeNeighborsCountAndCellState(current.x(), current.y(), false, map);
+                that._storeNeighborsCountAndCellState(current.x(), current.y(), false, map, livingCells, borningCells, dyingCells);
             }
         );        
     },
 
-    _storeNeighborsCountAndCellState: function (x, y, liveCell, map) {
+    _storeNeighborsCountAndCellState: function (x, y, liveCell, map, livingCells, borningCells, dyingCells) {
 
         if (map.exists(x, y)) {
             return;
@@ -111,6 +78,25 @@ Field.prototype = {
         var neighborsAndStatus = new NeighborsAndState(neighborsCount, isEmpty);
         
         map.add(x, y, neighborsAndStatus);
+		
+		if (isEmpty) {
+                
+            if (neighborsCount === 3) {
+                var borningCell = new Coordinates(x, y);
+                borningCells.push(borningCell);
+            }
+        } else {
+                
+            if (neighborsCount < 2 || neighborsCount > 3) {
+                var dyingCell = new Coordinates(x ,y);
+                dyingCells.push(dyingCell);    
+            }
+                    
+            if (neighborsCount === 2 || neighborsCount === 3) {
+                var livingCell = new Coordinates(x, y);
+                livingCells.push(livingCell);
+            }
+        }
     },
     
     _updateCells: function (livingCells, borningCells) {
@@ -122,13 +108,13 @@ Field.prototype = {
         
         _.each(livingCells,
             function (cell) {
-                that.putLiveCell(cell.x(), cell.y());
+				that._cells.add(cell.x(), cell.y());
             }
         );
 
         _.each(borningCells,
             function (cell) {
-                that.putLiveCell(cell.x(), cell.y());
+				that._cells.add(cell.x(), cell.y());
             }
         );
     },
@@ -143,7 +129,7 @@ Field.prototype = {
         
         _.each(neighbors,
             function (current) {
-                var exists = that._findCell(current.x(), current.y());
+                var exists = that._cells.exists(current.x(), current.y());
             
                 if (exists) {
                     ++count;
@@ -152,14 +138,6 @@ Field.prototype = {
         );
         
         return count;
-    },
-    
-    _findCell: function (x, y) {
-        "use strict";
-        
-        var exists = this._cells.exists(x, y);
-
-        return exists;
     }
     
 };
