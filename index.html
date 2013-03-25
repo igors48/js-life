@@ -26,7 +26,6 @@
     <script src="area.js"></script>
     <script src="offset.js"></script>
     <script src="neighbors.js"></script>
-    <script src="neighbors-and-state.js"></script>
     <script src="generation-report.js"></script>
     <script src="viewport.js"></script>
 	
@@ -46,7 +45,7 @@
         
         var model = new ToggleCellModel();
         var editor = new KineticEditor('container', 1200, 550, COLS, ROWS, this);
-        var renderer = new BreakableRenderer(300, editor);
+        var renderer = new BreakableRenderer(30000, editor);
         var mode = 'edit';
         var field;
         
