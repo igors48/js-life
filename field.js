@@ -45,17 +45,21 @@ Field.prototype = {
         while (count < this._cellsPerCall && this._index < maxIndex) {
             var cell = this._list[this._index];
 			
-            this._processLiveCell(cell);
+            this._processLiveCellAndTheirNeghbours(cell);
 
             ++this._index;
             ++count;
 		}
 
-		this._cells = this._newModel;
+		var finished = this._index === maxIndex;
 		
-		this._finished = true;
-
-        return this._index === maxIndex;
+		if (finished) {
+			this._cells = this._newModel;
+		
+			this._finished = true;
+		}
+		
+        return finished;
     },
 
 	_restart: function () {
@@ -67,13 +71,13 @@ Field.prototype = {
         this._newModel = new CellsList();
 	},
 	
-    _processLiveCell: function (cell) {
+    _processLiveCellAndTheirNeghbours: function (cell) {
         "use strict";
 
         var x = cell.x();    
         var y = cell.y();
         
-        this._storeNeighborsCountAndCellState(x, y, true, this._processedCells, this._newModel);
+        this._processCell(x, y, true, this._processedCells, this._newModel);
 
         var coordinates = new Coordinates(x, y);    
         var neighbors = Neighbors.getNeighbors(coordinates);
@@ -82,12 +86,12 @@ Field.prototype = {
         
         _.each(neighbors,
             function (current) {
-                that._storeNeighborsCountAndCellState(current.x(), current.y(), false, that._processedCells, that._newModel);
+                that._processCell(current.x(), current.y(), false, that._processedCells, that._newModel);
             }
         );        
     },
 
-    _storeNeighborsCountAndCellState: function (x, y, liveCell) {
+    _processCell: function (x, y, liveCell) {
         "use strict";
 
         if (this._processedCells.exists(x, y)) {
