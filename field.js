@@ -45,7 +45,7 @@ Field.prototype = {
         while (count < this._cellsPerCall && this._index < maxIndex) {
             var cell = this._list[this._index];
 			
-            this._processLiveCellAndTheirNeghbours(cell);
+            this._processLiveCellAndTheirNeighbours(cell);
 
             ++this._index;
             ++count;
@@ -71,7 +71,7 @@ Field.prototype = {
         this._newModel = new CellsList();
 	},
 	
-    _processLiveCellAndTheirNeghbours: function (cell) {
+    _processLiveCellAndTheirNeighbours: function (cell) {
         "use strict";
 
         var x = cell.x();    
