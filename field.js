@@ -88,6 +88,7 @@ Field.prototype = {
     },
 
     _storeNeighborsCountAndCellState: function (x, y, liveCell) {
+        "use strict";
 
         if (this._processedCells.exists(x, y)) {
             return;
