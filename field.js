@@ -15,17 +15,15 @@ Field.prototype = {
         this._cells.add(x, y);
     },
 
-    habitat: function () {
+	cellsCoordinates: function () {
         "use strict";
         
-        return this._cells.habitat();
-    },
-    
+        return this._cells.cellsCoordinates();
+	},
+	
     generationNext: function () {
         "use strict";
 
-        var previousGenerationHabitat = this._cells.habitat();    
-		
         var processedCells = new CellsList();
         var newModel = new CellsList();
         
@@ -43,10 +41,6 @@ Field.prototype = {
         );
 
 		this._cells = newModel;
-        
-        var generationReport = new GenerationReport(borningCells, dyingCells, livingCells, previousGenerationHabitat);
-        
-        return generationReport;
     },
 
     _processLiveCell: function (cell, processedCells, livingCells, borningCells, dyingCells, newModel) {
