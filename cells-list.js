@@ -17,27 +17,6 @@ CellsList.prototype = {
             
                 _.each(row,
                     function (value, colIndex) {
-                        var cell = new Cell(colIndex, rowIndex, value);
-                        
-                        result.push(cell);
-                    }
-                );
-            }
-        );
-        
-        return result;
-    },
-
-    cellsCoordinates: function () {
-        "use strict";
-        
-        var result = [];
-        
-        _.each(this._list,
-            function (row, rowIndex) {
-            
-                _.each(row,
-                    function (value, colIndex) {
                         var coordinates = new Coordinates(colIndex, rowIndex);
                         
                         result.push(coordinates);
