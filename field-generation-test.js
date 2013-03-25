@@ -1,7 +1,7 @@
 test("Empty field stays empty", function() {
     "use strict";
 	
-    var field = new Field();
+    var field = new Field(100);
 
     field.generationNext();
 	var cells = field.cells(); 
@@ -12,7 +12,7 @@ test("Empty field stays empty", function() {
 test("One cell will die", function() {
     "use strict";
 	
-    var field = new Field();
+    var field = new Field(100);
     field.putLiveCell(1, 1);
   
 	field.generationNext();
@@ -24,7 +24,7 @@ test("One cell will die", function() {
 test("Stone will not change", function() {
     "use strict";
 	
-    var field = new Field();
+    var field = new Field(100);
     field.putLiveCell(1, 1);
     field.putLiveCell(1, 2);
     field.putLiveCell(2, 1);
@@ -42,7 +42,7 @@ test("Stone will not change", function() {
 test("Rotator is rotating", function() {
     "use strict";
 	
-    var field = new Field();
+    var field = new Field(100);
     field.putLiveCell(4, 3);
     field.putLiveCell(3, 3);
     field.putLiveCell(2, 3);

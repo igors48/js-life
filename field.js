@@ -1,7 +1,16 @@
-var Field = function () {
+var Field = function (cellsPerCall) {
     "use strict";
 
+	Assert.isPositiveInteger(cellsPerCall);
+    this._cellsPerCall = cellsPerCall;
+
     this._cells = new CellsList();
+	
+	this._index = 0;
+	this._finished = true;
+    this._processedCells = new CellsList();
+    this._newModel = new CellsList();
+	this._list = [];
 };
 
 Field.prototype = {
@@ -24,28 +33,40 @@ Field.prototype = {
     generationNext: function () {
         "use strict";
 
-        var processedCells = new CellsList();
-        var newModel = new CellsList();
-        
-        var cells = this._cells.cells();
+		if (this._finished) {
+			this._finished = false;
+			this._restart();
+		}
+		
         var that = this;
 
-        _.each(cells,
+        _.each(this._list,
             function (cell) {
-                that._processLiveCell(cell, processedCells, newModel);
+                that._processLiveCell(cell);
             }
         );
 
-		this._cells = newModel;
+		this._cells = this._newModel;
+		
+		this._finished = true;
     },
 
-    _processLiveCell: function (cell, processedCells, newModel) {
+	_restart: function () {
+        "use strict";
+
+		this._index = 0;
+		this._list = this._cells.cells();
+        this._processedCells = new CellsList();
+        this._newModel = new CellsList();
+	},
+	
+    _processLiveCell: function (cell) {
         "use strict";
 
         var x = cell.x();    
         var y = cell.y();
         
-        this._storeNeighborsCountAndCellState(x, y, true, processedCells, newModel);
+        this._storeNeighborsCountAndCellState(x, y, true, this._processedCells, this._newModel);
 
         var coordinates = new Coordinates(x, y);    
         var neighbors = Neighbors.getNeighbors(coordinates);
@@ -54,14 +75,14 @@ Field.prototype = {
         
         _.each(neighbors,
             function (current) {
-                that._storeNeighborsCountAndCellState(current.x(), current.y(), false, processedCells, newModel);
+                that._storeNeighborsCountAndCellState(current.x(), current.y(), false, that._processedCells, that._newModel);
             }
         );        
     },
 
-    _storeNeighborsCountAndCellState: function (x, y, liveCell, processedCells, newModel) {
+    _storeNeighborsCountAndCellState: function (x, y, liveCell) {
 
-        if (processedCells.exists(x, y)) {
+        if (this._processedCells.exists(x, y)) {
             return;
         }
         
@@ -74,18 +95,18 @@ Field.prototype = {
             if (neighborsCount === 3) {
                 var borningCell = new Coordinates(x, y);
 
-				newModel.add(x, y);
+				this._newModel.add(x, y);
             }
         } else {
 
 			if (neighborsCount === 2 || neighborsCount === 3) {
                 var livingCell = new Coordinates(x, y);
 
-				newModel.add(x, y);
+				this._newModel.add(x, y);
             }
         }
 		
-        processedCells.add(x, y);
+        this._processedCells.add(x, y);
     },
 
     _countNeighbors: function (x, y) {
