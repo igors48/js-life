@@ -21,7 +21,6 @@
     <script src="toggle-cell-model.js"></script>
     <script src="kinetic-editor.js"></script>
     <script src="field.js"></script>
-    <script src="cell.js"></script>
     <script src="cells-list.js"></script>
     <script src="area.js"></script>
     <script src="offset.js"></script>
@@ -99,7 +98,7 @@
         function generation() {
             field.generationNext();
 
-            renderer.replaceModel(field.cellsCoordinates());
+            renderer.replaceModel(field.cells());
             
             onRedraw();
         }

@@ -15,10 +15,10 @@ Field.prototype = {
         this._cells.add(x, y);
     },
 
-	cellsCoordinates: function () {
+	cells: function () {
         "use strict";
         
-        return this._cells.cellsCoordinates();
+        return this._cells.cells();
 	},
 	
     generationNext: function () {
@@ -27,29 +27,25 @@ Field.prototype = {
         var processedCells = new CellsList();
         var newModel = new CellsList();
         
-        var livingCells = [];        
-        var borningCells = [];
-        var dyingCells = [];
-
         var cells = this._cells.cells();
         var that = this;
 
         _.each(cells,
             function (cell) {
-                that._processLiveCell(cell, processedCells, livingCells, borningCells, dyingCells, newModel);
+                that._processLiveCell(cell, processedCells, newModel);
             }
         );
 
 		this._cells = newModel;
     },
 
-    _processLiveCell: function (cell, processedCells, livingCells, borningCells, dyingCells, newModel) {
+    _processLiveCell: function (cell, processedCells, newModel) {
         "use strict";
 
-        var x = cell.coordinates().x();    
-        var y = cell.coordinates().y();
+        var x = cell.x();    
+        var y = cell.y();
         
-        this._storeNeighborsCountAndCellState(x, y, true, processedCells, livingCells, borningCells, dyingCells, newModel);
+        this._storeNeighborsCountAndCellState(x, y, true, processedCells, newModel);
 
         var coordinates = new Coordinates(x, y);    
         var neighbors = Neighbors.getNeighbors(coordinates);
@@ -58,44 +54,38 @@ Field.prototype = {
         
         _.each(neighbors,
             function (current) {
-                that._storeNeighborsCountAndCellState(current.x(), current.y(), false, processedCells, livingCells, borningCells, dyingCells, newModel);
+                that._storeNeighborsCountAndCellState(current.x(), current.y(), false, processedCells, newModel);
             }
         );        
     },
 
-    _storeNeighborsCountAndCellState: function (x, y, liveCell, processedCells, livingCells, borningCells, dyingCells, newModel) {
+    _storeNeighborsCountAndCellState: function (x, y, liveCell, processedCells, newModel) {
 
         if (processedCells.exists(x, y)) {
             return;
         }
         
         var neighborsCount = this._countNeighbors(x, y);
-        var isEmpty = liveCell ? false : !this._cells.exists(x, y);
         
-        processedCells.add(x, y);
-		
+        var isEmpty = liveCell ? false : !this._cells.exists(x, y);
+
 		if (isEmpty) {
                 
             if (neighborsCount === 3) {
                 var borningCell = new Coordinates(x, y);
-                borningCells.push(borningCell);
 
 				newModel.add(x, y);
             }
         } else {
-                
-            if (neighborsCount < 2 || neighborsCount > 3) {
-                var dyingCell = new Coordinates(x ,y);
-                dyingCells.push(dyingCell);    
-            }
-                    
-            if (neighborsCount === 2 || neighborsCount === 3) {
+
+			if (neighborsCount === 2 || neighborsCount === 3) {
                 var livingCell = new Coordinates(x, y);
-                livingCells.push(livingCell);
 
 				newModel.add(x, y);
             }
         }
+		
+        processedCells.add(x, y);
     },
 
     _countNeighbors: function (x, y) {

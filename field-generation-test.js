@@ -4,7 +4,7 @@ test("Empty field stays empty", function() {
     var field = new Field();
 
     field.generationNext();
-	var cells = field.cellsCoordinates(); 
+	var cells = field.cells(); 
     
     equal(cells.length, 0, "No living cells");
 });
@@ -16,7 +16,7 @@ test("One cell will die", function() {
     field.putLiveCell(1, 1);
   
 	field.generationNext();
-	var cells = field.cellsCoordinates(); 
+	var cells = field.cells(); 
     
     equal(cells.length, 0, "No living cells");
 });
@@ -31,7 +31,7 @@ test("Stone will not change", function() {
     field.putLiveCell(2, 2);
   
     field.generationNext();
-	var cells = field.cellsCoordinates(); 
+	var cells = field.cells(); 
 
     ok(TestTools.containsOnlyOne(new Coordinates(1, 1), cells));
     ok(TestTools.containsOnlyOne(new Coordinates(1, 2), cells));
@@ -48,7 +48,7 @@ test("Rotator is rotating", function() {
     field.putLiveCell(2, 3);
 
 	field.generationNext();
-	var cells = field.cellsCoordinates(); 
+	var cells = field.cells(); 
 
 	equal(cells.length, 3, "Three cells");
     ok(TestTools.containsOnlyOne(new Coordinates(3, 3), cells));
@@ -56,7 +56,7 @@ test("Rotator is rotating", function() {
     ok(TestTools.containsOnlyOne(new Coordinates(3, 4), cells));
 
 	field.generationNext();
-	cells = field.cellsCoordinates(); 
+	cells = field.cells(); 
 
 	equal(cells.length, 3, "Three cells");
     ok(TestTools.containsOnlyOne(new Coordinates(3, 3), cells));
