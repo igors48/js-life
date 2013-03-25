@@ -89,3 +89,29 @@ test("Rotator is rotating", function() {
 	FieldGenerationTestTools.assertIsHorizontalRotator(cells);
 });
 
+test("Rotator in breakable iteration", function() {
+    "use strict";
+
+	var field = FieldGenerationTestTools.createFieldWithHorizontalRotator(2);
+
+	var completed = field.generationNext();
+    ok(!completed, "Recalculation is not completed");
+
+	completed = field.generationNext();
+    ok(completed, "Recalculation is completed");
+	
+	var cells = field.cells(); 
+	
+	FieldGenerationTestTools.assertIsVerticalRotator(cells);
+	
+	completed = field.generationNext();
+    ok(!completed, "Recalculation is not completed");
+
+	completed = field.generationNext();
+    ok(completed, "Recalculation is completed");
+
+	cells = field.cells(); 
+	
+	FieldGenerationTestTools.assertIsHorizontalRotator(cells);
+});
+
