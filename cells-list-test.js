@@ -67,24 +67,6 @@ test("Remove cell from list", function() {
     equal(list.count(), 1, 'cells count does not change')
 });
 
-test("Habitat calculation", function() {
-    "use strict";
-    
-    var list = new CellsList();
-    
-    var xFirst = 48;
-    var yFirst = 49;
-    var xSecond = 148;
-    var ySecond = 149;
-    
-    list.add(xFirst, yFirst);
-    list.add(xSecond, ySecond);
-
-    var actual = list.habitat();    
-    var expected = new Area(new Coordinates(xFirst, yFirst), new Coordinates(xSecond, ySecond));    
-    ok(actual.equals(expected), 'habitat is valid');
-});
-
 test("All added cells returns in list", function() {
     "use strict";
     

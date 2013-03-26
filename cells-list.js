@@ -89,35 +89,7 @@ CellsList.prototype = {
 
         return this._count;
     },
-    
-    habitat: function () {
-        "use strict";
 
-        var rowMin = Number.MAX_VALUE;
-        var rowMax = 0;
-        var colMin = Number.MAX_VALUE;
-        var colMax = 0;
-        
-        _.each(this._list,
-            function (row, index) {                
-                rowMin = Math.min(rowMin, index);
-                rowMax = Math.max(rowMax, index);
-                
-                var rowMaxCol = _.max(row);
-                var rowMinCol = _.min(row);
-
-                colMin = Math.min(colMin, rowMinCol);
-                colMax = Math.max(colMax, rowMaxCol);
-            }
-        );
-        
-        var topLeft = new Coordinates(colMin, rowMin);
-        var bottomRight = new Coordinates(colMax, rowMax);
-        var habitat = new Area(topLeft, bottomRight);
-        
-        return habitat;
-    },
-    
     _row: function (y) {
         "use strict";    
     
