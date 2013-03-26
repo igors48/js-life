@@ -37,7 +37,9 @@ BreakableRenderer.prototype = {
             ++count;
         }
         
-        this._painter.draw();
+        if (this.complete()) {
+            this._painter.draw();
+        }
         
         return this.complete();
     },
