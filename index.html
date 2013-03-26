@@ -42,7 +42,7 @@
         var ROWS = 2000;
         
 		var CELL_RENDERED_PER_CALL = 500;
-		var CELL_RECALCULATED_PER_CALL = 500;
+		var CELL_RECALCULATED_PER_CALL = 1000;
 		
         var model = new ToggleCellModel();
         var editor = new KineticEditor('container', 1200, 550, COLS, ROWS, this);
@@ -70,7 +70,6 @@
             
             mode = 'play';
 
-			//animate();
             render();
         }
 
@@ -90,27 +89,8 @@
 			            
 			return field;
 		}		
-		
-		function animate() {
-            setTimeout(
-                function newGeneration() {
-                    generation();
-                    setTimeout(newGeneration, 5);
-                }
-            , 5);
-		}
-		
-        function generation() {
-            field.generationNext();
 
-            renderer.replaceModel(field.cells());
-            
-            onRedraw();
-        }
-        
-        var rendering = false;
-        
-		function render() {
+ 		function render() {
             
             if (rendering) {
                 return;
@@ -140,6 +120,7 @@
                     }
                     
                     setTimeout(doRender, 1);
+                    console.log('timeout');
                 }
             , 1);
 		}

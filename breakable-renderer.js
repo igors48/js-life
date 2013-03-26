@@ -39,9 +39,11 @@ BreakableRenderer.prototype = {
         
         if (this.complete()) {
             this._painter.draw();
+            
+            return true;
+        } else {
+            return false;
         }
-        
-        return this.complete();
     },
     
     complete: function () {
