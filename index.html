@@ -41,8 +41,8 @@
         var COLS = 2000;
         var ROWS = 2000;
         
-		var CELL_RENDERED_PER_CALL = 200;
-		var CELL_RECALCULATED_PER_CALL = 200;
+		var CELL_RENDERED_PER_CALL = 500;
+		var CELL_RECALCULATED_PER_CALL = 500;
 		
         var model = new ToggleCellModel();
         var editor = new KineticEditor('container', 1200, 550, COLS, ROWS, this);
@@ -129,8 +129,6 @@
                             if (recalculationCompleted) {
                                 var newModel = field.cells();
                                 renderer.replaceModel(newModel);
-                            } else {
-                                setTimeout(doRender, 1);
                             }
                         } else {
                             rendering = false;
