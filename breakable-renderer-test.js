@@ -112,7 +112,10 @@ test("After rendering painter redraw", function() {
     var model = BreakableRendererTestTools.createModel();
     renderer.replaceModel(model);
 
-    var completed = renderer.render();
+    renderer.render();
+    renderer.render();
+    renderer.render();
+    
     var draw = painter.isDraw();
     
     ok(draw, "Painter draw");
