@@ -72,6 +72,23 @@ CellsList.prototype = {
         }
     },
     
+    toggle: function (x, y) {
+        "use strict";
+
+        Assert.cellCoordinateValid(x);
+        Assert.cellCoordinateValid(y);
+        
+        if (this.exists(x, y)) {
+            this.remove(x, y);
+            
+            return false;
+        } else {
+            this.add(x, y);
+            
+            return true;
+        }
+    },
+    
     exists: function (x, y) {
         "use strict";
 

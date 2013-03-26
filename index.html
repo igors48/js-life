@@ -18,7 +18,6 @@
     <script src="assert-base.js"></script>
     <script src="assert.js"></script>
     <script src="coordinates.js"></script>
-    <script src="toggle-cell-model.js"></script>
     <script src="kinetic-editor.js"></script>
     <script src="field.js"></script>
     <script src="cells-list.js"></script>
@@ -44,7 +43,7 @@
 		var CELL_RENDERED_PER_CALL = 500;
 		var CELL_RECALCULATED_PER_CALL = 1000;
 		
-        var model = new ToggleCellModel();
+        var model = new CellsList();
         var editor = new KineticEditor('container', 1200, 550, COLS, ROWS, this);
         var renderer = new BreakableRenderer(CELL_RENDERED_PER_CALL, editor);
         var mode = 'edit';
@@ -202,7 +201,7 @@
 				var cellBlockContainer = formatReader.read(stringArrayReader);		
 				var cells = CellBlockContainerMapper.map(cellBlockContainer, COLS, ROWS);
 
-				that.model = new ToggleCellModel();
+				that.model = new CellsList();
             
 			    var rowMin = Number.MAX_VALUE;
                 var rowMax = 0;
@@ -214,7 +213,7 @@
                         var x = cell.x();
                         var y = cell.y();
                         
-						model.put(x, y);
+						model.add(x, y);
                     
                         rowMin = Math.min(rowMin, y);
                         rowMax = Math.max(rowMax, y);
