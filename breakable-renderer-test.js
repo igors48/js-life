@@ -103,22 +103,4 @@ test("Painting process really restarted", function() {
     BreakableRendererTestTools.assertModelPainted(renderer, painter);
 });
 
-test("After rendering painter redraw", function() {
-    "use strict";
-    
-    var painter = new PainterStub();
-    var renderer = new BreakableRenderer(2, painter);
-    
-    var model = BreakableRendererTestTools.createModel();
-    renderer.replaceModel(model);
-
-    renderer.render();
-    renderer.render();
-    renderer.render();
-    
-    var draw = painter.isDraw();
-    
-    ok(draw, "Painter draw");
-});
-
 

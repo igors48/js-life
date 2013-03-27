@@ -103,7 +103,8 @@
                 function doRender() {
                     
                     if (renderer.complete()) {
-                    
+                        editor.draw();
+                        
                         if (mode === 'play') {
                             var recalculationCompleted = field.generationNext();
 

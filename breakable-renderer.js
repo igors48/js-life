@@ -37,13 +37,7 @@ BreakableRenderer.prototype = {
             ++count;
         }
         
-        if (this.complete()) {
-            this._painter.draw();
-            
-            return true;
-        } else {
-            return false;
-        }
+        return this.complete();
     },
     
     complete: function () {
@@ -56,6 +50,7 @@ BreakableRenderer.prototype = {
         "use strict";
         
         this._painter.clear();
+        
         this._index = 0;
     }
     
