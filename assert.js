@@ -61,6 +61,17 @@ Assert.isNumber = function (value) {
     }
 };
 
+Assert.isPositiveNumber = function (value) {
+    "use strict";
+	
+    var isNumber = (_.isNumber(value)) && (!_.isNaN(value));
+    var isPositiveNumber = isNumber && (value >= 0);
+    
+    if (!isPositiveNumber) {
+        throw new Error('Value [ ' + value + ' ] is not positive number');
+    }
+};
+
 Assert.isPositiveInteger = function (value) {
     "use strict";
 	
@@ -148,5 +159,15 @@ Assert.isCellBlockContainer = function (value) {
     
     if (!isCellBlockContainer) {
         throw new Error('Is not an CellBlockContainer value');
+    }
+};
+
+Assert.isFunction = function (value) {
+    "use strict";
+    
+    var isFunction = _.isFunction(value);
+    
+    if (!isFunction) {
+        throw new Error('Is not an function');
     }
 };
