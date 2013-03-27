@@ -1,4 +1,4 @@
-var HorizontalScrollBar = function (configuration) {
+var VerticalScrollBar = function (configuration) {
     "use strict";
     
     Assert.isNotNullAndDefined(configuration);
@@ -18,8 +18,8 @@ var HorizontalScrollBar = function (configuration) {
     Assert.isPositiveInteger(configuration.height);    
     this._height = configuration.height;
     
-    Assert.isPositiveInteger(configuration.thumbWidth);    
-    this._thumbWidth = configuration.thumbWidth;
+    Assert.isPositiveInteger(configuration.thumbHeight);    
+    this._thumbHeight = configuration.thumbHeight;
     
     Assert.isNotNullAndDefined(configuration.areaFill);
     this._areaFill = configuration.areaFill;
@@ -36,19 +36,19 @@ var HorizontalScrollBar = function (configuration) {
     Assert.isFunction(configuration.onThumbDrag);
     this._onThumbDrag = configuration.onThumbDrag;
     
-    Assert.isFunction(configuration.onLeftAreaClick);
-    this._onLeftAreaClick = configuration.onLeftAreaClick;
+    Assert.isFunction(configuration.onTopAreaClick);
+    this._onTopAreaClick = configuration.onTopAreaClick;
     
-    Assert.isFunction(configuration.onRightAreaClick);
-    this._onRightAreaClick = configuration.onRightAreaClick;
+    Assert.isFunction(configuration.onBottomAreaClick);
+    this._onBottomAreaClick = configuration.onBottomAreaClick;
     
     this._thumb = null;
-    this._thumbMoveAreaWidth = 0;
+    this._thumbMoveAreaHeight = 0;
     
     this._init();
 };
 
-HorizontalScrollBar.prototype = {
+VerticalScrollBar.prototype = {
 
     CLICK_EVENT: 'click',
     DRAG_MOVE_EVENT: 'dragmove',
@@ -58,15 +58,15 @@ HorizontalScrollBar.prototype = {
     
         Assert.isNumber(offset);
         
-        var left = this._left + Math.floor(this._thumbMoveAreaWidth * offset);
+        var top = this._top + Math.floor(this._thumbMoveAreaHeight * offset);
         
-        this._thumb.setX(left);
+        this._thumb.setY(top);
     },
     
     _init: function () {
         "use strict";
 
-        var right = this._left + this._width;
+        var bottom = this._top + this._height;
         
         var area = new Kinetic.Rect({
             x: this._left,
@@ -77,52 +77,52 @@ HorizontalScrollBar.prototype = {
             opacity: this._areaOpacity
         });
 
-        var thumbLeftMax = right - this._thumbWidth;
-        this._thumbMoveAreaWidth = thumbLeftMax - this._left;
+        var thumbTopMax = bottom - this._thumbHeight;
+        this._thumbMoveAreaHeight = thumbTopMax - this._top;
 
         var that = this;
 
         this._thumb = new Kinetic.Rect({
             x: this._left,
             y: this._top,
-            width: this._thumbWidth,
-            height: this._height,
+            width: this._width,
+            height: this._thumbHeight,
             fill: this._thumbFill,
             opacity: this._thumbOpacity,
             draggable: true,
             dragBoundFunc: function(position) {
-                var newX = position.x;
+                var newY = position.y;
                 
-                if (newX < that._left) {
-                    newX = that._left;
+                if (newY < that._top) {
+                    newY = that._top;
                 }
-                else if (newX > thumbLeftMax) {
-                    newX = thumbLeftMax;
+                else if (newY > thumbTopMax) {
+                    newY = thumbTopMax;
                 }
                 
                 return {
-                    x: newX,
-                    y: that._top
+                    x: that._left,
+                    y: newY
                 }
             }
         });
         
         this._thumb.on(this.DRAG_MOVE_EVENT,
             function () {
-                that._onThumbDrag(that._thumb.getX() - that._left, that._thumbMoveAreaWidth);
+                that._onThumbDrag(that._thumb.getY() - that._top, that._thumbMoveAreaHeight);
             }
         );
         
         area.on(this.CLICK_EVENT,
             function (event) {
-                var x = event.layerX;
+                var y = event.layerY;
 
-                if (x < that._thumb.getX()) {
-                    that._onLeftAreaClick();
+                if (y < that._thumb.getY()) {
+                    that._onTopAreaClick();
                 }
                 
-                if (x > that._thumb.getX() + that._thumb.getWidth()) {
-                    that._onRightAreaClick();
+                if (y > that._thumb.getY() + that._thumb.getHeight()) {
+                    that._onBottomAreaClick();
                 }
             }
         );

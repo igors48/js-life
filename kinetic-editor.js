@@ -193,82 +193,32 @@ KineticEditor.prototype = {
     _initVerticalScrollBar: function (width, height) {
         "use strict";
 
-        var verticalScrollAreaLeft = width - this.SCROLL_BAR_INDENT - this.SCROLL_BAR_WIDTH;
-        var verticalScrollAreaTop = this.SCROLL_BAR_INDENT;
-
-        var verticalScrollAreaWidth = this.SCROLL_BAR_WIDTH;
-        var verticalScrollAreaHeight = height - 2 * this.SCROLL_BAR_INDENT - this.SCROLL_BAR_WIDTH;
-        
-        var verticalScrollAreaBottom = verticalScrollAreaTop + verticalScrollAreaHeight;
-        
-        this._verticalScrollArea = new Kinetic.Rect({
-            x: verticalScrollAreaLeft,
-            y: verticalScrollAreaTop,
-            width: verticalScrollAreaWidth,
-            height: verticalScrollAreaHeight,
-            fill: this.SCROLL_BAR_AREA_FILL,
-            opacity: this.SCROLL_BAR_AREA_OPACITY
-        });
-
-        var verticalScrollThumbWidth = this.SCROLL_BAR_WIDTH;
-        var verticalScrollThumbHeight = this.SCROLL_THUMB_WIDTH;
-
-        var verticalScrollThumbTopMax = verticalScrollAreaBottom - verticalScrollThumbHeight;
-
-        var verticalScrollThumbLeft = verticalScrollAreaLeft;
-        var verticalScrollThumbTop = verticalScrollAreaTop;
-
-        this._verticalScrollThumb = new Kinetic.Rect({
-            x: verticalScrollThumbLeft,
-            y: verticalScrollThumbTop,
-            width: verticalScrollThumbWidth,
-            height: verticalScrollThumbHeight,
-            fill: this.SCROLL_BAR_THUMB_FILL,
-            opacity: this.SCROLL_BAR_THUMB_OPACITY,
-            draggable: true,
-            dragBoundFunc: function(position) {
-                var newY = position.y;
-                
-                if (newY < verticalScrollAreaTop) {
-                    newY = verticalScrollAreaTop;
-                }
-                else if (newY > verticalScrollThumbTopMax) {
-                    newY = verticalScrollThumbTopMax;
-                }
-                
-                return {
-                    x: verticalScrollThumbLeft,
-                    y: newY
-                }
-            }
-        });
-        
-        this._syncVerticalThumbPositionWithViewport();
-        
         var that = this;
-
-        this._verticalScrollThumb.on(this.DRAG_MOVE_EVENT,
-            function () {
-                that._onVerticalThumbDrag(that._verticalScrollThumb.getY() - verticalScrollAreaTop, verticalScrollThumbTopMax - verticalScrollAreaTop);
-            }
-        );
         
-        this._verticalScrollArea.on(this.CLICK_EVENT,
-            function (event) {
-                var y = event.layerY;
-
-                if (y < that._verticalScrollThumb.getY()) {
-                    that._onVerticalTopScrollAreaClick();
-                }
-                
-                if (y > that._verticalScrollThumb.getY() + that._verticalScrollThumb.getHeight()) {
-                    that._onVerticalBottomScrollAreaClick();
-                }
-            }
-        );
+        var configuration = {
+            layer: this._scrollBarsLayer,
+            left: width - this.SCROLL_BAR_INDENT - this.SCROLL_BAR_WIDTH,
+            top: this.SCROLL_BAR_INDENT,
+            width: this.SCROLL_BAR_WIDTH,
+            height: height - 2 * this.SCROLL_BAR_INDENT - this.SCROLL_BAR_WIDTH,
+            thumbHeight: this.SCROLL_THUMB_WIDTH,
+            areaFill: this.SCROLL_BAR_AREA_FILL,    
+            areaOpacity: this.SCROLL_BAR_AREA_OPACITY,    
+            thumbFill: this.SCROLL_BAR_THUMB_FILL,
+            thumbOpacity: this.SCROLL_BAR_THUMB_OPACITY,
+            onThumbDrag:  function (position, maximum) {
+                that._onVerticalThumbDrag(position, maximum);
+            },   
+            onTopAreaClick: function () {
+                that._onVerticalTopScrollAreaClick();
+            },
+            onBottomAreaClick: function () {
+                that._onVerticalBottomScrollAreaClick();
+            }        
+        };
         
-        this._scrollBarsLayer.add(this._verticalScrollArea);
-        this._scrollBarsLayer.add(this._verticalScrollThumb);
+        this._verticalScrollBar = new VerticalScrollBar(configuration);
+        this._syncVerticalThumbPositionWithViewport();
     },
     
     _onHorizontalThumbDrag: function (position, maximum) {
@@ -327,10 +277,8 @@ KineticEditor.prototype = {
         "use strict";
 
         var ratio = this._viewport.getVerticalScrollRatio();
-        var verticalScrollThumbLeft = this._verticalScrollArea.getY() + Math.floor((this._verticalScrollArea.getHeight() - this.SCROLL_THUMB_WIDTH) * ratio);
-        
-        this._verticalScrollThumb.setY(verticalScrollThumbLeft);
-        
+
+        this._verticalScrollBar.setThumbOffsetInPercent(ratio);
         this._scrollBarsLayer.draw();
     },
     
