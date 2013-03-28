@@ -25,3 +25,4 @@
 0034 [ ]    assert in index.html
 0035 [ ]	many redraws in breakable rendering
 0036 [ ]	'revert to original colony' feature
+0037 [ ]    layered redraw

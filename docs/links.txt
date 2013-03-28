@@ -27,3 +27,6 @@ http://habrahabr.ru/post/162317/
 
 Selenium + NodeJS
 http://habrahabr.ru/company/yandex/blog/173769/
+
+Canvas perfomance
+http://www.html5rocks.com/en/tutorials/canvas/performance/
