@@ -4,6 +4,8 @@ var PainterStub = function () {
     this._paintedCellCount = 0;
     this._cleared = false;
     this._draw = false;
+    this._paintedStarted = 0;
+    this._paintedEnded = 0;
 };
 
 PainterStub.prototype = {
@@ -11,6 +13,7 @@ PainterStub.prototype = {
     startPaint: function () {
         "use strict";
 
+        ++this._paintedStarted;
     },
     
     paintCell: function (coordinates) {
@@ -23,6 +26,7 @@ PainterStub.prototype = {
     endPaint: function () {
         "use strict";
 
+        ++this._paintedEnded;
     },
     
     clear: function () {
@@ -61,6 +65,18 @@ PainterStub.prototype = {
         "use strict";
     
         return this._draw;
-    }
+    },
+    
+    startPaintCount: function () {
+        "use strict";
+    
+        return this._paintedStarted;
+    },
+    
+    endPaintCount: function () {
+        "use strict";
+
+        return this._paintedEnded;
+    },
     
 };

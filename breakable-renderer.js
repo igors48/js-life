@@ -27,14 +27,20 @@ BreakableRenderer.prototype = {
         
         var count = 0;
         var maxIndex = this._model.length;
-        
-        while (count < this._paintPerCall && this._index < maxIndex) {
-            var current = this._model[this._index];
+
+        if (!this.complete()) {     
+            this._painter.startPaint();
             
-            this._painter.paintCell(current);
+            while (count < this._paintPerCall && this._index < maxIndex) {
+                var current = this._model[this._index];
             
-            ++this._index;
-            ++count;
+                this._painter.paintCell(current);
+            
+                ++this._index;
+                ++count;
+            }
+
+            this._painter.endPaint();
         }
         
         return this.complete();

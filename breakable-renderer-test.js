@@ -103,5 +103,30 @@ test("Painting process really restarted", function() {
     BreakableRendererTestTools.assertModelPainted(renderer, painter);
 });
 
-// before drawing a part notification about it sent
-// after drawing a part notification about it sent
+test("Before drawing a part notification about it sent", function() {
+    "use strict";
+    
+    var painter = new PainterStub();
+    var renderer = new BreakableRenderer(2, painter);
+    
+    var model = BreakableRendererTestTools.createModel();
+    renderer.replaceModel(model);
+
+    BreakableRendererTestTools.assertModelPainted(renderer, painter);
+    
+    equal(painter.startPaintCount(), 3, "Notification count valid");
+});
+
+test("After drawing a part notification about it sent", function() {
+    "use strict";
+    
+    var painter = new PainterStub();
+    var renderer = new BreakableRenderer(2, painter);
+    
+    var model = BreakableRendererTestTools.createModel();
+    renderer.replaceModel(model);
+
+    BreakableRendererTestTools.assertModelPainted(renderer, painter);
+    
+    equal(painter.endPaintCount(), 3, "Notification count valid");
+});
