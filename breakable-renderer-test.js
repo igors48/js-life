@@ -103,4 +103,5 @@ test("Painting process really restarted", function() {
     BreakableRendererTestTools.assertModelPainted(renderer, painter);
 });
 
-
+// before drawing a part notification about it sent
+// after drawing a part notification about it sent

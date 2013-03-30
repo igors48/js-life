@@ -8,11 +8,21 @@ var PainterStub = function () {
 
 PainterStub.prototype = {
 
+    startPaint: function () {
+        "use strict";
+
+    },
+    
     paintCell: function (coordinates) {
         "use strict";
 
         Assert.isCoordinates(coordinates);
         ++this._paintedCellCount;
+    },
+    
+    endPaint: function () {
+        "use strict";
+
     },
     
     clear: function () {
