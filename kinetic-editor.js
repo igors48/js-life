@@ -51,7 +51,7 @@ KineticEditor.prototype = {
         
         this._viewport = new ViewPort(width, height, maxCols, maxRows, this.MIN_CELL_SIZE, this.MAX_CELL_SIZE, this.CELL_SIZE);
 
-        var stage = new Kinetic.Stage({
+        this._stage = new Kinetic.Stage({
             container: container,
             width: width,
             height: height
@@ -59,6 +59,7 @@ KineticEditor.prototype = {
 
         this._backgroundLayer = new Kinetic.Layer();
         this._modelLayer = new Kinetic.Layer();
+        this._drawLayers = [];
         this._scrollBarsLayer = new Kinetic.Layer();
         this._cellHighlightingLayer = new Kinetic.Layer();
     
@@ -66,10 +67,10 @@ KineticEditor.prototype = {
         this._initModelLayer();
         this._initControlLayer(width, height);
         
-        stage.add(this._cellHighlightingLayer);
-        stage.add(this._backgroundLayer);
-        stage.add(this._modelLayer);
-        stage.add(this._scrollBarsLayer);
+        this._stage.add(this._cellHighlightingLayer);
+        this._stage.add(this._backgroundLayer);
+        this._stage.add(this._modelLayer);
+        this._stage.add(this._scrollBarsLayer);
 
         this._cacheCellViewAndPaint();
     },
@@ -124,6 +125,13 @@ KineticEditor.prototype = {
         this._playMode = true;
     },
 
+    startPaint: function () {
+        "use strict";
+
+        var newDrawLayer = new Kinetic.Layer();
+        this._drawLayers.push(newDrawLayer);    
+    },
+
     paintCell: function (coordinates) {
         "use strict";
                         
@@ -136,22 +144,40 @@ KineticEditor.prototype = {
                 y: (viewPortCoordinates.y()) * this._cachedCellSize
             });
 
-            this._modelLayer.add(image);
+            var last = this._drawLayers.length - 1;
+            this._drawLayers[last].add(image);
         }
     },
-    
+
+    endPaint: function () {
+        "use strict";
+        
+        var last = this._drawLayers.length - 1;
+        this._stage.add(this._drawLayers[last]);
+        //this._drawLayers[last].draw();
+    },
+
     clear: function () {
         "use strict";
-    
+        
+        //var that = this;
+        
+        _.each(this._drawLayers, function (layer) {
+            //that._stage.remove(layer);
+            layer.removeChildren();
+            layer.remove();
+        });
+        
+        this._drawLayers = [];    
         this._modelLayer.removeChildren();
     },
-    
+    /*
     draw: function () {
         "use strict";
     
         this._modelLayer.draw();
     },
-    
+    */
     _initControlLayer: function (width, height) {
         "use strict";
 

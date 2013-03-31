@@ -42,7 +42,7 @@
         var COLS = 2000;
         var ROWS = 2000;
         
-		var CELL_RENDERED_PER_CALL = 50;
+		var CELL_RENDERED_PER_CALL = 1000;
 		var CELL_RECALCULATED_PER_CALL = 20000;
 		
         var model = new CellsList();
@@ -103,7 +103,7 @@
                 function doRender() {
                     
                     if (renderer.complete()) {
-                        editor.draw();
+                        //editor.draw();
                         
                         if (mode === 'play') {
                             console.log('calculation');
