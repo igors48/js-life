@@ -7,7 +7,7 @@ var CellsList = function () {
 
 CellsList.prototype = {
 
-    cells: function () {
+    coordinates: function () {
         "use strict";
         
         var result = [];
@@ -28,6 +28,27 @@ CellsList.prototype = {
         return result;
     },
     
+    cells: function () {
+        "use strict";
+        
+        var cells = [];
+        
+        _.each(this._list,
+            function (row, rowIndex) {
+            
+                _.each(row,
+                    function (value, colIndex) {
+                        var cell = new Cell(colIndex, rowIndex, value);
+                        
+                        cells.push(cell);
+                    }
+                );
+            }
+        );
+        
+        return cells;
+    },
+    
     add: function (x, y, value) {
         "use strict";
     
@@ -42,6 +63,44 @@ CellsList.prototype = {
         
             ++this._count;
         }
+    },
+    
+    addAll: function (cellsList) {
+        "use strict";
+    
+        Assert.isCellsList(cellsList);
+        
+        var cells = cellsList.cells();
+        var that = this;
+        
+        _.each(cells, function (cell) {
+            var coordinates = cell.coordinates();
+            
+            that.add(coordinates.x(), coordinates.y(), cell.value());
+        });
+    },
+
+    retain: function (cellsList) {
+        "use strict";
+    
+        Assert.isCellsList(cellsList);
+        
+        var removed = [];
+        
+        _.each(this.cells(), function (current) {
+            var coordinates = current.coordinates();
+            
+            if (!cellsList.exists(coordinates.x(), coordinates.y())) {
+                removed.push(current);
+            }
+        }); 
+        
+        this._list = [];
+        this._count = 0;
+        
+        this.addAll(cellsList);
+        
+        return removed;
     },
     
     get: function (x, y) {

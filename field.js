@@ -24,10 +24,10 @@ Field.prototype = {
         this._cells.add(x, y);
     },
 
-	cells: function () {
+	coordinates: function () {
         "use strict";
         
-        return this._cells.cells();
+        return this._cells.coordinates();
 	},
 	
     generationNext: function () {
@@ -66,7 +66,7 @@ Field.prototype = {
         "use strict";
 
 		this._index = 0;
-		this._list = this._cells.cells();
+		this._list = this._cells.coordinates();
         this._processedCells = new CellsList();
         this._newModel = new CellsList();
 	},

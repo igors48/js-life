@@ -10,11 +10,21 @@ DrawBuffer.prototype = {
     restart: function () {
         "use strict";
     
+        //_.each
     },
     
     drawn: function (x, y, object) {
         "use strict";
     
+        Assert.isPositiveInteger(x);
+        Assert.isPositiveInteger(y);
+        Assert.isNotNullAndDefined(object);
+        
+        var drawn = this._previuos.exists(x, y);
+        
+        this._current.add(x, y, object);
+        
+        return drawn;
     },
     
     commit: function () {

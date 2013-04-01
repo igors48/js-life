@@ -38,7 +38,7 @@ test("Empty field stays empty", function() {
     var field = new Field(100);
 
     field.generationNext();
-	var cells = field.cells(); 
+	var cells = field.coordinates(); 
     
     equal(cells.length, 0, "No living cells");
 });
@@ -50,7 +50,7 @@ test("One cell will die", function() {
     field.putLiveCell(1, 1);
   
 	field.generationNext();
-	var cells = field.cells(); 
+	var cells = field.coordinates(); 
     
     equal(cells.length, 0, "No living cells");
 });
@@ -65,7 +65,7 @@ test("Stone will not change", function() {
     field.putLiveCell(2, 2);
   
     field.generationNext();
-	var cells = field.cells(); 
+	var cells = field.coordinates(); 
 
     ok(TestTools.containsOnlyOne(new Coordinates(1, 1), cells));
     ok(TestTools.containsOnlyOne(new Coordinates(1, 2), cells));
@@ -79,12 +79,12 @@ test("Rotator is rotating", function() {
 	var field = FieldGenerationTestTools.createFieldWithHorizontalRotator(100);
 
 	field.generationNext();
-	var cells = field.cells(); 
+	var cells = field.coordinates(); 
 	
 	FieldGenerationTestTools.assertIsVerticalRotator(cells);
 	
 	field.generationNext();
-	cells = field.cells(); 
+	cells = field.coordinates(); 
 
 	FieldGenerationTestTools.assertIsHorizontalRotator(cells);
 });
@@ -100,7 +100,7 @@ test("Rotator in breakable iteration", function() {
 	completed = field.generationNext();
     ok(completed, "Recalculation is completed");
 	
-	var cells = field.cells(); 
+	var cells = field.coordinates(); 
 	
 	FieldGenerationTestTools.assertIsVerticalRotator(cells);
 	
@@ -110,7 +110,7 @@ test("Rotator in breakable iteration", function() {
 	completed = field.generationNext();
     ok(completed, "Recalculation is completed");
 
-	cells = field.cells(); 
+	cells = field.coordinates(); 
 	
 	FieldGenerationTestTools.assertIsHorizontalRotator(cells);
 });

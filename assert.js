@@ -162,6 +162,16 @@ Assert.isCellBlockContainer = function (value) {
     }
 };
 
+Assert.isCellsList = function (value) {
+    "use strict";
+    
+    var isCellsList = value instanceof CellsList;
+    
+    if (!isCellsList) {
+        throw new Error('Is not an CellsList value');
+    }
+};
+
 Assert.isFunction = function (value) {
     "use strict";
     
