@@ -1,16 +1,17 @@
 var DrawBuffer = function () {
     "use strict";
     
-    this._previous = new CellList();
-    this._current = new CellList();
+    this._previous = new CellsList();
+    this._current = new CellsList();
 };
 
 DrawBuffer.prototype = {
 
     restart: function () {
         "use strict";
-    
-        //_.each
+
+        this._previous.addAll(this._current);
+        this._current = new CellsList();    
     },
     
     drawn: function (x, y, object) {
@@ -20,7 +21,7 @@ DrawBuffer.prototype = {
         Assert.isPositiveInteger(y);
         Assert.isNotNullAndDefined(object);
         
-        var drawn = this._previuos.exists(x, y);
+        var drawn = this._previous.exists(x, y);
         
         this._current.add(x, y, object);
         
@@ -30,12 +31,17 @@ DrawBuffer.prototype = {
     commit: function () {
         "use strict";
     
-        //returns object that must be removed from layer
+        var removed = this._previous.retain(this._current);
+        this._current = new CellsList();
+        
+        return removed;
     },
     
     clear: function () {
         "use strict";
     
+        this._previous = new CellsList();
+        this._current = new CellsList();
     }
     
 };
