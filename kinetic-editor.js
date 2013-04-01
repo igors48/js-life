@@ -58,7 +58,10 @@ KineticEditor.prototype = {
         });
 
         this._backgroundLayer = new Kinetic.Layer();
-        this._modelLayer = new Kinetic.Layer();
+        
+        this._drawBuffer = new DrawBuffer();
+        this._modelLayer = new Kinetic.Layer({clearBeforeDraw: false});
+        
         this._scrollBarsLayer = new Kinetic.Layer();
         this._cellHighlightingLayer = new Kinetic.Layer();
     
@@ -130,25 +133,36 @@ KineticEditor.prototype = {
         var viewPortCoordinates = this._viewport.toViewPort(coordinates);
                 
         if (viewPortCoordinates) {
+            var x = (viewPortCoordinates.x()) * this._cachedCellSize; 
+            var y = (viewPortCoordinates.y()) * this._cachedCellSize;
+            
             var image = new Kinetic.Image({
                 image: this._cachedCellView,
-                x: (viewPortCoordinates.x()) * this._cachedCellSize,
-                y: (viewPortCoordinates.y()) * this._cachedCellSize
+                x: x,
+                y: y
             });
 
-            this._modelLayer.add(image);
+            if (!this._drawBuffer.drawn(viewPortCoordinates.x(), viewPortCoordinates.y(), image)) {
+                this._modelLayer.add(image);
+            }
         }
     },
     
     clear: function () {
         "use strict";
-    
-        this._modelLayer.removeChildren();
+        this._drawBuffer.restart();
+        //this._modelLayer.removeChildren();
     },
     
     draw: function () {
         "use strict";
     
+        var deleted = this._drawBuffer.commit();
+        
+        _.each(deleted, function (victim) {
+            victim.value().remove();
+        });
+        
         this._modelLayer.draw();
     },
     
