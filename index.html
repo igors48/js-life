@@ -22,6 +22,7 @@
     <script src="horizontal-scroll-bar.js"></script>
     <script src="vertical-scroll-bar.js"></script>
     <script src="field.js"></script>
+    <script src="cell.js"></script>
     <script src="cells-list.js"></script>
     <script src="area.js"></script>
     <script src="offset.js"></script>
@@ -64,7 +65,7 @@
             
             editor.switchToPlayMode();
 
-            var cells = model.cells();
+            var cells = model.coordinates();
 
             field = createField(cells);                
             renderer.replaceModel(cells);
@@ -110,7 +111,7 @@
                             var recalculationCompleted = field.generationNext();
 
                             if (recalculationCompleted) {
-                                var newModel = field.cells();
+                                var newModel = field.coordinates();
                                 renderer.replaceModel(newModel);
                             }
                         } else {
@@ -137,7 +138,7 @@
         
         function onToggleCell(coordinates) {
             model.toggle(coordinates.x(), coordinates.y());
-            renderer.replaceModel(model.cells());
+            renderer.replaceModel(model.coordinates());
             
             onRedraw();
         }
